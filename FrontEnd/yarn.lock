@@ -141,6 +141,10 @@ ansi-styles@^3.0.0, ansi-styles@^3.1.0:
   dependencies:
     color-convert "^1.9.0"
 
+antd-mobile-demo-data@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/antd-mobile-demo-data/-/antd-mobile-demo-data-0.1.4.tgz#27237fd220fba1b906fa891cab480d80b05382e9"
+
 antd-mobile@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/antd-mobile/-/antd-mobile-1.6.0.tgz#327477f728c85abc9158e7eebe4b10671a9eacac"
@@ -319,6 +323,12 @@ ast-types-flow@0.0.7:
 async-each@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/async-each/-/async-each-1.0.1.tgz#19d386a1d9edc6e7c1c85d388aedbcc56d33602d"
+
+async-validator@1.x:
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/async-validator/-/async-validator-1.7.1.tgz#89d3d7a384ca5d05e0f07bf51754d591e2cfec61"
+  dependencies:
+    babel-runtime "6.x"
 
 async@2.4.1:
   version "2.4.1"
@@ -2186,6 +2196,10 @@ dom-converter@~0.1:
   dependencies:
     utila "~0.3"
 
+dom-scroll-into-view@1.x:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/dom-scroll-into-view/-/dom-scroll-into-view-1.2.1.tgz#e8f36732dd089b0201a88d7815dc3f88e6d66c7e"
+
 dom-serializer@0, dom-serializer@~0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/dom-serializer/-/dom-serializer-0.1.0.tgz#073c697546ce0780ce23be4a28e293e40bc30c82"
@@ -3201,7 +3215,7 @@ hoek@2.x.x:
   version "2.16.3"
   resolved "https://registry.yarnpkg.com/hoek/-/hoek-2.16.3.tgz#20bb7403d3cea398e91dc4710a8ff1b8274a25ed"
 
-hoist-non-react-statics@^1.2.0:
+hoist-non-react-statics@1.x, hoist-non-react-statics@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-1.2.0.tgz#aa448cf0986d55cc40773b17174b7dd066cb7cfb"
 
@@ -5583,6 +5597,18 @@ rc-drawer@~0.4.9:
     babel-runtime "6.x"
     classnames "^2.2.4"
     prop-types "^15.5.10"
+
+rc-form@^1.4.3:
+  version "1.4.3"
+  resolved "https://registry.yarnpkg.com/rc-form/-/rc-form-1.4.3.tgz#4e96ef7a6913bf624f306d08ea2631d8ffc58c81"
+  dependencies:
+    async-validator "1.x"
+    babel-runtime "6.x"
+    create-react-class "^15.5.3"
+    dom-scroll-into-view "1.x"
+    hoist-non-react-statics "1.x"
+    lodash "^4.17.4"
+    warning "^3.0.0"
 
 rc-hammerjs@^0.6.6, rc-hammerjs@~0.6.0:
   version "0.6.8"

@@ -46,7 +46,7 @@ export default class Home extends Component {
     }
 
     render() {
-        const {token} = this.store;
+        // const {token} = this.store;
         const {history} =this;
         return (
             <div id="home">

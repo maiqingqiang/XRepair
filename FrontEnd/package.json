@@ -8,6 +8,7 @@
     "lazy-route": "^1.0.7",
     "mobx": "^3.2.2",
     "mobx-react": "^4.2.2",
+    "rc-form": "^1.4.3",
     "react": "^15.6.1",
     "react-dom": "^15.6.1"
   },
@@ -17,6 +18,7 @@
     "test": "node scripts/test.js --env=jsdom"
   },
   "devDependencies": {
+    "antd-mobile-demo-data": "^0.1.4",
     "autodll-webpack-plugin": "^0.2.1",
     "autoprefixer": "7.1.1",
     "babel-core": "6.25.0",
