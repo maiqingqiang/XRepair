@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {observer, inject} from 'mobx-react';
-import {Grid, Icon} from 'antd-mobile';
+import {Button} from 'antd-mobile';
 
 @inject("store")
 @observer
@@ -11,12 +11,16 @@ export default class Login extends Component {
         this.history = props.history;
     }
 
-    render() {
-        // const {token} = this.store;
-        const {history} =this;
+    login=()=>{
+        this.store.isLogin = true;
+        const { from } = this.props.location.state || { from: { pathname: '/' } }
+        this.history.push(from)
+    };
+
+    render(){
         return (
             <div id="login">
-                login
+                <Button onClick={this.login}>登录</Button>
             </div>
         );
     }

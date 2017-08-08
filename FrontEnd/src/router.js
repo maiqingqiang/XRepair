@@ -24,7 +24,7 @@ let Common = [
     },
     {
         render: props => (<LazyRoute {...props} component={import('./pages/NoMatch')}/>)
-    },
+    }
 ];
 
 routes=[...routes,...Common];

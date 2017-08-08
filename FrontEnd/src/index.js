@@ -6,7 +6,6 @@ import {Provider} from "mobx-react";
 import store from './stores/store';
 import routes from './router';
 import axios from 'axios';
-import {PrivateRoute} from './components/Index'
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
@@ -46,7 +45,7 @@ ReactDOM.render(
             <div>
                 <Switch>
                     {routes.map((route, index) => (
-                        <PrivateRoute
+                        <Route
                             key={index}
                             path={route.path}
                             exact={route.exact}

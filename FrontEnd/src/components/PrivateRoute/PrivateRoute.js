@@ -14,7 +14,7 @@ class PrivateRoute extends Component{
     }
 
     render() {
-        const {token,isLogin} = this.store;
+        const {isLogin} = this.store;
         console.log('islogin'+isLogin)
         return (
             <Route {...this.rest} render={isLogin?(this.render):(props => (
