@@ -1,7 +1,12 @@
 import React from 'react';
 import LazyRoute from "lazy-route";
+import General from './routers/General'
 
-const routes = [
+let routes = [];
+
+routes=[...routes,...General];
+
+let Common = [
     {
         path: '/',
         exact: true,
@@ -16,5 +21,7 @@ const routes = [
         render: props => (<LazyRoute {...props} component={import('./pages/NoMatch')}/>)
     },
 ];
+
+routes=[...routes,...Common];
 
 export default routes

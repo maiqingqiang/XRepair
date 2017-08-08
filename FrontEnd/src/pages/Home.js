@@ -11,7 +11,8 @@ const data = [{
     title: '通用报修',
     sub: '集合多种报修项目',
     color1: '#4de685',
-    color2: '#0cd257'
+    color2: '#0cd257',
+    to:'/general/index'
 }, {
     icon: Net,
     title: '宽带报修',
@@ -36,19 +37,22 @@ const data = [{
 
 @inject("store")
 @observer
-class Home extends Component {
+export default class Home extends Component {
     constructor(props) {
         super(props);
         this.store = props.store;
-        console.log(this.store)
+        this.history = props.history;
+        // console.log(this.store)
     }
 
     render() {
         const {token} = this.store;
+        const {history} =this;
         return (
-            <div>
+            <div id="home">
                 <Grid data={data}
                       columnNum={2}
+                      onClick={_el => history.push(_el.to)}
                       renderItem={dataItem => (
                           <div className="grid-item">
                               <div className="icon" style={{
@@ -68,4 +72,3 @@ class Home extends Component {
     }
 }
 
-export default Home
