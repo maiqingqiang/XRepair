@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import registerServiceWorker from './registerServiceWorker';
-import {BrowserRouter as Router, Route,Switch} from 'react-router-dom'
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import {Provider} from "mobx-react";
 import store from './stores/store';
 import routes from './router';
 import axios from 'axios';
+import {PrivateRoute} from './components/Index'
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
@@ -45,12 +46,11 @@ ReactDOM.render(
             <div>
                 <Switch>
                     {routes.map((route, index) => (
-                        <Route
+                        <PrivateRoute
                             key={index}
                             path={route.path}
                             exact={route.exact}
-                            render={route.render}
-                        />
+                            render={route.render}/>
                     ))}
                 </Switch>
             </div>

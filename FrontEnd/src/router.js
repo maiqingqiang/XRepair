@@ -13,6 +13,11 @@ let Common = [
         render: props => (<LazyRoute {...props} component={import('./pages/Home')}/>)
     },
     {
+        path: '/login',
+        exact: true,
+        render: props => (<LazyRoute {...props} component={import('./pages/Login')}/>)
+    },
+    {
         path: '/about',
         exact: true,
         render: props => (<LazyRoute {...props} component={import('./pages/About')}/>)

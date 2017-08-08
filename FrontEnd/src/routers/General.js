@@ -5,6 +5,7 @@ export default [
     {
         path: '/general/index',
         exact: true,
+        auth:true,
         render: props => (<LazyRoute {...props} component={import('./../modules/General/index')}/>)
     },
 ]
