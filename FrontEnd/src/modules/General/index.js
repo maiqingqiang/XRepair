@@ -31,7 +31,7 @@ const seasons = [
 
 ];
 
-// @Protected
+@Protected
 @inject("store")
 @observer
 class Index extends Component {

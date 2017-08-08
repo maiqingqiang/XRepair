@@ -11,7 +11,6 @@ import meIcon from '../asset/me.svg';
 import meIconAct from '../asset/me_active.svg';
 
 const Item = List.Item;
-const Brief = Item.Brief;
 
 const data = [{
     icon: GeneralRepair,

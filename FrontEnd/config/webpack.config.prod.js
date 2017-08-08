@@ -294,7 +294,8 @@ module.exports = {
                 resource.indexOf('node_modules') >= 0 &&
                 resource.match(/\.(js|less|scss)$/),
         }),
-        new webpack.optimize.ModuleConcatenationPlugin(),
+        //todo 这个东东有bug
+        // new webpack.optimize.ModuleConcatenationPlugin(),
         new webpack.LoaderOptionsPlugin({
             minimize: true,
             debug: false,
