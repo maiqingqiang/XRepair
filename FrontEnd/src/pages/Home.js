@@ -105,10 +105,8 @@ export default class Home extends Component {
                             });
                         }}>
                         <List renderHeader={() => '我的'} className="my-list">
-                            <Item arrow="horizontal" onClick={() => {
-                            }}>个人资料</Item>
-                            <Item arrow="horizontal" onClick={() => {
-                            }}>我的报修</Item>
+                            <Item arrow="horizontal" onClick={() => {history.push('')}}>个人资料</Item>
+                            <Item arrow="horizontal" onClick={() => {history.push('/repair_list')}}>我的报修</Item>
                         </List>
                         <WhiteSpace size="lg"/>
                         <WingBlank size="sm">

@@ -23,6 +23,11 @@ let Common = [
         render: props => (<LazyRoute {...props} component={import('./pages/About')}/>)
     },
     {
+        path: '/repair_list',
+        exact: true,
+        render: props => (<LazyRoute {...props} component={import('./pages/RepairList')}/>)
+    },
+    {
         render: props => (<LazyRoute {...props} component={import('./pages/NoMatch')}/>)
     }
 ];
