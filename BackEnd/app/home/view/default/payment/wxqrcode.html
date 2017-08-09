@@ -1,0 +1,58 @@
+
+
+
+<!doctype html>
+<html>
+<head>
+<title>微信扫码({$out_trade_no})</title>
+<style>
+*{margin:0;padding:0;}
+body{background:url({$yf_theme_path}public/payment/images/bg.jpg) repeat;}
+#main{background-color:#fff;padding:1px;width:500px;margin:100px auto;text-align:center;border-radius:3px;box-shadow:5px 5px 30px #333;}
+#content{padding:30px;}
+#title{color:#333;font-size:14px;background-color:#e8e8e8;border-bottom:1px solid #ccc;line-height:60px;}
+#title span{color:#fb180a;font-size:16px;font-weight:bold;}
+#QRmsg{color:#149696;background-color:#e8e8e8;border-top:1px solid #ccc;line-height:28px;padding:20px 0;font-size:16px;}
+.qr_default{background:url({$yf_theme_path}public/payment/images/icon_pay.png) no-repeat 150px -63px;}
+.qr_succ, .pay_succ{background:url(image/icon_pay.png) no-repeat 150px -3px;}
+.pay_error{background:url({$yf_theme_path}public/payment/images/icon_pay.png) no-repeat 150px -120px;}
+#msgContent p{text-align:left;padding-left:220px;}
+#msgContent p a{color:#149696;font-weight:bold;}
+</style>
+  <script type="text/javascript" src="{$yf_theme_path}public/others/jquery.min-2.2.1.js"></script>
+</head>
+
+<body>
+    <div id="main">
+        <div id="title">订单号：<span id="orderid">{$out_trade_no}</span>&nbsp;&nbsp;&nbsp;&nbsp;金额：<span>{$money}.00</span> 元</div>
+        <div id="content">
+            <div id="QRimg">
+                  <img src="{$pay_qrcode_url}" style="width:150px;height:150px;">
+              </div>
+        </div>
+        <div id="QRmsg">
+      <div id="msgContent" class="qr_default">
+                  <p>支付码成功生成<br>请尽快完成支付</p>
+              </div>
+    </div>
+    </div>
+</body>
+</html>
+<script>
+function p(id){
+  $.ajax({
+    url: '{:url('home/Payment/wxqrcodequery')}',
+    type: 'POST',
+    dataType: 'json',
+    data: {out_trade_no: id,sgin:'{$sgin}'},
+    success: function (data){
+      if(parseInt(data.status) == 8){
+        window.location.href = "http://www.zolpay.com/orderquery.htm?orderid=" + id;
+      }
+    }
+  });
+};
+$(function(){
+  setInterval("p('{$out_trade_no}')", 5000);
+});
+</script>

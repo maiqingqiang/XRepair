@@ -1,0 +1,275 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+	<div class="page-content">
+		<!--主题-->
+		<div class="page-header">
+			<h1>
+				您当前操作
+				<small>
+					<i class="ace-icon fa fa-angle-double-right"></i>
+					第三方登录
+				</small>
+			</h1>
+		</div>
+		<div class="row">
+			<div class="tabbable">
+				<ul class="nav nav-tabs" id="myTab">
+					<li class="active"><a data-toggle="tab" href="#qq">QQ</a></li>
+					<li><a data-toggle="tab" href="#sina">Sina</a></li>
+					<li><a data-toggle="tab" href="#weixin">微信扫码</a></li>
+					<li><a data-toggle="tab" href="#wechat">微信公众登录</a></li>
+					<li><a data-toggle="tab" href="#google">Google</a></li>
+					<li><a data-toggle="tab" href="#facebook">Facebook</a></li>
+				</ul>
+				<form class="form-horizontal ajaxForm" name="oauthsys" method="post" action="{:url('admin/Sys/runoauthsys')}">
+					<div class="tab-content">
+						<div id="qq" class="tab-pane fade in active">
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> QQ APPID： </label>
+								<div class="col-sm-9">
+									<input type="text" name="qq_appid" id="qq_appid" value="{$oauth_qq.app_key}"  placeholder="请输入QQ APPID"  class="col-xs-10 col-sm-5"/>
+									<span class="lbl">&nbsp;&nbsp;<span class="red"></span></span>
+									<span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle" id="resone"></span>
+											</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> QQ APP KEY： </label>
+								<div class="col-sm-9">
+									<input type="password" name="qq_appkey" id="qq_appkey" value="{$oauth_qq.app_secret}" placeholder="请输入QQ APP KEY"   class="col-xs-10 col-sm-5"/>
+									<span class="lbl">&nbsp;&nbsp;<span class="red"></span></span>
+									<span class="help-inline col-xs-12 col-sm-7">
+								<span class="middle" id="restwo"></span>
+							</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启： </label>
+								<div class="col-sm-9" style="padding-top:5px;">
+									<input name="qq_display" id="qq_display" {if condition="!empty($oauth_qq['display']) eq 1"}checked{/if} value="1" class="ace ace-switch ace-switch-4 btn-flat col-xs-10 col-sm-5" type="checkbox" />
+									<span class="lbl middle help-inline" >&nbsp;&nbsp; 默认关闭</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right"></label>
+								<div class="col-sm-9">
+									<a href="http://connect.qq.com/" target="_blank">点击此处</a>获取QQ互联APPID及APP KEY
+								</div>
+							</div>
+						</div>
+						<div id="sina" class="tab-pane fade">
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 新浪微博APPID： </label>
+								<div class="col-sm-9">
+									<input type="text" name="sina_appid" id="sina_appid" value="{$oauth_sina.app_key}"  placeholder="新浪微博APPID"  class="col-xs-10 col-sm-5"/>
+									<span class="lbl">&nbsp;&nbsp;<span class="red"></span></span>
+									<span class="help-inline col-xs-12 col-sm-7">
+								<span class="middle" id="resthr"></span>
+							</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 新浪微博 APP KEY： </label>
+								<div class="col-sm-9">
+									<input type="password" name="sina_appkey" id="sina_appkey" value="{$oauth_sina.app_secret}" placeholder="新浪微博 APP KEY"   class="col-xs-10 col-sm-5"/>
+									<span class="lbl">&nbsp;&nbsp;<span class="red"></span></span>
+									<span class="help-inline col-xs-12 col-sm-7">
+								<span class="middle" id="resfour"></span>
+							</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启： </label>
+								<div class="col-sm-9" style="padding-top:5px;">
+									<input name="sina_display" id="sina_display" {if condition="!empty($oauth_sina['display']) eq 1"}checked{/if} value="1" class="ace ace-switch ace-switch-4 btn-flat col-xs-10 col-sm-5" type="checkbox" />
+									<span class="lbl middle help-inline" >&nbsp;&nbsp; 默认关闭</span>
+								</div>
+							</div>
+							<div class="page-header form-group">
+								<label class="col-sm-3 control-label no-padding-right"></label>
+								<div class="col-sm-9">
+									<a href="http://open.weibo.com/" target="_blank">点击此处</a>获取新浪微博互联APPID及APP KEY
+								</div>
+							</div>
+						</div>
+						<div id="weixin" class="tab-pane fade">
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 微信扫码APPID： </label>
+								<div class="col-sm-9">
+									<input type="text" name="weixin_appid" id="weixin_appid" value="{$oauth_weixin.app_key}"  placeholder="微信扫码APPID"  class="col-xs-10 col-sm-5" >
+									<span class="lbl">&nbsp;&nbsp;<span class="red"></span></span>
+									<span class="help-inline col-xs-12 col-sm-7">
+								<span class="middle" id="resthr"></span>
+							</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 微信扫码 APP KEY： </label>
+								<div class="col-sm-9">
+									<input type="password" name="weixin_appkey" id="weixin_appkey" value="{$oauth_weixin.app_secret}" placeholder="微信扫码 APP KEY"   class="col-xs-10 col-sm-5" >
+									<span class="lbl">&nbsp;&nbsp;<span class="red"></span></span>
+									<span class="help-inline col-xs-12 col-sm-7">
+								<span class="middle" id="resfour"></span>
+							</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启： </label>
+								<div class="col-sm-9" style="padding-top:5px;">
+									<input name="weixin_display" id="weixin_display" {if condition="!empty($oauth_weixin['display']) eq 1"}checked{/if} value="1" class="ace ace-switch ace-switch-4 btn-flat col-xs-10 col-sm-5" type="checkbox" />
+									<span class="lbl middle help-inline" >&nbsp;&nbsp; 默认关闭</span>
+								</div>
+							</div>
+							<div class="page-header form-group">
+								<label class="col-sm-3 control-label no-padding-right"></label>
+								<div class="col-sm-9">
+									<a href="https://open.weixin.qq.com/" target="_blank">点击此处</a>获取微信扫码互联APPID及APP KEY
+								</div>
+							</div>
+						</div>
+
+						<div id="wechat" class="tab-pane fade">
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 微信公众APPID： </label>
+								<div class="col-sm-9">
+									<input type="text" name="wechat_appid" id="wechat_appid" value="{$oauth_wechat.app_key}"  placeholder="微信公众APPID"  class="col-xs-10 col-sm-5">
+									<span class="lbl">&nbsp;&nbsp;<span class="red"></span></span>
+									<span class="help-inline col-xs-12 col-sm-7">
+								<span class="middle" id="resthr"></span>
+							</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 微信公众 APP KEY： </label>
+								<div class="col-sm-9">
+									<input type="password" name="wechat_appkey" id="wechat_appkey" value="{$oauth_wechat.app_secret}" placeholder="微信公众 APP KEY"   class="col-xs-10 col-sm-5">
+									<span class="lbl">&nbsp;&nbsp;<span class="red"></span></span>
+									<span class="help-inline col-xs-12 col-sm-7">
+								<span class="middle" id="resfour"></span>
+							</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启： </label>
+								<div class="col-sm-9" style="padding-top:5px;">
+									<input name="wechat_display" id="wechat_display" {if condition="!empty($oauth_wechat['display']) eq 1"}checked{/if} value="1" class="ace ace-switch ace-switch-4 btn-flat col-xs-10 col-sm-5" type="checkbox" />
+									<span class="lbl middle help-inline" >&nbsp;&nbsp; 默认关闭</span>
+								</div>
+							</div>
+							<div class="page-header form-group">
+								<label class="col-sm-3 control-label no-padding-right"></label>
+								<div class="col-sm-9">
+									<a href="https://mp.weixin.qq.com/" target="_blank">点击此处</a>获取微信公众APPID及APP KEY
+								</div>
+							</div>
+						</div>
+
+						<div id="google" class="tab-pane fade">
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Google APPID： </label>
+								<div class="col-sm-9">
+									<input type="text" name="google_appid" id="google_appid" value="{$oauth_google.app_key}"  placeholder="Google APPID"  class="col-xs-10 col-sm-5" >
+									<span class="lbl">&nbsp;&nbsp;<span class="red"></span></span>
+									<span class="help-inline col-xs-12 col-sm-7">
+								<span class="middle" id="resthr"></span>
+							</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Google APP KEY： </label>
+								<div class="col-sm-9">
+									<input type="password" name="google_appkey" id="google_appkey" value="{$oauth_google.app_secret}" placeholder="Google APP KEY"   class="col-xs-10 col-sm-5" >
+									<span class="lbl">&nbsp;&nbsp;<span class="red"></span></span>
+									<span class="help-inline col-xs-12 col-sm-7">
+								<span class="middle" id="resfour"></span>
+							</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启： </label>
+								<div class="col-sm-9" style="padding-top:5px;">
+									<input name="google_display" id="google_display" {if condition="!empty($oauth_google['display']) eq 1"}checked{/if} value="1" class="ace ace-switch ace-switch-4 btn-flat col-xs-10 col-sm-5" type="checkbox" />
+									<span class="lbl middle help-inline" >&nbsp;&nbsp; 默认关闭</span>
+								</div>
+							</div>
+							<div class="page-header form-group">
+								<label class="col-sm-3 control-label no-padding-right"></label>
+								<div class="col-sm-9">
+									<a href="https://www.google.com/" target="_blank">点击此处</a>获取Google互联APPID及APP KEY
+								</div>
+							</div>
+						</div>
+						<div id="facebook" class="tab-pane fade">
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Facebook APPID： </label>
+								<div class="col-sm-9">
+									<input type="text" name="facebook_appid" id="facebook_appid" value="{$oauth_facebook.app_key}"  placeholder="Facebook APPID"  class="col-xs-10 col-sm-5" />
+									<span class="lbl">&nbsp;&nbsp;<span class="red"></span></span>
+									<span class="help-inline col-xs-12 col-sm-7">
+								<span class="middle" id="resthr"></span>
+							</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Facebook APP KEY： </label>
+								<div class="col-sm-9">
+									<input type="password" name="facebook_appkey" id="facebook_appkey" value="{$oauth_facebook.app_secret}" placeholder="Facebook APP KEY"   class="col-xs-10 col-sm-5" />
+									<span class="lbl">&nbsp;&nbsp;<span class="red"></span></span>
+									<span class="help-inline col-xs-12 col-sm-7">
+								<span class="middle" id="resfour"></span>
+							</span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启： </label>
+								<div class="col-sm-9" style="padding-top:5px;">
+									<input name="facebook_display" id="facebook_display" {if condition="!empty($oauth_facebook['display']) eq 1"}checked{/if} value="1" class="ace ace-switch ace-switch-4 btn-flat col-xs-10 col-sm-5" type="checkbox" />
+									<span class="lbl middle help-inline" >&nbsp;&nbsp; 默认关闭</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label no-padding-right"></label>
+								<div class="col-sm-9">
+									<a href="https://developer.facebook.com/" target="_blank">点击此处</a>获取Facebook互联APPID及APP KEY
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="clearfix form-actions">
+						<div class="col-sm-offset-3 col-sm-9">
+							<button class="btn btn-info" type="submit">
+								<i class="ace-icon fa fa-check bigger-110"></i>
+								保存
+							</button>
+
+							&nbsp; &nbsp; &nbsp;
+							<button class="btn" type="reset">
+								<i class="ace-icon fa fa-undo bigger-110"></i>
+								重置
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div><!-- /.page-content -->
+{/block}

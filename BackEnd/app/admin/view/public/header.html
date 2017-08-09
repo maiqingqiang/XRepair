@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta charset="utf-8" />
+	<title>YFCMF后台管理</title>
+
+	<meta name="description" content="" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+	<link rel="Bookmark" href="__ROOT__/favicon.ico" >
+    <link rel="Shortcut Icon" href="__ROOT__/favicon.ico" />
+	<!-- bootstrap & fontawesome必须的css -->
+	<link rel="stylesheet" href="__PUBLIC__/ace/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="__PUBLIC__/font-awesome/css/font-awesome.min.css" />
+	<link rel="stylesheet" href="__PUBLIC__/datePicker/bootstrap-datepicker.css" />
+	<link rel="stylesheet" href="__PUBLIC__/datetimepicker/bootstrap-datetimepicker.css" />
+	<!-- 此页插件css -->
+
+	<!-- ace的css -->
+	<link rel="stylesheet" href="__PUBLIC__/ace/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+	<!-- IE版本小于9的ace的css -->
+	<!--[if lte IE 9]>
+	<link rel="stylesheet" href="__PUBLIC__/ace/css/ace-part2.min.css" class="ace-main-stylesheet" />
+	<![endif]-->
+
+	<!--[if lte IE 9]>
+	<link rel="stylesheet" href="__PUBLIC__/ace/css/ace-ie.css" />
+	<![endif]-->
+
+	<link rel="stylesheet" href="__PUBLIC__/yfcmf/yfcmf.css" />
+	<!-- 此页相关css -->
+	
+	<!-- ace设置处理的js -->
+	<script src="__PUBLIC__/ace/js/ace-extra.js"></script>
+	<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+	<!--[if lte IE 8]>
+	<script src="__PUBLIC__/others/html5shiv.min.js"></script>
+	<script src="__PUBLIC__/others/respond.min.js"></script>
+	<![endif]-->
+    <!-- 引入基本的js -->
+    <script type="text/javascript">
+        var admin_ueditor_handle = "{:url('admin/Ueditor/upload')}";
+        var admin_ueditor_lang ='zh-cn';
+    </script>
+    <!--[if !IE]> -->
+    <script src="__PUBLIC__/others/jquery.min-2.2.1.js"></script>
+    <!-- <![endif]-->
+    <!-- 如果为IE,则引入jq1.12.1 -->
+    <!--[if IE]>
+    <script src="__PUBLIC__/others/jquery.min-1.12.1.js"></script>
+    <![endif]-->
+
+    <!-- 如果为触屏,则引入jquery.mobile -->
+    <script type="text/javascript">
+        if('ontouchstart' in document.documentElement) document.write("<script src='__PUBLIC__/others/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+    </script>
+    <script src="__PUBLIC__/others/bootstrap.min.js"></script>
+</head>
+
+<body class="no-skin">
+<!-- 导航栏开始 -->
+<div id="navbar" class="navbar navbar-default navbar-fixed-top">
+	<div class="navbar-container" id="navbar-container">
+		<!-- 导航左侧按钮手机样式开始 -->
+		<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
+			<span class="sr-only">Toggle sidebar</span>
+
+			<span class="icon-bar"></span>
+
+			<span class="icon-bar"></span>
+
+			<span class="icon-bar"></span>
+		</button><!-- 导航左侧按钮手机样式结束 -->
+		<button data-target="#sidebar2" data-toggle="collapse" type="button" class="pull-left navbar-toggle collapsed">
+			<span class="sr-only">Toggle sidebar</span>
+			<i class="ace-icon fa fa-dashboard white bigger-125"></i>
+		</button>
+		<!-- 导航左侧正常样式开始 -->
+		<div class="navbar-header pull-left">
+			<!-- logo -->
+			<a href="{:url('admin/Index/index')}" class="navbar-brand" title="管理后台首页">
+				<small>
+					<i class="fa fa-leaf"></i>
+					YFCMF
+				</small>
+			</a>
+		</div><!-- 导航左侧正常样式结束 -->
+
+		<!-- 导航栏开始 -->
+		<div class="navbar-buttons navbar-header pull-right" role="navigation">
+			<ul class="nav ace-nav">
+				<li class="grey">
+					<a href="{:url('home/Index/index')}" target="_blank">
+						前台首页
+					</a>
+				</li>
+
+				<li class="purple">
+					<a data-info="确定要清理缓存吗？" class="confirm-rst-btn" href="{:url('admin/Sys/clear')}">
+						清除缓存
+					</a>
+				</li>
+				
+				{if condition="config('lang_switch_on')"}
+				<li class="grey">
+					{switch name="$lang"}
+						{case value="zh-cn"}<a href="{:url('admin/Index/lang',['lang_s'=>'en'])}" class="rst-url-btn">ENGLISH</a>{/case}
+						{case value="en-us"}<a href="{:url('admin/Index/lang',['lang_s'=>'cn'])}" class="rst-url-btn">简体中文</a>{/case}
+					{/switch}
+				</li>
+				{/if}
+				<!-- 用户菜单开始 -->
+				<li class="light-blue dropdown-modal">
+					<a data-toggle="dropdown" href="#" class="dropdown-toggle">
+						<img class="nav-user-photo" src="{$admin_avatar|get_imgurl=2}" alt="{:session('admin_auth.admin_username')}" />
+								<span class="user-info">
+									<small>欢迎,</small>
+									{:session('admin_auth.admin_username')}
+								</span>
+
+						<i class="ace-icon fa fa-caret-down"></i>
+					</a>
+
+					<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+						<li>
+							<a href="{:url('admin/Admin/profile')}">
+								<i class="ace-icon fa fa-user"></i>
+								会员中心
+							</a>
+						</li>
+
+						<li class="divider"></li>
+
+						<li>
+							<a href="{:url('admin/Login/logout')}"  data-info="你确定要退出吗？" class="confirm-btn">
+								<i class="ace-icon fa fa-power-off"></i>
+								注销
+							</a>
+						</li>
+					</ul>
+				</li><!-- 用户菜单结束 -->
+			</ul>
+		</div><!-- 导航栏结束 -->
+	</div><!-- 导航栏容器结束 -->
+</div><!-- 导航栏结束 -->

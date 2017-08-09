@@ -1,0 +1,98 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+	<div class="page-content">
+
+
+
+		<!--主题-->
+		<div class="page-header">
+			<h1>
+				您当前操作
+				<small>
+					<i class="ace-icon fa fa-angle-double-right"></i>
+					短信配置
+				</small>
+			</h1>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<form class="form-horizontal ajaxForm" name="smssys" method="post" action="{:url('admin/Sys/runsmssys')}">
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> AccessKeyId： </label>
+						<div class="col-sm-9">
+							<input type="text" name="AccessKeyId" id="qq_appid" value="{$sms_sys.AccessKeyId}"  placeholder="请输入AccessKeyId"  class="col-xs-10 col-sm-5" required/>
+							<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必填</span>
+                                            <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle" id="resone"></span>
+											</span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> accessKeySecret： </label>
+						<div class="col-sm-9">
+							<input type="password" name="accessKeySecret" id="password" value="{$sms_sys.accessKeySecret}" placeholder="accessKeySecret"   class="col-xs-10 col-sm-5" required/>
+							<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必填</span>
+                                            <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle" id="restwo"></span>
+											</span>
+						</div>
+					</div>
+
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 短信模板： </label>
+						<div class="col-sm-9">
+							<input type="text" name="TemplateCode" id="signName" value="{$sms_sys.TemplateCode}" placeholder="TemplateCode"   class="col-xs-10 col-sm-5" required/>
+							<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>短信模板的模板CODE</span>
+                                            <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle" id="restwo"></span>
+											</span>
+						</div>
+					</div>
+
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 短信签名： </label>
+						<div class="col-sm-9">
+							<input type="text" name="signName" id="signName" value="{$sms_sys.signName}" placeholder="signName"   class="col-xs-10 col-sm-5" required/>
+							<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>管理控制台中配置的短信签名（状态必须是验证通过）</span>
+                                            <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle" id="restwo"></span>
+											</span>
+						</div>
+					</div>
+					
+					<div class="space-4"></div>
+					<div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启： </label>
+                                    <div class="col-sm-9" style="padding-top:5px;">                                    
+                                    <input name="sms_open" id="sms_open" {if condition="$sms_sys.sms_open eq 1"}checked{/if} value="1" class="ace ace-switch ace-switch-4 btn-flat col-xs-10 col-sm-5" type="checkbox" /> 
+                                    <span class="lbl middle help-inline" >&nbsp;&nbsp;* 默认关闭</span>
+                                    </div>
+                                </div>
+
+					<div class="clearfix form-actions">
+						<div class="col-sm-offset-3 col-sm-9">
+							<button class="btn btn-info" type="submit">
+								<i class="ace-icon fa fa-check bigger-110"></i>
+								保存
+							</button>
+
+							&nbsp; &nbsp; &nbsp;
+							<button class="btn" type="reset">
+								<i class="ace-icon fa fa-undo bigger-110"></i>
+								重置
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+
+	</div><!-- /.page-content -->
+{/block}

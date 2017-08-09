@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<!--[if IE 8]>			<html class="ie ie8"> <![endif]-->
+<!--[if IE 9]>			<html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <title>{$menu.menu_seo_title|default=$site_seo_title} {$site_name}</title>
+    <meta name="keywords" content="{$menu.menu_seo_key|default=$site_seo_keywords}" />
+    <meta name="description" content="{$menu.menu_seo_des|default=$site_seo_description}">
+    {include file="public:head" /}
+</head>
+<body class="about page">
+<div class="wrap">
+    {include file="public:nav" /}
+<!-- 	{yf:data name="test" ispage="true" page="2" table="faq" /} -->
+<!-- 	{php}dump($test);{/php} -->
+    <div id="main-cmf">
+        <div class="breadcrumb-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
+                        <h2 class="title">{:lang('about us')}</h2>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
+                        <div class="breadcrumbs pull-right">
+                            <ul>
+                                <li>{:lang('current location')}:</li>
+                                <li><a href="__ROOT__/">{:lang('home')}</a></li>
+                                <li>{:lang('about us')}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="posts-block col-lg-8 col-md-8 col-sm-6 col-xs-12">
+                        <article>
+							{yf:singlepage name="menu" menuid="$about_id" /}
+                            <h3 class="title">{:lang('team introduction')}</h3>
+                            <div class="post-content">
+                                <div class="img-content">
+                                    <img src="{$menu.menu_img|get_imgurl}" alt="" style="max-width:350px">
+                                </div>
+                                <p>{$menu.menu_content}</p>
+                            </div>
+                        </article>
+                    </div>
+                    <div class="skills col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <h3 class="title">{:lang('our advantage')}</h3>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 85%;">{:lang('our advantage one')} 90%</div>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" style="width: 65%;">{:lang('our advantage two')} 85%</div>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 90%;">{:lang('our advantage three')} 90%</div>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">{:lang('our advantage four')} 90%</div>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%;">{:lang('our advantage five')} 75%</div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="divider"></div>
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <h3 class="title">{:lang('work flow')}</h3>
+                        <div class="widget tabs animate_afc">
+                            <div id="horizontal-tabs">
+                                <ul class="tabs">
+                                    <li id="tab1" class="current">{:lang('design')}</li>
+                                    <li id="tab2">{:lang('development phase')}</li>
+                                    <li id="tab3">{:lang('test and acceptance')}</li>
+                                </ul>
+                                <div class="contents">
+                                    <div class="tabscontent" id="content1" style="display: block;">
+                                        <p>{:lang('flow one')}
+                                        </p>
+                                    </div>
+                                    <div class="tabscontent" id="content2">
+                                        <p>{:lang('flow two')}
+                                        </p>
+                                    </div>
+                                    <div class="tabscontent" id="content3">
+                                        <p>{:lang('flow three')}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="row">
+                            <div class="testimonials widget">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="testimonials-title">
+                                        <h3 class="title">{:lang('positive')}</h3>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div id="testimonials-carousel" class="testimonials-carousel slide animate_afc">
+                                    <div class="carousel-inner">
+										{yf:news name="positive" cid="$positive_cid" field="news_title,news_scontent,news_source,n_id,news_img" order="news_time desc" limit="8" /} 
+                                        {foreach name="positive" item="vo" key="k"}
+                                            <div {if condition="$k eq 0"}class="item active"{else /}class="item"{/if}>
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="testimonial item">
+                                                    <p>{$vo.news_scontent}</p>
+                                                    <div class="testimonials-arrow">
+                                                    </div>
+                                                    <div class="author">
+                                                        <div class="testimonial-image "><img alt="" src="{$vo.news_img|get_imgurl}"></div>
+                                                        <div class="testimonial-author-info">
+                                                            <a href=""><span class="color">{$vo.news_title}</span></a>{$vo.news_source}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        {/foreach}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{include file="public:footer"/}
+</div>
+{include file="public:scripts"/}
+</body>
+</html>

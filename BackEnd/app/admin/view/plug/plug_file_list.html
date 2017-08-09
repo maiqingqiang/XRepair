@@ -1,0 +1,81 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+	<div class="page-content">
+		<link rel="stylesheet" type="text/css" media="all" href="__PUBLIC__/sldate/daterangepicker-bs3.css" />
+		<div class="row maintop">
+			<div class="col-xs-4 col-sm-3 margintop5">
+				<a href="{:url('admin/Plug/plug_file_filter')}">
+					<button class="btn btn-sm btn-danger">
+						<i class="ace-icon fa fa-bolt bigger-110"></i>
+						检测未使用文件
+					</button>
+				</a>
+
+			</div>
+			<form name="admin_list_sea" class="form-search" id="list-filter" method="post" action="{:url('admin/Plug/plug_file_list')}">
+				<div class="col-xs-12 col-sm-3 hidden-xs btn-sespan margintop5">
+					<div class="input-group">
+						<span class="input-group-addon">
+							<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+						</span>
+						<input type="text"  name="reservation" id="reservation" class="sl-date form-control " value="{$sldate}" placeholder="点击选择日期范围" style="height:34px"/>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-4 margintop5">
+					<div class="input-group">
+								<span class="input-group-addon">
+									<i class="ace-icon fa fa-check"></i>
+								</span>
+						<input type="text" name="val" id="val" class="form-control" value="{$val}" placeholder="输入文件路径" />
+								<span class="input-group-btn">
+									<button type="submit" class="btn btn-purple btn-sm ajax-search-form">
+										<span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
+										搜索
+									</button>
+								</span>
+					</div>
+				</div>
+				<div class="col-xs-12 col-sm-2 input-group-btn margintop5">
+					<a href="{:url('admin/Plug/plug_file_list')}">
+						<button type="button" class="btn btn-sm  btn-purple ajax-display-all">
+							<span class="ace-icon fa fa-globe icon-on-right bigger-110"></span>
+							显示全部
+						</button>
+					</a>
+				</div>
+			</form>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<div>
+					<table class="table table-striped table-bordered table-hover" id="dynamic-table">
+						<thead>
+						<tr>
+							<th>ID</th>
+							<th>文件路径</th>
+							<th>文件大小</th>
+							<th>上传时间</th>
+							<th>查看</th>
+						</tr>
+						</thead>
+
+						<tbody id="ajax-data">
+							{include file="plug/ajax_plug_file_list"/}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+
+	</div><!-- /.page-content -->
+{/block}
+{block name="scripts"}
+	<script type="text/javascript" src="__PUBLIC__/sldate/moment.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/sldate/daterangepicker.js"></script>
+	<script type="text/javascript">
+		$('#reservation').daterangepicker(null, function(start, end, label) {
+			console.log(start.toISOString(), end.toISOString(), label);
+		});
+	</script>
+{/block}

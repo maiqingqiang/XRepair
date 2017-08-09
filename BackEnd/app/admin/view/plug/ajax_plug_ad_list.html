@@ -1,0 +1,56 @@
+{foreach name="plug_ad_list" item="v"}
+	<tr>
+		<td class="hidden-xs" height="28" >{$v.plug_ad_id}</td>
+		<td><a href="{$v.plug_ad_url}" target="_blank">{$v.plug_ad_name}</a></td>
+		<td class="hidden-sm hidden-xs">{$v.plug_adtype_name}</td>
+		{if condition="config('lang_switch_on')"}
+		<td class="hidden-sm hidden-xs">{$v.plug_ad_l}</td>
+		{/if}
+		<td class="hidden-sm hidden-xs">{$v.plug_ad_addtime|date='Y-m-d',###}</td>
+		<td><input name="{$v.plug_ad_id}" value="{$v.plug_ad_order}" class="list_order center"/></td>
+		<td>
+			{if condition='$v.plug_ad_open eq 1'}
+				<a class="red open-btn" href="{:url('admin/Plug/plug_ad_state')}" data-id="{$v.plug_ad_id}" title="已开启">
+					<div id="zt{$v.plug_ad_id}"><button class="btn btn-minier btn-yellow">开启</button></div>
+				</a>
+				{else/}
+				<a class="red open-btn" href="{:url('admin/Plug/plug_ad_state')}" data-id="{$v.plug_ad_id}" title="已禁用">
+					<div id="zt{$v.plug_ad_id}"><button class="btn btn-minier btn-danger">禁用</button></div>
+				</a>														{/if}														</td>
+		<td>
+			<div class="hidden-sm hidden-xs action-buttons">
+				<a class="green"  href="{:url('admin/Plug/plug_ad_edit',array('plug_ad_id'=>$v['plug_ad_id']))}" title="修改">
+					<i class="ace-icon fa fa-pencil bigger-130"></i>																</a>
+				<a class="red confirm-rst-url-btn" href="{:url('admin/Plug/plug_ad_del',array('plug_ad_id'=>$v['plug_ad_id'],'p'=>input('p',1)))}" data-info="你确定要删除吗？" title="删除">
+					<i class="ace-icon fa fa-trash-o bigger-130"></i>																</a>											</div>
+			<div class="hidden-md hidden-lg">
+				<div class="inline position-relative">
+					<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+						<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+					</button>
+					<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+						<li>
+							<a href="{:url('admin/Plug/plug_ad_edit',array('plug_ad_id'=>$v['plug_ad_id']))}" class="tooltip-success" data-rel="tooltip" title="" data-original-title="修改">
+										<span class="green">
+											<i class="ace-icon fa fa-pencil bigger-120"></i>
+										</span>
+							</a>
+						</li>
+
+						<li>
+							<a href="{:url('admin/Plug/plug_ad_del',array('plug_ad_id'=>$v['plug_ad_id'],'p'=>input('p',1)))}"  class="tooltip-error confirm-rst-url-btn" data-info="你确定要删除吗？" data-rel="tooltip" title="" data-original-title="删除">
+										<span class="red">
+											<i class="ace-icon fa fa-trash-o bigger-120"></i>
+										</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</td>
+	</tr>
+{/foreach}
+<tr>
+	<td height="50" align="left"><button  id="btnorder" class="btn btn-white btn-yellow btn-sm">排序</button></td>
+	<td height="50" colspan="10" align="right">{$page}</td>
+</tr>

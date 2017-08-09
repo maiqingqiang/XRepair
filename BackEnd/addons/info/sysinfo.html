@@ -1,0 +1,23 @@
+<div class="widget-box sl-indextop10 text-left">
+	<div class="widget-header">
+		<h5 class="widget-title"><span style="font-size:14px; font-family:Microsoft YaHei">框架&系统信息</span></h5>
+
+	</div>
+	<div class="widget-body">
+		<div class="widget-main">
+			<p class="alert alert-danger sl-line-height25">
+				YFCMF版本：{$Think.config.yfcmf_version} &nbsp;
+				{if condition="!empty($update_check)"}
+				{if condition="empty($ver_last)"}
+					<button class="btn btn-xs btn-success"><i class="ace-icon fa fa-check"></i>{$ver_str}</button>
+				{else /}
+					<a href="{:url('admin/Update/index')}" title="在线更新"><button class="btn btn-xs btn-danger"><i class="ace-icon fa fa-bolt bigger-110"></i>{$ver_str}</button></a>
+				{/if}
+				{/if}
+				<br />
+				框架版本：ThinkPHP{$info.ThinkPHPTYE}&nbsp;&nbsp;上传附件限制：{$info.ONLOAD}<br />
+				系统版本：{$info.RUNTYPE}<br />
+			</p>
+		</div>
+	</div>
+</div>

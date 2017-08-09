@@ -1,0 +1,39 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+	<div class="page-content">
+
+		<div class="row maintop">
+			<div class="row">
+				<div class="col-xs-12">
+					<div>
+						<form id="alldel" name="alldel" method="post" action="{:url('admin/Plug/plug_file_alldel')}" >
+							<input name="p" id="p" value="{:input('p',1)}" type="hidden" />
+							<table class="table table-striped table-bordered table-hover" id="dynamic-table">
+								<thead>
+								<tr>
+									<th class="hidden-xs center">
+										<label class="pos-rel">
+											<input type="checkbox" class="ace"  id='chkAll' onclick='CheckAll(this.form)' value="全选"/>
+											<span class="lbl"></span>															</label>
+									</th>
+									<th>ID</th>
+									<th>文件路径</th>
+									<th>文件大小</th>
+									<th>上传时间</th>
+									<th>查看</th>
+									<th style="border-right:#CCC solid 1px;">操作</th>
+								</tr>
+								</thead>
+
+								<tbody id="ajax-data">
+									{include file="plug/ajax_plug_file_filter"/}
+								</tbody>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+{/block}

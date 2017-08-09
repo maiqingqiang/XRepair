@@ -1,0 +1,144 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+	<div class="page-content">
+		<div class="row maintop">
+			<form class="form-horizontal ajaxForm2" name="plug_linktype_add" method="post" action="{:url('admin/Plug/plug_linktype_runadd')}">
+				<div class="col-xs-12 col-sm-12"><small class="sl-left10">栏目名称：</small>
+					<small>
+						<input name="plug_linktype_name" id="plug_linktype_name" class="rule"  placeholder=" 输入名称" required/></small>&nbsp;&nbsp;					
+					<small class="sl-left10">排序（从小到大）：</small>
+					<small>
+						<input name="plug_linktype_order" id="plug_linktype_order" class="wh40" style="text-align:center" value="50"/></small>
+					<small>
+						<button class="btn btn-sm btn-danger ruleadd">
+							添加栏目
+						</button>
+					</small>
+				</div>
+			</form>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<div>
+					<form class="ajaxForm" name="linktype" method="post" action="{:url('admin/Plug/plug_linktype_order')}" >
+						<table class="table table-striped table-bordered table-hover" id="dynamic-table">
+							<thead>
+							<tr>
+								<th>ID</th>
+								<th>栏目名称</th>
+								<th style="border-right:#CCC solid 1px;">排序</th>
+								<th style="border-right:#CCC solid 1px;">操作</th>
+							</tr>
+							</thead>
+
+							<tbody>
+
+							{foreach name="link_type" item="v"}
+								<tr>
+									<td height="28">{$v.plug_linktype_id}</td>
+									<td>{$v.plug_linktype_name}</td>
+									<td><input name="{$v.plug_linktype_id}" value="{$v.plug_linktype_order}" class="list_order center"/></td>
+									<td>
+										<div class="hidden-sm hidden-xs action-buttons">
+											<a class="green" href="javascript:;" onclick="return openWindow({$v.plug_linktype_id},'{$v.plug_linktype_name}',{$v.plug_linktype_order});" data-toggle="tooltip" title="修改">
+												<i class="ace-icon fa fa-pencil bigger-130"></i>
+											</a>
+											<a class="red confirm-rst-url-btn" href="{:url('admin/Plug/plug_linktype_del',array('plug_linktype_id'=>$v['plug_linktype_id']))}" data-toggle="tooltip"  data-info="你确定要删除吗？" title="删除">
+												<i class="ace-icon fa fa-trash-o bigger-130"></i>
+											</a>
+										</div>
+										<div class="hidden-md hidden-lg">
+											<div class="inline position-relative">
+												<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+													<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+												</button>
+												<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+													<li>
+														<a class="green" href="javascript:;" onclick="return openWindow({$v.plug_linktype_id},'{$v.plug_linktype_name}',{$v.plug_linktype_order});" data-toggle="tooltip" title="修改">
+																	<span class="green">
+																		<i class="ace-icon fa fa-pencil bigger-120"></i>
+																	</span>
+														</a>
+													</li>
+
+													<li>
+														<a href="{:url('admin/Plug/plug_linktype_del',array('plug_linktype_id'=>$v['plug_linktype_id']))}"  class="tooltip-error confirm-rst-url-btn" data-info="你确定要删除吗？" data-rel="tooltip" title="" data-original-title="删除">
+																	<span class="red">
+																		<i class="ace-icon fa fa-trash-o bigger-120"></i>
+																	</span>
+														</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</td>
+								</tr>
+							{/foreach}
+							<tr>
+								<td colspan="5" align="left"><button type="submit"  id="btnorder" class="btn btn-white btn-yellow btn-sm">排序</button></td>
+							</tr>
+							</tbody>
+						</table>
+					</form>
+				</div>
+			</div>
+		</div>
+
+
+		<!--修改模态框,对于参数比较少的时候适用-->
+		<div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-backdrop fade in" id="gbbb" style="height: 100%;"></div>
+			<form class="form-horizontal ajaxForm2" name="plug_linktype_edit" method="post" action="{:url('admin/Plug/plug_linktype_runedit')}">
+				<input type="hidden" name="plug_linktype_id" id="plug_linktype_id" value="" />
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" id="gb" data-dismiss="modal"
+									aria-hidden="true">×
+							</button>
+							<h4 class="modal-title" id="myModalLabel">
+								修改友情链接栏目
+							</h4>
+						</div>
+						<div class="modal-body">
+
+
+							<div class="row">
+								<div class="col-xs-12">
+
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 链接名称：  </label>
+										<div class="col-sm-10">
+											<input type="text" name="plug_linktype_name" id="newplug_linktype_name"  class="col-xs-10 col-sm-5" required/>
+											<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必须是以字母开头，数字、符号组合</span>
+										</div>
+									</div>
+									<div class="space-4"></div>
+
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 排序：  </label>
+										<div class="col-sm-10">
+											<input type="text" name="plug_linktype_order" id="newplug_linktype_order" class="col-xs-10 col-sm-3" />
+											<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>从小到大排序</span>
+										</div>
+									</div>
+									<div class="space-4"></div>
+
+								</div>
+							</div>
+
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary">
+								提交保存
+							</button>
+							<button type="button" class="btn btn-default" id="gbb" data-dismiss="modal"
+									aria-hidden="true">关闭
+							</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div><!--修改-->
+	</div><!-- /.page-content -->
+{/block}

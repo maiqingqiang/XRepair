@@ -1,0 +1,25 @@
+<div id="sidebar2" class="sidebar h-sidebar navbar-collapse collapse breadcrumbs-fixed" data-sidebar="true" data-sidebar-scroll="true" data-sidebar-hover="true">
+	<div class="nav-wrap-up pos-rel">
+		<div class="nav-wrap">
+			<ul class="nav nav-list">
+				{if condition="($id_curr neq '') AND (!empty($menus_child))"}
+				{foreach name="menus_child" item="k"}
+				<li>
+					<a href="{:url(''.$k['name'].'')}">
+					<o class="font12 {if condition="$id_curr eq $k['id']"}rigbg{/if}">{$k.title}</o>
+					</a>
+					<b class="arrow"></b>
+				</li>
+				{/foreach}
+				{else /}
+				<li>
+					<a href="{:url('admin/Index/index')}">
+						<o class="font12">欢迎使用YFCMF后台系统管理</o>
+					</a>
+					<b class="arrow"></b>
+				</li>
+				{/if}
+			</ul>
+		</div>
+	</div><!-- /.nav-list -->
+</div>

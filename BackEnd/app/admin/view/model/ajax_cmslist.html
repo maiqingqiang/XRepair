@@ -1,0 +1,62 @@
+{foreach name="data" item="v"}
+<tr>
+	<td class="hidden-xs" align="center">
+		<label class="pos-rel">
+			<input name="{$model['model_pk']}[]" id="navid" class="ace"  type='checkbox' value="{$v[$model['model_pk']]}">
+			<span class="lbl"></span>
+		</label>
+	</td>
+    {switch name="fields[$model['model_order']]['type']" }
+    {case value="number"}
+    <td height="28" ><input name="{$v[$model['model_pk']]}" value="{$v[$model['model_order']]|default=50}" class="list_order center"/></td>
+    {/case}
+    {case value="datetime|date"}
+	<td height="28" >{$v[$model['model_order']]}</td>
+    {/case}
+    {/switch}
+	{foreach name="fields" item="vv" key="k"}
+	{if condition="$k neq $model['model_order']"}
+	<td height="28" >{$v[$k]}</td>
+	{/if}
+	{/foreach}
+	<td>
+		<div class="hidden-sm hidden-xs action-buttons">
+			<a class="green"  href="{:url('admin/Model/cmsedit',['id'=>$model_id,$model['model_pk']=>$v[$model['model_pk']]])}" title="修改">
+				<i class="ace-icon fa fa-pencil bigger-130"></i>
+			</a>
+			<a class="red confirm-rst-url-btn" href="{:url('admin/Model/cmsdel',['id'=>$model_id,$model['model_pk']=>$v[$model['model_pk']]])}" data-info="你确定要删除吗？" title="删除">
+				<i class="ace-icon fa fa-trash-o bigger-130"></i>
+			</a>
+		</div>
+		<div class="hidden-md hidden-lg">
+			<div class="inline position-relative">
+				<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+					<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+				</button>
+				<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+					<li>
+						<a href="" class="tooltip-success" data-rel="tooltip" title="" data-original-title="修改">
+							<span class="green">
+								<i class="ace-icon fa fa-pencil bigger-120"></i>
+							</span>
+						</a>
+					</li>
+
+					<li>
+						<a href="{:url('admin/Model/cmsdel',['id'=>$model_id,$model['model_pk']=>$v[$model['model_pk']]])}"  class="tooltip-error confirm-rst-url-btn" data-info="你确定要删除吗？" data-rel="tooltip" title="" data-original-title="删除">
+							<span class="red">
+								<i class="ace-icon fa fa-trash-o bigger-120"></i>
+							</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</td>
+</tr>
+{/foreach}
+<tr>
+	<td align="left" class="hidden-xs"><button id="btnsubmit" class="btn btn-white btn-yellow btn-sm hidden-xs">删</button> </td>
+	<td align="left" class="hidden-xs"><button  id="btnorder" href="{:url('admin/Model/cmsorder',['id'=>$model_id])}" class="btn btn-white btn-yellow btn-sm">排序</button></td>
+	<td colspan="20" align="right" class="hidden-xs">{$page}</td>
+</tr>

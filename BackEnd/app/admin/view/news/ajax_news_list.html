@@ -1,0 +1,93 @@
+{foreach name="news" item="v"}
+	<tr>
+		<td class="hidden-xs" align="center">
+			<label class="pos-rel">
+				<input name='n_id[]' id="navid" class="ace"  type='checkbox' value='{$v.n_id}'>
+				<span class="lbl"></span>
+			</label>
+		</td>
+		<td class="hidden-xs center"><input name="{$v.n_id}" value="{$v.listorder|default=50}" class="list_order news_order"/></td>
+		<td class="hidden-xs" align="center">{$v.n_id}</td>
+		<td><a href="{:url('admin/News/news_edit',array('n_id'=>$v['n_id']))}" title="{$v.news_title}">{$v.news_title|subtext=25}</a>【{$v['member_list_nickname']|default=$v['member_list_username']}】</td>
+		<td class="hidden-xs hidden-sm">
+			<select name="news_columnid" class="ajax_change_news_columnid">
+			{foreach name="menu" item="vo"}
+				{if condition="($vo['menu_type'] neq '') AND ($vo['menu_l'] eq $v['news_l'])"}
+			<option value="{$vo.id}" class="bgc" {if condition="$v.news_columnid eq $vo['id']"}selected{/if}>{$vo.lefthtml}{$vo.menu_name}</option>
+				{/if}
+			{/foreach}
+			</select>
+			<span class="action none">
+				<a href="{:url('admin/News/news_columnid')}" class="green change-columnid" data-columnid="{$v.news_columnid}" data-id="{$v.n_id}" title="确认">
+					<i class="ace-icon fa fa-check bigger-130"></i>
+				</a>
+				<a href="javascript:void(0);" class="red cancel-change-columnid" data-columnid="{$v.news_columnid}" title="取消">
+					<i class="ace-icon fa fa-close bigger-130"></i>
+				</a>
+			</span>
+		</td>
+		<td class="hidden-sm hidden-xs">
+			{if condition="strstr($v['news_flag'],'h') eq true"}<span style="color:#03C">头</span>{/if}
+			{if condition="strstr($v['news_flag'],'c') eq true"}<span style="color:#060">荐</span>{/if}
+			{if condition="strstr($v['news_flag'],'f') eq true"}<span style="color:#09F">幻</span>{/if}
+			{if condition="strstr($v['news_flag'],'a') eq true"}<span style="color:#63C">特</span>{/if}
+			{if condition="strstr($v['news_flag'],'s') eq true"}<span style="color:#C0C">滚</span>{/if}
+			{if condition="strstr($v['news_flag'],'p') eq true"}<span style="color:#960">图</span>{/if}
+			{if condition="strstr($v['news_flag'],'j') eq true"}<span style="color:#C00">跳</span>{/if}
+			{if condition="strstr($v['news_flag'],'d') eq true"}<span style="color:#630">原</span>{/if}
+			{if condition="strstr($v['news_flag'],'cp') eq true"}<span style="color:#438eb9">产</span>{/if}
+		</td>
+		<td class="hidden-xs">
+			{if condition="$v['news_open'] eq 1"}
+				<a class="red state-btn" href="{:url('admin/News/news_state')}" data-id="{$v.n_id}" title="已审">
+					<div><button class="btn btn-minier btn-yellow">已审</button></div>
+				</a>
+				{else/}
+				<a class="red state-btn" href="{:url('admin/News/news_state')}" data-id="{$v.n_id}" title="未审">
+					<div><button class="btn btn-minier btn-danger">未审</button></div>
+				</a>
+			{/if}
+		</td>
+		<td class="hidden-xs">{$v.news_time|date='Y-m-d',###}</td>
+		<td>
+			<div class="hidden-sm hidden-xs action-buttons">
+				<a class="green" href="{:url('admin/News/news_edit',array('n_id'=>$v['n_id']))}" data-toggle="tooltip" title="修改">
+					<i class="ace-icon fa fa-pencil bigger-130"></i>
+				</a>
+				<a class="red confirm-rst-url-btn" data-info="你确定要删除到回收站吗？" href="{:url('admin/News/news_del',array('n_id'=>$v['n_id'],'p'=>input('p',1)))}" title="回收站" data-toggle="tooltip">
+					<i class="ace-icon fa fa-trash-o bigger-130"></i>
+				</a>
+			</div>
+			<div class="hidden-md hidden-lg">
+				<div class="inline position-relative">
+					<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+						<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+					</button>
+					<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+						<li>
+							<a href="{:url('admin/News/news_edit',array('n_id'=>$v['n_id']))}" class="tooltip-success" data-rel="tooltip" title="" data-original-title="修改">
+											<span class="green">
+												<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+											</span>
+							</a>
+						</li>
+
+						<li>
+							<a href="{:url('admin/News/news_del',array('n_id'=>$v['n_id'],'p'=>input('p',1)))}" data-info="你确定要删除到回收站吗？" class="tooltip-error confirm-rst-url-btn" data-rel="tooltip" title="回收站" data-original-title="回收站">
+											<span class="red">
+												<i class="ace-icon fa fa-trash-o bigger-120"></i>
+											</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</td>
+	</tr>
+{/foreach}
+<tr>
+	<td align="left" class="hidden-xs center"><button id="btnsubmit" class="btn btn-white btn-yellow btn-sm hidden-xs">删</button> </td>
+	<td colspan="2" align="left"class="hidden-lg hidden-md hidden-sm">{$page}</td>
+	<td align="left" class="hidden-xs center"><button  id="btnorder" href="{:url('admin/News/news_order')}" class="btn btn-white btn-yellow btn-sm">排序</button></td>
+	<td colspan="7" align="right" class="hidden-xs">{$page}</td>
+</tr>

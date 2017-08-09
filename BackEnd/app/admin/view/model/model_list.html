@@ -1,0 +1,184 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+	<div class="page-content">
+
+		<div class="row maintop">
+			<div class="col-xs-5 col-sm-2  margintop5">
+				<a href="{:url('admin/Model/model_add')}">
+					<button class="btn btn-sm btn-danger">
+						<i class="ace-icon fa fa-bolt bigger-110"></i>
+						添加模型
+					</button>
+				</a>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12">
+				<div>
+					<table class="table table-striped table-bordered table-hover" id="dynamic-table">
+						<thead>
+						<tr>
+							<th class="hidden-xs">ID</th>
+							<th>模型标识</th>
+							<th>模型标题</th>
+							<th>数据引擎</th>
+							<th class="hidden-sm hidden-xs">添加日期</th>
+							<th>状态</th>
+							<th style="border-right:#CCC solid 1px;">操作</th>
+						</tr>
+						</thead>
+
+						<tbody>
+							{foreach name="models" item="v"}
+							<tr>
+								<td height="28"  class="hidden-xs" >{$v.model_id}</td>
+								<td>{$v.model_name}</td>
+								<td>{$v.model_title}</td>
+								<td>{$v.model_engine}</td>
+								<td class="hidden-sm hidden-xs">{$v.create_time|date='Y-m-d',###}</td>
+								<td>
+									{if condition='$v.model_status eq 1'}
+										<a class="red open-btn" href="{:url('admin/Model/model_state')}" data-id="{$v.model_id}" title="已开启">
+											<div id="zt{$v.model_id}"><button class="btn btn-minier btn-yellow">开启</button></div>
+										</a>
+										{else/}
+										<a class="red open-btn" href="{:url('admin/Model/model_state')}" data-id="{$v.model_id}" title="已禁用">
+											<div id="zt{$v.model_id}"><button class="btn btn-minier btn-danger">禁用</button></div>
+										</a>
+									{/if}														</td>
+								<td>
+									<div class="hidden-sm hidden-xs action-buttons">
+										<a class="blue" href="javascript:;" onclick="return addmenu({$v.model_id});" data-toggle="tooltip"   title="添加到后台左侧菜单">
+											<i class="ace-icon fa fa-plus-circle bigger-130"></i>													</a>
+										<a class="green confirm-url-btn"  href="{:url('admin/Model/model_edit',['model_id'=>$v.model_id])}" data-info="将重建数据库,原有数据自动备份，确认修改？" data-toggle="tooltip" title="修改">
+											<i class="ace-icon fa fa-pencil bigger-130"></i>
+										</a>
+										<a class="green"  href="{:url('admin/Model/model_copy',['model_id'=>$v.model_id])}"  data-toggle="tooltip" title="复制模型">
+											<i class="ace-icon fa fa-exchange bigger-130"></i>
+										</a>
+										<a class="red confirm-rst-url-btn" href="{:url('admin/Model/model_del',array('model_id'=>$v['model_id']))}" data-info="你确定要删除吗？不建议直接删除" data-toggle="tooltip" title="删除">
+											<i class="ace-icon fa fa-trash-o bigger-130"></i>
+										</a>
+									</div>
+									<div class="hidden-md hidden-lg">
+										<div class="inline position-relative">
+											<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+												<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+											</button>
+											<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+												<li>
+													<a href="javascript:;" onclick="return addmenu({$v.model_id});" class="tooltip-success blue" data-rel="tooltip" title="添加到后台左侧菜单"  data-original-title="添加到后台左侧菜单">
+																<span class="green">
+																	<i class="ace-icon fa fa fa-plus-circle bigger-120"></i>
+																</span>
+													</a>
+												</li>
+												<li>
+													<a href="{:url('admin/Model/model_edit',['model_id'=>$v.model_id])}" class="tooltip-success confirm-url-btn" data-rel="tooltip" title="修改" data-info="将重建数据库,原有数据自动备份，确认修改？" data-original-title="修改">
+																<span class="green">
+																	<i class="ace-icon fa fa-pencil bigger-120"></i>
+																</span>
+													</a>
+												</li>
+												<li>
+													<a href="{:url('admin/Model/model_copy',['model_id'=>$v.model_id])}" class="tooltip-success" data-rel="tooltip" title="复制模型"  data-original-title="复制模型">
+																<span class="green">
+																	<i class="ace-icon fa fa-exchange bigger-120"></i>
+																</span>
+													</a>
+												</li>
+												<li>
+													<a href="{:url('admin/Model/model_del',array('model_id'=>$v['model_id']))}"  class="tooltip-error confirm-rst-url-btn" data-info="你确定要删除吗？不建议直接删除" data-rel="tooltip" title="删除" data-original-title="删除">
+																<span class="red">
+																	<i class="ace-icon fa fa-trash-o bigger-120"></i>
+																</span>
+													</a>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</td>
+							</tr>
+							{/foreach}
+						</tbody>
+					</table>
+
+				</div>
+			</div>
+		</div>
+		<!--添加到后台menu-->
+		<div class="modal fade in" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-backdrop fade in" id="gbbb" style="height: 100%;"></div>
+			<form class="form-horizontal ajaxForm2" name="model_addmenu" method="post" action="{:url('admin/Model/model_addmenu')}">
+				<input type="hidden" name="model_id" id="model_id" value="" />
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" id="gb" data-dismiss="modal"
+									aria-hidden="true">×
+							</button>
+							<h4 class="modal-title" id="myModalLabel">
+								添加到后台菜单
+							</h4>
+						</div>
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-xs-12">
+									<div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 上级栏目：  </label>
+										<div class="col-sm-9">
+											<select name="admin_rule_pid"class="col-sm-4 selector" required>
+												<option value="0">顶级栏目</option>
+												{foreach name="admin_rule" item="v"}
+												<option value="{$v.id}">{$v.lefthtml}{$v.title}</option>
+												{/foreach}
+											</select>
+											<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>后台菜单名</span>
+										</div>
+									</div>
+									<div class="space-4"></div>
+									<div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 导航标题：  </label>
+										<div class="col-sm-9">
+											<input type="text" name="menu_name" id="menu_name"  class="col-xs-10 col-sm-5" required/>
+											<span class="lbl">&nbsp;&nbsp;<span class="red"></span>后台菜单名</span>
+										</div>
+									</div>
+									<div class="space-4"></div>
+
+									<div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 样式名称：  </label>
+										<div class="col-sm-9">
+											<input type="text" name="css" id="css" class="col-xs-10 col-sm-3"/>
+											<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>样式图标样式</span>
+										</div>
+										<span class="col-sm-3"></span><span class="col-sm-9" style="font-size:12px; color:#999; margin-top:5px;">预留样式：fa-tachometer ， fa-folder ， fa-list ， fa-list-alt ， fa-calendar</span>
+									</div>
+									<div class="space-4"></div>
+									<div class="form-group">
+										<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 排序（从小到大）： </label>
+										<div class="col-sm-9">
+											<input type="text" name="sort" id="sort"  value="50" class="col-xs-10 col-sm-3" />
+											<span class="lbl">&nbsp;&nbsp;<span class="red"></span>越小越靠前</span>
+										</div>
+									</div>
+									<div class="space-4"></div>
+								</div>
+							</div>
+
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary">
+								提交保存
+							</button>
+							<button type="button" class="btn btn-default" id="gbb" data-dismiss="modal"
+									aria-hidden="true">关闭
+							</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div><!--修改-->
+	</div><!-- /.page-content -->
+{/block}

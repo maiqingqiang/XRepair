@@ -1,0 +1,41 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+	<div class="page-content">
+
+
+		<div class="col-xs-12 col-sm-12 rule-top alert alert-info top10">
+			<button type="button" class="close" data-dismiss="alert">
+				<i class="ace-icon fa fa-times"></i>
+			</button>
+			此处导入功能作为参考示例，缺少部分判断业务流程，程序员根据需求进行更改(参考：<a href="http://www.codeplex.com/PHPExcel" target="_blank">PHPEXCEL插件</a>)
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12">
+				<form class="form-horizontal ajaxForm2" name="excel_runimport" method="post" action="{:url('admin/Sys/excel_runimport')}"  enctype="multipart/form-data">
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 【文章】选择上传的EXCEL文件： </label>
+						<div class="col-sm-4">
+							<a href="javascript:;" class="file">
+								<input type="file" name="file_stu" id="file_stu"  class="file" multiple="multiple" required/>
+								选择上传文件
+							</a>
+												<span class="input-group-btn" style="float:inherit; left:140px; top:2px;">
+													<button type="submit" class="btn btn-xs  btn-purple">
+														<span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
+														表格导入
+													</button>
+												</span>
+							<span style="float:right; line-height:35px; top:2px;"><a href="__PUBLIC__/Excel/sample/mr_news.xls" target="_blank">下载示例表格</a></span>
+
+						</div>
+
+					</div>
+					<div class="space-4"></div>
+				</form>
+			</div>
+		</div>
+
+
+	</div><!-- /.page-content -->
+{/block}

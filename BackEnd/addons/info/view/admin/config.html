@@ -1,0 +1,47 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+	<div class="page-content">
+		<!--主题-->
+		<div class="page-header">
+			<h1>
+				您当前操作
+				<small>
+					<i class="ace-icon fa fa-angle-double-right"></i>
+					插件设置
+				</small>
+			</h1>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<form class="form-horizontal ajaxForm2" method="post" action="{:addon_url('info://Admin/config')}">
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否显示： </label>
+						<div class="col-sm-9" style="padding-top:5px;">
+							<input name="display" {if condition='$config.display eq 1'}checked{/if}  value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+							<span class="lbl"></span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+
+					<div class="clearfix form-actions">
+						<div class="col-sm-offset-3 col-sm-9">
+							<button class="btn btn-info" type="submit">
+								<i class="ace-icon fa fa-check bigger-110"></i>
+								保存
+							</button>
+							&nbsp; &nbsp; &nbsp;
+							<button class="btn" type="reset">
+								<i class="ace-icon fa fa-undo bigger-110"></i>
+								重置
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div><!-- /.page-content -->
+{/block}
+	
+
+

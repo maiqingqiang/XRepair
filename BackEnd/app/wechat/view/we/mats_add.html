@@ -1,0 +1,229 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+	<div class="page-content">
+		<!--主题-->
+		<div class="page-header">
+			<h1>
+				您当前操作
+				<small>
+					<i class="ace-icon fa fa-angle-double-right"></i>
+					添加素材
+				</small>
+			</h1>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<form class="form-horizontal ajaxForm2" name="form0" method="post" action="{:url('wechat/We/mats_runadd')}"  enctype="multipart/form-data">
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 素材类型： </label>
+						<div class="col-sm-10">
+							<select name="mats_type"  id="mats_type" class="col-sm-4 selector" required>
+								<option value="image">图片素材</option>
+								<option value="voice">声音素材</option>
+								<option value="video">视频素材</option>
+								<option value="thumb">缩略图素材</option>
+								<option value="news">图文素材</option>
+							</select>
+						</div>
+					</div>
+					<div class="space-4"></div>
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 素材名：  </label>
+						<div class="col-sm-10">
+							<input type="text" name="mats_name" placeholder="输入素材名" class="col-xs-10 col-sm-6" />
+							<span class="help-inline col-xs-12 col-sm-7">
+								<span class="middle" id="resone"></span>
+							</span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+					<div id="input-video" class="none">
+						<div class="form-group">
+							<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 视频标题：  </label>
+							<div class="col-sm-10">
+								<input type="text" name="video_title" placeholder="输入视频标题" class="col-xs-10 col-sm-6" />
+								<span class="help-inline col-xs-12 col-sm-7">
+								<span class="middle" id="resone"></span>
+							</span>
+							</div>
+						</div>
+						<div class="space-4"></div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 视频描述：  </label>
+							<div class="col-sm-10">
+								<input type="text" name="video_introduction" placeholder="输入视频描述" class="col-xs-10 col-sm-6" />
+								<span class="help-inline col-xs-12 col-sm-7">
+								<span class="middle" id="resone"></span>
+							</span>
+							</div>
+						</div>
+						<div class="space-4"></div>
+					</div>
+					<div id="upload-file">
+						<div class="form-group">
+							<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 文件上传： </label>
+							<div class="col-sm-10">
+								<input type="file" name="mats_file" id="id-input-file-1" class="col-xs-10 col-sm-6"/>
+								<span class="lbl"></span>
+							</div>
+						</div>
+						<div class="space-4"></div>
+					</div>
+					<div id="input-news" class="none">
+						<div class="form-group">
+							<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 图文标题：  </label>
+							<div class="col-sm-10">
+								<input type="text" name="news_title" placeholder="输入图文标题" class="col-xs-10 col-sm-6" />
+								<span class="help-inline col-xs-12 col-sm-7">
+								<span class="middle" id="resone"></span>
+							</span>
+							</div>
+						</div>
+						<div class="space-4"></div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 图文作者：  </label>
+							<div class="col-sm-10">
+								<input type="text" name="news_author" placeholder="输入图文作者" class="col-xs-10 col-sm-6" />
+								<span class="help-inline col-xs-12 col-sm-7">
+								<span class="middle" id="resone"></span>
+							</span>
+							</div>
+						</div>
+						<div class="space-4"></div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 图文摘要：  </label>
+							<div class="col-sm-10">
+								<input type="text" name="news_digest" placeholder="输入图文摘要" class="col-xs-10 col-sm-6" />
+								<span class="help-inline col-xs-12 col-sm-7">
+								<span class="middle" id="resone"></span>
+							</span>
+							</div>
+						</div>
+						<div class="space-4"></div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 图文跳转URL：  </label>
+							<div class="col-sm-10">
+								<input type="text" name="content_source_url" placeholder="输入图文跳转URL" class="col-xs-10 col-sm-6" />
+								<span class="help-inline col-xs-12 col-sm-7">
+								<span class="middle" id="resone"></span>
+							</span>
+							</div>
+						</div>
+						<div class="space-4"></div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 是否显示封面： </label>
+							<div class="col-sm-10" style="padding-top:5px;">
+								<input name="show_cover_pic" id="show_cover_pic" value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+								<span class="lbl">&nbsp;&nbsp;默认不显示</span>
+							</div>
+						</div>
+						<div class="space-4"></div>
+						<div id="news_thumb">
+							<div class="form-group">
+								<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 图文封面： </label>
+								<div class="col-sm-10">
+									<input type="file" name="news_thumb" id="id-input-file-2" class="col-xs-10 col-sm-6"/>
+									<span class="lbl"></span>
+								</div>
+							</div>
+							<div class="space-4"></div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 图文封面： </label>
+							<div class="col-sm-10">
+								<script src="__PUBLIC__/ueditor/ueditor.config.js" type="text/javascript"></script>
+								<script src="__PUBLIC__/ueditor/ueditor.all.js" type="text/javascript"></script>
+								<textarea name="mats_content" rows="100%" style="width:100%" id="myEditor"></textarea>
+								<script type="text/javascript">
+                                    var editor = new UE.ui.Editor({
+                                        serverUrl:"{:url('admin/Ueditor/upload',['edit_type'=>'mats'])}"
+                                    });
+                                    editor.render("myEditor");
+								</script>
+							</div>
+						</div>
+						<div class="space-4"></div>
+					</div>
+					<div class="clearfix form-actions">
+						<div class="col-md-offset-3 col-md-9">
+							<button class="btn btn-info" type="submit">
+								<i class="ace-icon fa fa-check bigger-110"></i>
+								保存
+							</button>
+
+							&nbsp; &nbsp; &nbsp;
+							<button class="btn" type="reset">
+								<i class="ace-icon fa fa-undo bigger-110"></i>
+								重置
+							</button>
+						</div>
+					</div>
+				</div>	
+			</form>
+		</div>
+	</div>
+{/block}
+{block name="scripts"}
+	<script>
+		var input_file=$('#id-input-file-1'),upload_file=$('#upload-file'),input_video=$('#input-video'),input_news=$('#input-news');
+        input_file.ace_file_input({
+            no_file:'未选择文件(支持文件拖入) ...',
+            btn_choose:'选择',
+            btn_change:'更改',
+            droppable:true,
+            onchange:null,
+            thumbnail:false, //| true | large
+            allowExt:  ['bmp', 'png', 'jpeg', 'gif', 'jpg'],
+            maxSize: 2097152//2M
+        });
+        $('#id-input-file-2').ace_file_input({
+            no_file:'未选择文件,支持文件拖入(仅支持jpg格式,大小限制64k) ...',
+            btn_choose:'选择',
+            btn_change:'更改',
+            droppable:true,
+            onchange:null,
+            thumbnail:false, //| true | large
+            allowExt:  ['jpg'],
+            maxSize: 65536//64k
+        });
+        $('#mats_type').change(function () {
+            var $type=$(this).val();
+            if($type=='news'){
+                upload_file.addClass('none');
+                input_news.removeClass('none');
+			}else{
+                upload_file.removeClass('none');
+                input_news.addClass('none');
+			}
+            if($type=='thumb'){
+                input_video.addClass('none');
+                input_file.ace_file_input('update_settings', {
+                    no_file:'仅支持jpg格式,大小限制64k',
+                    allowExt: ['jpg'],
+                    maxSize: 65536//64K
+                });
+			}else if($type=='voice'){
+                input_video.addClass('none');
+                input_file.ace_file_input('update_settings', {
+                    no_file:'支持mp3/wma/wav/amr格式,大小限制5M,不超过60秒',
+                    allowExt: ['mp3', 'wma', 'wav', 'amr'],
+                    maxSize: 5242880//5M
+                });
+			}else if($type=='video'){
+                input_video.removeClass('none');
+                input_file.ace_file_input('update_settings', {
+                    no_file:'仅支持mp4格式,大小限制10M',
+                    allowExt: ['mp4'],
+                    maxSize: 10485760//10M
+                });
+			}else{
+                input_video.addClass('none');
+                input_file.ace_file_input('update_settings', {
+                    no_file:'支持bmp/png/jpeg/gif/jpg格式,大小限制2M',
+                    allowExt: ['bmp', 'png', 'jpeg', 'gif', 'jpg'],
+                    maxSize: 2097152//2M
+                });
+			}
+        });
+	</script>
+{/block}

@@ -1,0 +1,187 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+	<div class="page-content">
+
+		<!--主题-->
+		<div class="page-header">
+			<h1>
+				您当前操作
+				<small>
+					<i class="ace-icon fa fa-angle-double-right"></i>
+					添加会员信息
+				</small>
+			</h1>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<form class="form-horizontal memberform" name="member_list_add" method="post" action="{:url('admin/Member/member_runadd')}">
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 所属用户组： </label>
+						<div class="col-sm-10">
+							<select name="member_list_groupid"  class="col-sm-4 selector" required>
+								<option value="">请选择所属用户组</option>
+								{foreach name="member_group" item="v"}
+									<option value="{$v.member_group_id}">{$v.member_group_name}</option>
+								{/foreach}
+							</select>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 用户名：  </label>
+						<div class="col-sm-10">
+							<input type="text" name="member_list_username" id="member_list_username" placeholder="输入登录用户名" class="col-xs-10 col-sm-4" required/>
+							<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必填，用户名必须是以字母开头，数字、符号组合</span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 登入密码：  </label>
+						<div class="col-sm-10">
+							<input type="text" name="member_list_pwd" id="member_list_pwd" placeholder="输入登录密码" class="col-xs-10 col-sm-4" maxlength="15" minlength="5" required/>
+							<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必填，密码必须大于6位，小于15位</span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 昵称：  </label>
+						<div class="col-sm-10">
+							<input type="text" name="member_list_nickname" id="member_list_nickname" placeholder="输入昵称" class="col-xs-10 col-sm-4" />
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 积分：  </label>
+						<div class="col-sm-10">
+							<input type="text" name="score" id="score" placeholder="0" class="col-xs-10 col-sm-4" />
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 金币：  </label>
+						<div class="col-sm-10">
+							<input type="text" name="coin" id="coin" placeholder="0" class="col-xs-10 col-sm-4" />
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 所在地：  </label>
+						<div class="col-sm-10">
+							<select name="member_list_province" id="province" onChange="loadRegion('province',2,'city','{:url('admin/Ajax/getRegion')}');">
+								<option value="0" selected>省份/直辖市</option>
+								{volist name="province" id="vo"}
+								<option value="{$vo.id}" >{$vo.name}</option>
+								{/volist}
+							</select>
+							<select name="member_list_city" id="city"  onchange="loadRegion('city',3,'town','{:url('admin/Ajax/getRegion')}');">
+								<option value="0">市/县</option>
+							</select>
+							<select name="member_list_town" id="town">
+								<option value="0">镇/区</option>
+							</select>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 性别：  </label>
+						<div class="col-sm-10">
+							<label>
+								<input name="member_list_sex" type="radio" value="1" class="ace" />
+								<span class="lbl"> 程序猿 </span>&nbsp;&nbsp;
+							</label>
+							<label>
+								<input name="member_list_sex" type="radio" value="2" class="ace" />
+								<span class="lbl"> 程序媛 </span>
+							</label>
+							<label>
+								<input name="member_list_sex" type="radio" value="3" checked class="ace" />
+								<span class="lbl"> 保密 </span>
+							</label>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 手机号码：  </label>
+						<div class="col-sm-10">
+							<input type="text" name="member_list_tel" id="member_list_tel" placeholder="输入手机号码" class="col-xs-10 col-sm-4" required/>
+							<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>只能填写数字</span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 个人网站：  </label>
+						<div class="col-sm-10">
+							<input type="url" name="user_url" id="user_url" placeholder="http://www.rainfer.cn" class="col-xs-10 col-sm-4" />
+							<span class="lbl">&nbsp;&nbsp;<span class="red"></span>http://开头</span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 签名：  </label>
+						<div class="col-sm-10">
+							<textarea  name="signature" cols="20" rows="4" class="col-xs-10 col-sm-4 limited"   id="form-field-12"  maxlength="125"></textarea>
+							<input type="hidden" name="maxlengthone" value="125" />
+							<span class="help-inline">&nbsp;&nbsp;还可以输入 <span class="middle charsLeft"></span> 个字符</span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 联系邮箱：  </label>
+						<div class="col-sm-10">
+							<input type="email" name="member_list_email" id="member_list_email" placeholder="输入联系邮箱" class="col-xs-10 col-sm-4" required/>
+							<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必填：用于找回密码</span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 是否审核： </label>
+						<div class="col-sm-10" style="padding-top:5px;">
+							<input name="member_list_open" id="member_list_open" value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+							<span class="lbl">&nbsp;&nbsp;默认关闭</span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 是否激活： </label>
+						<div class="col-sm-10" style="padding-top:5px;">
+							<input name="user_status" id="user_status" value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+							<span class="lbl">&nbsp;&nbsp;默认未激活</span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="clearfix form-actions">
+						<div class="col-md-offset-3 col-md-9">
+							<button class="btn btn-info" type="submit">
+								<i class="ace-icon fa fa-check bigger-110"></i>
+								保存
+							</button>
+
+							&nbsp; &nbsp; &nbsp;
+							<button class="btn" type="reset">
+								<i class="ace-icon fa fa-undo bigger-110"></i>
+								重置
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div><!-- /.page-content -->
+{/block}
+{block name="scripts"}
+	<script type="text/javascript" src="__PUBLIC__/others/region.js"></script>
+{/block}

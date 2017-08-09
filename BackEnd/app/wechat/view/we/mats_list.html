@@ -1,0 +1,53 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+	<div class="page-content">
+		<div class="row maintop">
+			<div class="col-xs-12">
+				<a class="red" href="{:url('wechat/We/mats_add')}">
+					<button class="btn btn-xs btn-danger">
+						<i class="ace-icon fa fa-plus bigger-110"></i>
+						上传永久素材
+					</button>
+				</a>
+				<a class="red confirm-rst-url-btn" href="{:url('wechat/We/mats_get')}" data-info="请勿频繁同步,确认要同步?">
+					<button class="btn btn-xs btn-info">
+						<i class="ace-icon fa fa-refresh bigger-110"></i>
+						同步素材
+					</button>
+				</a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<div>
+					<form class="ajaxForm2" name="leftnav" method="post" action="{:url('wechat/We/mats_alldel')}" >
+						<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+							<thead>
+							<tr>
+								<th class="hidden-xs center">
+										<label class="pos-rel">
+											<input type="checkbox" class="ace"  id='chkAll' onclick='CheckAll(this.form)' value="全选"/>
+											<span class="lbl"></span>
+										</label>
+								</th>
+								<th>详情</th>
+								<th>ID</th>
+								<th>素材名</th>
+								<th>素材类型</th>
+								<th>素材ID</th>
+								<th>索引</th>
+								<th class="hidden-sm hidden-xs">添加时间</th>
+								<th style="border-right:#CCC solid 1px;">操作</th>
+							</tr>
+							</thead>
+
+							<tbody id="ajax-data">
+								{include file="we/ajax_mats_list"/}
+							</tbody>
+						</table>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div><!-- /.page-content -->
+{/block}

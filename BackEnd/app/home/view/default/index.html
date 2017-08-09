@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<!--[if IE 8]>			<html class="ie ie8"> <![endif]-->
+<!--[if IE 9]>			<html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
+<head>
+   <meta charset="utf-8">
+   <title>{$site_seo_title} {$site_name}</title>
+   <meta name="keywords" content="{$site_seo_keywords}" />
+   <meta name="description" content="{$site_seo_description}">
+   {include file="public:head" /}
+</head>
+<body class="home">
+<div class="wrap">
+   {include file="public:nav" /}
+   <div id="main-cmf">
+      <div class="fullwidthbanner-container">
+         <div class="fullwidthbanner rslider">
+			{yf:ads name="home_slides" cid="$home_adtype_id" /} 
+            <ul>
+               {foreach name="home_slides" item="vo"}
+                  <li data-delay="6000" data-masterspeed="300" data-transition="fade">
+                     <div class="slotholder"><a href="{$vo.plug_ad_url}"><img class="img-responsive" src="{$vo.plug_ad_pic|get_imgurl}" data-fullwidthcentering="on" alt="{$vo.plug_ad_name}"></a></div>
+                     <div class="caption list_slide lfb tp-caption start"
+                          data-x="40"
+                          data-y="85"
+                          data-speed="3000"
+                          data-endspeed="800"
+                          data-start="1000"
+                          data-easing="easeOutQuint"
+                          data-endeasing="easeOutQuint">
+                        <h3>{$vo.plug_ad_name}</h3>
+                     </div>
+					 {php}
+					 //幻灯片内容,换行符隔开
+					 $slide_content=explode("\n",$vo['plug_ad_content']);
+					 {/php}
+					 {foreach name="slide_content" item="voo" key="k"}
+					 <div class="caption list_slide lfb tp-caption start"
+                           data-easing="easeOutExpo"
+                           data-start="{$k*600+1400}"
+                           data-speed="3000"
+                           data-y="{$k*40+180}"
+                           data-x="{$k*30+40}">
+                           <div class="list-slide">
+                              <i class="slide-icon">{$k+1}</i>
+                              <h5 class="dblue">{$voo}</h5>
+                           </div>
+                      </div>
+					  {/foreach}
+                  </li>
+               {/foreach}
+            </ul>
+         </div>
+      </div>
+      <div class="main-content">
+         <div class="container">
+            <div class="row">
+               <div class="col-lg-4 col-md-4 col-sm-4">
+                  <div class="content-box big ch-item bottom-pad-small">
+                     <div class="ch-info-wrap">
+                        <div class="ch-info">
+                           <div class="ch-info-front ch-img-1"><i class="fa fa-heart"></i></div>
+                           <div class="ch-info-back">
+                              <i class="fa fa-heart"></i>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="content-box-info">
+                        <h3>{:lang('index one')}</h3>
+                        <p>{:lang('index one text')}</p>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-lg-4 col-md-4 col-sm-4">
+                  <div class="content-box big ch-item bottom-pad-small">
+                     <div class="ch-info-wrap">
+                        <div class="ch-info">
+                           <div class="ch-info-front ch-img-1"><i class="fa fa-flag"></i></div>
+                           <div class="ch-info-back">
+                              <i class="fa fa-flag"></i>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="content-box-info">
+                        <h3>{:lang('index two')}</h3>
+                        <p>{:lang('index two text')}</p>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-lg-4 col-md-4 col-sm-4">
+                  <div class="content-box big ch-item">
+                     <div class="ch-info-wrap">
+                        <div class="ch-info">
+                           <div class="ch-info-front ch-img-1"><i class="fa fa-users"></i></div>
+                           <div class="ch-info-back">
+                              <i class="fa fa-users"></i>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="content-box-info">
+                        <h3>{:lang('index three')}</h3>
+                        <p>{:lang('index three text')}</p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="recentworks bottom-pad">
+         <div class="container">
+            <div class="row">
+               <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 animate_afl d1">
+                  <div class="portfolio-desc">
+                     <h3 class="title">{:lang('successful case')}</h3>
+                     <p>{:lang('successful case text')}</p>
+                     <div class="carousel-controls">
+                        <a class="prev" href="#portfolio-carousel" data-slide="prev"><i class="fa fa-angle-left"></i></a>
+                        <a class="next" href="#portfolio-carousel" data-slide="next"><i class="fa fa-angle-right"></i></a>
+                        <div class="clearfix"></div>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-lg-9 col-md-9 col-xs-12">
+                  <div class="row">
+                     <div id="portfolio-carousel" class="portfolio-carousel slide">
+                        <div class="carousel-inner">
+                           {yf:news name="lastportfolios" cid="$lastportfolios_cid" field="news_title,news_scontent,n_id,news_columnid,news_img,news_pic_allurl" order="news_time desc" limit="3" /}  
+						   <div class="item active">
+                              {volist name="lastportfolios" id="vo" key="k" offset="0" length='3'}
+                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 item animate_afc d{$k+1}">
+                                    <div class="portfolio-item">
+									{if condition="!empty($vo['news_img'])"}
+                                       <a href="{$vo['news_img']|get_imgurl}" class="portfolio-item-link" data-rel="prettyPhoto" >
+                                          <span class="portfolio-item-hover"></span>
+                                          <span class="fullscreen"><i class="fa fa-search"></i></span><img src="{$vo['news_img']|get_imgurl}" alt=" "/>
+                                       </a>
+									{/if}
+                                       <div class="portfolio-item-title">
+                                          <a href="{:url('home/News/index',array('id'=>$vo['n_id']))}">{$vo.news_title}</a>
+                                          <p>
+                                             {$vo.news_scontent}
+                                          </p>
+                                       </div>
+                                       <div class="clearfix"></div>
+                                    </div>
+                                 </div>
+                              {/volist}
+                           </div>
+                           <div class="item">
+                              {volist name="lastportfolios" id="vo" offset="3" length='3'}
+                                 <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 item">
+                                    <div class="portfolio-item">
+									{if condition="!empty($smeta['thumb'])"}
+                                       <a href="{$vo['news_img']|get_imgurl}" class="portfolio-item-link" data-rel="prettyPhoto" >
+                                          <span class="portfolio-item-hover"></span><span class="fullscreen"><i class="fa fa-search"></i></span><img src="{$vo['news_img']|get_imgurl}" alt=" "/>
+                                       </a>
+									{/if}
+                                       <div class="portfolio-item-title">
+                                          <a href="{:url('home/News/index',array('id'=>$vo['n_id']))}">{$vo.news_title}</a>
+                                          <p>
+                                             {$vo.news_scontent}
+                                          </p>
+                                       </div>
+                                       <div class="clearfix"></div>
+                                    </div>
+                                 </div>
+                              {/volist}
+                           </div>
+                        </div>
+                     </div>
+                     <div class="clearfix"></div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="features bottom-pad">
+         <div class="container">
+            <div class="row">
+               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                  <h3  class="title">{:lang('service items')}</h3>
+                  <div class="row">
+                     <div class="circular-nav">
+                        <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12 animate_afl">
+                           <div id="cn-tabs">
+							  {yf:news name="services" cid="$services_cid" field="news_content,news_title,n_id,news_columnid" order="news_time desc" limit="6" /} 
+                              {foreach name="services" item="vo" key="k" }
+                                 <div class="service service-{$k+1}">
+                                    <div class="cn-content">
+                                       <h4>{$vo.news_title}</h4>
+                                       <p>{$vo.news_content|html_trim=420}</p>
+                                       <a href="{:url('home/News/index',array('id'=>$vo['n_id']))}">{:lang('see')} <i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i></a>
+                                       <div class="clearfix"></div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                 </div>
+                              {/foreach}
+                           </div>
+                           <div class="clearfix"></div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 col-lg-offset-1 col-md-offset-1 animate_afr">
+                           <div class="cn-wrapper">
+                              <ul>
+                                 <li class="circle-1 circle"><a class="active" href="#"><span class="fa fa-home"></span></a></li>
+                                 <li class="circle-2 circle"><a href="#"><span class="fa fa-leaf"></span></a></li>
+                                 <li class="circle-3 circle"><a href="#"><span class="fa fa-cubes"></span> </a></li>
+                                 <li class="circle-4 circle"><a href="#"><span class="fa fa-share-alt-square"></span></a></li>
+                                 <li class="circle-5 circle"><a href="#"><span class="fa fa-magnet"></span></a></li>
+                                 <li class="circle-6 circle"><a href="#"><span class="fa fa-th-list"></span></a></li>
+                              </ul>
+                              <div class="clearfix"></div>
+                           </div>
+                        </div>
+                        <div class="clearfix"></div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="latest-posts">
+         <div class="container">
+            <div class="row">
+               <div class="col-lg-12 col-md-12 com-sm-12 col-xs-12">
+                  <h3 class="title">{:lang('recent news')}</h3>
+               </div>
+               <div class="clearfix"></div>
+               <div class="blog-showcase col-lg-12 col-md-12 col-sm-12 col-xs-12 animate_afb d1">
+                  <ul>
+					 {yf:news name="lastnews" cid="$portal_index_lastnews" field="news_title,news_hits,news_scontent,n_id,news_img,news_columnid,news_time" order="news_time desc" limit="3" /} 
+                     {foreach name="lastnews" item="vo" key="k"}
+                        <li {if condition="$k eq 2"}class="blog-first-el"{/if}>
+                        <div class="blog-showcase-thumb col-lg-4">
+                           <div class="post-body">
+                              <a class="post-item-link" href="{:url('home/News/index',array('id'=>$vo['n_id']))}"><img alt="" src="{$vo['news_img']|get_imgurl}"></a>
+                           </div>
+                        </div>
+                        <div class="blog-showcase-extra-info col-lg-4">
+                           <i class="fa fa-clock-o">{$vo.news_time|date="Y-m-d H:i:s",###}</i>
+                           <h5><a href="{:url('home/News/index',array('id'=>$vo['n_id']))}" class="title">{$vo.news_title}</a></h5>
+                           <p>{:msubstr($vo['news_scontent'],0,45)}</p>
+                           <a href="{:url('home/News/index',array('id'=>$vo['n_id']))}">{:lang('see')} <i class="fa fa-angle-double-right"></i></a>
+                        </div>
+                        </li>
+                     {/foreach}
+                  </ul>
+                  <div class="clearfix"></div>
+               </div>
+            </div>
+            <div class="divider"></div>
+         </div>
+      </div>
+      <div class="our-clients">
+         <div class="container">
+            <div class="row">
+               <div class="client">
+                  <div class="client-logo">
+                     <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12">
+                        <div class="clients-title">
+                           <h3 class="title">{:lang('partner')}</h3>
+                           <div class="carousel-controls pull-right">
+                              <a class="prev" href="#client-carousel" data-slide="prev"><i class="fa fa-angle-left"></i></a>
+                              <a class="next" href="#client-carousel" data-slide="next"><i class="fa fa-angle-right"></i></a>
+                              <div class="clearfix"></div>
+                           </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="row">
+                           <div id="client-carousel" class="client-carousel slide">
+                              <div class="carousel-inner">
+								 {yf:news name="client" cid="$client_cid" field="news_title,news_scontent,news_img,news_pic_allurl" order="news_time desc" limit="8" /}
+                                 <div class="item active">
+                                    {volist name="client" id="vo" key="k" offset="0" length='4'}
+									{php}$imgs=explode(",",$vo['news_pic_allurl']);{/php}
+                                       <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6 item animate_afc d1">
+                                          <div class="item-inner"><a href="#"><img alt="Upportdash" style="height:150px" src="{$imgs[0]|get_imgurl}"></a></div>
+                                       </div>
+                                    {/volist}
+                                 </div>
+                                 <div class="item">
+                                    {volist name="client" id="vo" key="k" offset="4" length='4'}
+                                       {php}$imgs=explode(",",$vo['news_pic_allurl']);{/php}									       
+									   <div class="col-lg-3 col-md-3 col-sm-3 col-xs-6 item">
+                                       <div class="item-inner"><a href="#"><img alt="Upportdash" style="height:150px" src="{$imgs[0]|get_imgurl}"></a></div>
+                                    </div>
+                                    {/volist}
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="row ">
+                           <div class="testimonials widget">
+                              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                 <div class="testimonials-title">
+                                    <h3 class="title">{:lang('positive')}</h3>
+                                 </div>
+                              </div>
+                              <div class="clearfix"></div>
+                              <div id="testimonials-carousel" class="testimonials-carousel slide animate_afr d5">
+                                 <div class="carousel-inner">
+									{yf:news name="positive" cid="$positive_cid" field="news_title,news_scontent,news_source,n_id,news_img,news_columnid" order="news_time desc" limit="8" /} 
+                                    {foreach name="positive" item="vo" key="k"}
+                                       <div {if condition="$k eq 0"}class="item active"{else /}class="item"{/if}>
+                                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                          <div class="testimonial item">
+                                             <p>{$vo.news_scontent}</p>
+                                             <div class="testimonials-arrow">
+                                             </div>
+                                             <div class="author">
+                                                <div class="testimonial-image "><img alt="" src="{$vo['news_img']|get_imgurl}"></div>
+                                                <div class="testimonial-author-info">
+                                                   <a href="{:url('home/News/index',array('id'=>$vo['n_id']))}"><span class="color">{$vo.news_title}</span></a>{$vo.news_source}
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                 </div>
+                                 {/foreach}
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+{include file="public:footer"/}
+</div>
+{include file="public:scripts"/}
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<!--[if IE 8]>			<html class="ie ie8"> <![endif]-->
+<!--[if IE 9]>			<html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <title>{$menu.menu_seo_title|default=$site_seo_title} {$site_name}</title>
+    <meta name="keywords" content="{$menu.menu_seo_key|default=$site_seo_keywords}" />
+    <meta name="description" content="{$menu.menu_seo_des|default=$site_seo_description}">
+    {include file="public:head" /}
+</head>
+<body class="page">
+<div class="wrap">
+    {include file="public:nav" /}
+    <div id="main-cmf">
+        <div class="breadcrumb-wrapper">
+            <div class="container">
+                <div class="row page-title">
+                    <div class="col-lg-12 col-md-12 col-xs-12 col-sm-6">
+                        <h1 class="title">{$news_title}</h1>
+                        <div>
+                            <span>{$news_time|date="Y-m-d H:i:s",###} by <a href="{:url('home/Index/visit',array('id'=>$news_auto))}" class="blog-entry-meta-author">{$member_list_nickname|default=$member_list_username}</a></span>
+		    		<span>
+		    			<i class="fa fa-eye"> </i>{$news_hits}
+						<a href="{:url('home/News/dolike',array('id'=>$n_id))}" class="js-count-btn"><i class="fa fa-thumbs-up"> </i></a><span class="count">{$news_like}</span>
+						<a href="{:url('home/News/dofavorite',array('id'=>$n_id))}" class="js-favorite-btn" data-id="{$n_id}" data-key="{:get_favorite_key('news',$n_id)}">
+						<i class="fa fa-star-o"></i>
+						</a>
+					</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="posts-block col-lg-9 col-md-9 col-sm-8 col-xs-12">
+                        <article class="post hentry">
+                            <div class="post-content">
+                                <p>{$content}</p>
+                            </div>
+                            <div class="pagination-centered">
+                                {$page}
+                            </div>
+                            {if condition="!empty($news_source)"}
+                                <div class="post-content">
+                                    <b>{:lang('news copyright',[$news_source])}</b>
+                                </div>
+                            {/if}
+                            <div>
+                                {if condition="!empty($prev)"}
+                                    <a href="{:url('home/News/index',array('id'=>$prev['n_id']))}" class="btn btn-primary pull-left">{:lang('last news')}</a>
+                                {/if}
+                                {if condition="!empty($next)"}
+                                    <a href="{:url('home/News/index',array('id'=>$next['n_id']))}" class="btn btn-primary pull-right">{:lang('next news')}</a>
+                                {/if}
+                                <script type="text/javascript" src="{$yf_theme_path}public/js/qrcode.min.js"></script>
+                                <div id="qrcode" style="width: 100px;margin:0 auto"></div>
+                                <script type="text/javascript">
+                                    var qrcode = new QRCode(document.getElementById("qrcode"), {
+                                        width : 100,
+                                        height : 100
+                                    });
+                                    function makeCode () {
+                                        qrcode.makeCode("http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}");
+                                    }
+                                    makeCode();
+                                </script>
+                                <div class="clearfix"></div>
+                            </div>
+                        </article>
+						{if condition="$t_open eq 1"}
+						{include file="public:comment" /}
+						{/if}
+                    </div>
+                    {include file="public:rightslider"/}
+                </div>
+            </div>
+        </div>
+    </div>
+    {include file="public:footer"/}
+</div>
+{include file="public:scripts"/}
+</body>
+</html>

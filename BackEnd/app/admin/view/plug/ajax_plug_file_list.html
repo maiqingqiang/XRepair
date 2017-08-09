@@ -1,0 +1,30 @@
+{foreach name="plug_files" item="v"}
+	<tr>
+		<td height="28" >{$v.id}</td>
+		<td>{$v.path}</td>
+		<td>{$v.filesize}</td>
+		<td>{$v.uptime|date="Y-m-d H:i:s",###}</td>
+		<td>
+			{php}
+				if(function_exists('exif_imagetype')){
+					$is_img=exif_imagetype('.'.$v['path']);
+				}else{
+					$info = getimagesize($image);
+					$is_img=$info[2];
+				}
+				if(!$is_img){
+				$suff=pathinfo($v['path'], PATHINFO_EXTENSION);
+				}
+			{/php}
+			{if condition="$is_img gt 0"}
+				<img src="__ROOT__{$v.path}" style="max-width:40px;max-height:40px;"/>
+				{else /}
+				{$suff}文件
+			{/if}
+		</td>
+	</tr>
+{/foreach}
+<tr>
+	<td colspan="8" align="right">{$page}</td>
+</tr>
+

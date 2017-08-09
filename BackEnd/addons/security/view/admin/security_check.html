@@ -1,0 +1,49 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+<div class="page-content">
+	<div class="row maintop">
+		<div class="col-xs-12 col-sm-8">
+			<a href="{:addon_url('security://Admin/security_list')}">
+				<button class="btn btn-xs btn-danger">
+					<i class="ace-icon fa fa-rotate-left bigger-110"></i>
+					返回安全文件列表
+				</button>
+			</a>
+			<a href="{:addon_url('security://Admin/security_generate')}" id="security_generate">
+				<button class="btn btn-xs btn-danger">
+					<i class="ace-icon fa fa-bolt bigger-110"></i>
+					<span class="tip">重新生成安全文件</span>
+				</button>
+			</a>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<div>
+				<table class="table table-striped table-bordered table-hover" id="dynamic-table">
+					<thead>
+					<tr>
+						<th>文件检测情况</th>
+					</tr>
+					</thead>
+
+					<tbody>
+					{if condition="empty($error_msgs)"}
+					<tr>
+						<td>当前系统没有发生文件被修改问题。</td>
+					</tr>
+					{else /}
+					{foreach name="error_msgs" item="v"}
+						<tr>
+							<td>{$v}</td>
+						</tr>
+					{/foreach}
+					{/if}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div><!-- /.page-content -->
+{/block}
+

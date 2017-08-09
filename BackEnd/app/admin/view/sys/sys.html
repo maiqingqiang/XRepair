@@ -1,0 +1,320 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+	<div class="page-content">
+		<!--主题-->
+		<div class="page-header">
+			<h1>
+				您当前操作
+				<small>
+					<i class="ace-icon fa fa-angle-double-right"></i>
+					站点设置
+				</small>
+			</h1>
+		</div>
+		<div class="row">
+
+			<div class="tabbable">
+				<ul class="nav nav-tabs" id="myTab">
+					<li class="active">
+						<a data-toggle="tab" href="#basic">
+							基本设置
+						</a>
+					</li>
+
+					<li>
+						<a data-toggle="tab" href="#contact">
+							联系方式
+						</a>
+					</li>
+
+					<li>
+						<a data-toggle="tab" href="#seo">
+							SEO设置
+						</a>
+					</li>
+				</ul>
+				<form class="form-horizontal ajaxForm2" name="sys" method="post" action="{:url('admin/Sys/runsys')}">
+					<fieldset>
+						<div class="tab-content">
+							<div id="basic" class="tab-pane fade in active">
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 站点名称 </label>
+									<div class="col-sm-9">
+										<input type="text" name="options[site_name]" id="site_name" value="{$sys.site_name}" class="col-xs-10 col-sm-7" required/>
+								<span class="help-inline col-xs-12 col-sm-5">
+									<span class="middle" id="resone">*</span>
+								</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 站点网址 </label>
+									<div class="col-sm-9">
+										<input type="url" name="options[site_host]" id="site_host" value="{$sys.site_host}"  class="col-xs-10 col-sm-7" required/>
+								<span class="help-inline col-xs-12 col-sm-5">
+									<span class="middle" id="restwo">*</span>
+								</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 站点主题(PC) </label>
+									<div class="col-sm-9">
+										<select name="options[site_tpl]" id="site_tpl" class="col-xs-10 col-sm-7" required>
+											{foreach name="templates" item="vo"}
+												<option value="{$vo}" {if condition="$sys.site_tpl eq $vo"}selected="selected"{/if}>{$vo}</option>
+											{/foreach}
+										</select>
+									<span class="help-inline col-xs-12 col-sm-5">
+										<span class="middle" id="restwo">*</span>
+									</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 站点主题(手机) </label>
+									<div class="col-sm-9">
+										<select name="options[site_tpl_m]" id="site_tpl_m" class="col-xs-10 col-sm-7" required>
+											{foreach name="templates" item="vo"}
+											<option value="{$vo}" {if condition="$sys.site_tpl_m eq $vo"}selected="selected"{/if}>{$vo}</option>
+											{/foreach}
+										</select>
+										<span class="help-inline col-xs-12 col-sm-5">
+										<span class="middle" id="restwo">*</span>
+									</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+								<div class="form-group" id="pic_list">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 网站LOGO </label>
+									<div class="col-sm-9">
+										<input type="hidden" name="checkpic" id="checkpic" value="{$sys.site_logo}" />
+										<input type="hidden" name="oldcheckpic" id="oldcheckpic" value="{$sys.site_logo}" />
+										<input type="hidden" name="oldcheckpicname" id="oldcheckpic" value="{$sys.site_logo}" />
+										<a href="javascript:;" class="file" title="点击选择所要上传的图片">
+											<input type="file" name="file0" id="file0" multiple="multiple"/>
+											选择上传文件
+										</a>
+										&nbsp;&nbsp;<a href="javascript:;" onclick="return backpic('{$sys.site_logo|get_imgurl}');" title="还原修改前的图片" class="file">
+										撤销上传
+										</a>
+										<div><img src="{$sys.site_logo|get_imgurl}" height="70" id="img0" ></div>
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 备案信息 </label>
+									<div class="col-sm-9">
+										<input type="text" name="options[site_icp]" id="site_icp" value="{$sys.site_icp}"  class="col-xs-10 col-sm-7" />
+								<span class="help-inline col-xs-12 col-sm-5">
+									<span class="middle" id="restwo"></span>
+								</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 统计代码 </label>
+									<div class="col-sm-9">
+										<textarea  name="options[site_tongji]" cols="20" rows="2" class="col-xs-10 col-sm-7 limited"   id="form-field-9"  maxlength="500">{$sys.site_tongji}</textarea>
+										<input type="hidden" name="maxlengthone" value="500" />
+								<span class="help-inline col-xs-5 col-sm-5">
+									还可以输入 <span class="middle charsLeft"></span> 个字符
+								</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 版权信息 </label>
+									<div class="col-sm-9">
+										<textarea  name="options[site_copyright]" cols="20" rows="3" class="col-xs-10 col-sm-7 limited1"   id="form-field-10"  maxlength="150">{$sys.site_copyright}</textarea>
+										<input type="hidden" name="maxlengthone" value="150" />
+								<span class="help-inline col-xs-5 col-sm-5">
+									还可以输入 <span class="middle charsLeft1"></span> 个字符
+								</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+								<div class="form-group none">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启自动更新： </label>
+									<div class="col-sm-9" style="padding-top:5px;">
+										<input name="update_check" id="update_check" {if condition='$Think.config.update_check eq 1'}checked{/if}  value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+										<span class="lbl"></span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 后台极验验证： </label>
+									<div class="col-sm-9" style="padding-top:5px;">
+										<input name="geetest_on" id="geetest_on" {if condition="config('geetest.geetest_on')"}checked{/if}  value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+										<span class="lbl"><a href="http://www.geetest.com" target="_blank" style="margin-left: 10px;"><span class="label label-lg label-pink">申请：http://www.geetest.com</span></a></span>
+										<span class="help-inline">需开启路由</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+								<div id="geetest" {if condition="config('geetest.geetest_on') eq 0"}style="display: none;"{/if}>
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 极验captcha_id：</label>
+									<div class="col-sm-9">
+										<input type="text" name="captcha_id" id="captcha_id" value="{:config('geetest.captcha_id')}" class="col-xs-10 col-sm-7" />
+										<span class="help-inline col-xs-12 col-sm-5">
+									<span class="lbl"></span>
+								</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 极验private_key： </label>
+									<div class="col-sm-9">
+										<input type="password" name="private_key" id="private_key" value="{:config('geetest.private_key')}" class="col-xs-10 col-sm-7" />
+										<span class="help-inline col-xs-12 col-sm-5">
+									<span class="lbl"></span>
+								</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+								</div>
+							</div>
+
+							<div id="contact" class="tab-pane fade">
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 公司名称 </label>
+									<div class="col-sm-9">
+										<input type="text" name="options[site_co_name]" id="site_co_name" value="{$sys.site_co_name}" class="col-xs-10 col-sm-7" />
+								<span class="help-inline col-xs-12 col-sm-5">
+									<span class="middle" id="resone"></span>
+								</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 公司地址 </label>
+									<div class="col-sm-9">
+										<input type="text" name="options[site_address]" id="site_address" value="{$sys.site_address}"  class="col-xs-10 col-sm-7" />
+								<span class="help-inline col-xs-12 col-sm-5">
+									<span class="middle" id="restwo"></span>
+								</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 地图lat </label>
+									<div class="col-sm-9">
+										<input type="text" name="options[map_lat]" id="map_lat" value="{$map_lat}" class="col-xs-10 col-sm-7" />
+								<span class="help-inline col-xs-12 col-sm-5">
+									<span class="middle" id="resone"></span>
+								</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+								
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 地图lng </label>
+									<div class="col-sm-9">
+										<input type="text" name="options[map_lng]" id="map_lng" value="{$map_lng}" class="col-xs-10 col-sm-7" />
+								<span class="help-inline col-xs-12 col-sm-5">
+									<span class="middle" id="resone"></span>
+								</span>
+									</div>
+								</div>
+								<div class="space-4"></div>							
+								
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 联系电话 </label>
+									<div class="col-sm-9">
+										<input type="text" name="options[site_tel]" id="site_tel" value="{$sys.site_tel}"  class="col-xs-10 col-sm-7" />
+								<span class="help-inline col-xs-12 col-sm-5">
+									<span class="middle" id="restwo"></span>
+								</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 站长邮箱 </label>
+									<div class="col-sm-9">
+										<input type="email" name="options[site_admin_email]" id="site_admin_email" value="{$sys.site_admin_email}"  class="col-xs-10 col-sm-7" />
+								<span class="help-inline col-xs-12 col-sm-5">
+									<span class="middle" id="restwo"></span>
+								</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 站长QQ </label>
+									<div class="col-sm-9">
+										<input type="number" name="options[site_qq]" id="site_qq" value="{$sys.site_qq}"  class="col-xs-10 col-sm-7" />
+								<span class="help-inline col-xs-12 col-sm-5">
+									<span class="middle" id="restwo"></span>
+								</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+							</div>
+
+							<div id="seo" class="tab-pane fade">
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 首页SEO标题 </label>
+									<div class="col-sm-9">
+										<input type="text" name="options[site_seo_title]" id="site_seo_title" value="{$sys.site_seo_title}"  class="col-xs-10 col-sm-7" />
+								<span class="help-inline col-xs-12 col-sm-5">
+									<span class="middle" id="resthr"></span>
+								</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 首页SEO关键字 </label>
+									<div class="col-sm-9">
+										<textarea  name="options[site_seo_keywords]" cols="20" class="col-xs-10 col-sm-7 limited2"  id="form-field-11"  maxlength="100">{$sys.site_seo_keywords}</textarea>
+										<input type="hidden" name="maxlength" value="100" />
+								<span class="help-inline col-xs-5 col-sm-5">
+									还可以输入 <span class="middle charsLeft2"></span> 个字符,以英文 , 号隔开
+								</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+								<div class="form-group">
+									<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 首页SEO描述 </label>
+									<div class="col-sm-9">
+										<textarea  name="options[site_seo_description]" cols="20" rows="4" class="col-xs-10 col-sm-7 limited3"   id="form-field-12"  maxlength="200">{$sys.site_seo_description}</textarea>
+										<input type="hidden" name="maxlengthone" value="200" />
+								<span class="help-inline col-xs-5 col-sm-5">
+									还可以输入 <span class="middle charsLeft3"></span> 个字符
+								</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+							</div>
+						</div>
+						<div class="clearfix form-actions">
+							<div class="col-sm-offset-3 col-sm-9">
+								<button class="btn btn-info" type="submit">
+									<i class="ace-icon fa fa-check bigger-110"></i>
+									保存
+								</button>
+
+								&nbsp; &nbsp; &nbsp;
+								<button class="btn" type="reset">
+									<i class="ace-icon fa fa-undo bigger-110"></i>
+									重置
+								</button>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+		</div>
+
+	</div><!-- /.page-content -->
+{/block}

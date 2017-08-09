@@ -1,0 +1,41 @@
+<div class="row">
+	<div class="portfolio">							
+		{foreach name="lists['news']" item="vo" key="i"}
+			{php}
+			$imgs=array_filter(explode(",", $vo['news_pic_allurl']));
+			{/php}
+			<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12 item">
+				<div class="gallery portfolio-item">
+					{if condition="!empty($vo['news_img'])"}
+						<a href="{$vo['news_img']|get_imgurl}" rel="prettyPhoto[a{$i}]">
+							<span class="portfolio-item-hover"></span>
+							<span class="fullscreen"><i class="fa fa-search"></i></span>
+							<img src="{$vo['news_img']|get_imgurl}" alt=" "/>
+						</a>											
+					{foreach name="imgs" item="voo" key="k"}
+						<a href="{$voo|get_imgurl}" rel="prettyPhoto[a{$i}]">
+							<img src="{$voo|get_imgurl}" alt=" " style="display:none;"/>
+						</a>
+					{/foreach}											
+					{else /}
+					{foreach name="imgs" item="voo" key="k"}
+						<a href="{$voo|get_imgurl}" rel="prettyPhoto[a{$i}]">
+							<span class="portfolio-item-hover"></span>
+							<span class="fullscreen"><i class="fa fa-search"></i></span>
+							<img src="{$voo|get_imgurl}" alt=" " {if condition="$k neq 0"}style="display:none;"{/if}/>
+						</a>
+					{/foreach}											
+					{/if}
+					<div class="portfolio-item-title">
+						<a href="{:url('home/News/index',array('id'=>$vo['n_id']))}">{$vo.news_title}</a>
+						<p>{$vo.news_scontent}</p>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+		{/foreach}
+	</div>
+</div>
+<div class="pagination-centered">
+	{$page_html}
+</div>

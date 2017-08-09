@@ -1,0 +1,67 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+	<div class="page-content">
+
+
+
+		<!--主题-->
+		<div class="page-header">
+			<h1>
+				您当前操作
+				<small>
+					<i class="ace-icon fa fa-angle-double-right"></i>
+					添加用户组
+				</small>
+			</h1>
+		</div>
+
+
+		<div class="row">
+			<div class="col-xs-12">
+				<form class="form-horizontal ajaxForm2" name="admin_group_add" method="post" action="{:url('admin/Admin/admin_group_runadd')}">
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 用户组名：  </label>
+						<div class="col-sm-10">
+							<input type="text" name="title" id="title" placeholder="输入用户组名" class="col-xs-10 col-sm-4" required/>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 是否启用： </label>
+						<div class="col-sm-10" style="padding-top:5px;">
+							<input name="status" id="status" value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+							<span class="lbl">&nbsp;默认关闭</span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 规则设置： </label>
+						<div class="col-sm-10" style="padding-top:3px;">
+							<span class="lbl">设置规则请在用户组列表页进行规则配置</span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="clearfix form-actions">
+						<div class="col-md-offset-3 col-md-9">
+							<button class="btn btn-info" type="submit">
+								<i class="ace-icon fa fa-check bigger-110"></i>
+								保存
+							</button>
+
+							&nbsp; &nbsp; &nbsp;
+							<button class="btn" type="reset">
+								<i class="ace-icon fa fa-undo bigger-110"></i>
+								重置
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+	</div><!-- /.page-content -->
+{/block}

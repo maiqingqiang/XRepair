@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<!--[if IE 8]>			<html class="ie ie8"> <![endif]-->
+<!--[if IE 9]>			<html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<title>{:lang('account activation')} {$site_name} </title>
+	<meta name="keywords" content="{$menu.menu_seo_key|default=$site_seo_keywords}" />
+	<meta name="description" content="{$menu.menu_seo_des|default=$site_seo_description}">
+	{include file="public:head" /}
+</head>
+
+<body class="body-white">
+<div class="wrap">
+	{include file="public:nav" /}
+	<div id="main-cmf">
+		<div class="content">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-4 col-md-4 col-sm-6 col-xs-10 col-lg-offset-4 col-md-offset-4 col-sm-offset-3 col-xs-offset-1 animate_afr">
+						<h2 class="text-center" style="margin: 10% 0;">{:lang('account not activated')}</h2>
+						<div class="text-center" style="margin: 30% 0;">
+							<h5>{:lang('resend active email')}<a href="{:url('home/Login/resend')}">{:lang('resend now')}</a></h5>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{include file="public:footer"/}
+</div>
+{include file="public:scripts"/}
+</body>
+</html>

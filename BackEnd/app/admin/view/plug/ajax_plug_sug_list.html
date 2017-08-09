@@ -1,0 +1,34 @@
+{foreach name="plug_sug" item="v"}
+	<tr>
+		<td class="hidden-xs" align="center">
+			<label class="pos-rel">
+				<input name='sug_id[]' id="navid" class="ace"  type='checkbox' value='{$v.plug_sug_id}'>
+				<span class="lbl"></span>
+			</label>
+		</td>
+		<td class="hidden-xs">{$v.plug_sug_id}</td>
+		<td height="28">{$v.plug_sug_name}</td>
+		<td class="hidden-sm hidden-xs">{$v.plug_sug_email}</td>
+		<td>{$v.plug_sug_content}</td>
+		<td class="hidden-sm hidden-xs">{$v.plug_sug_addtime|date='Y-m-d',###}</td>
+		<td>
+			<div class="action-buttons">
+
+				<a href="{:url('admin/Plug/plug_sug_reply')}" data-id="{$v.plug_sug_id}" class="tooltip-success sugreply-btn" data-rel="tooltip" title="回复" data-original-title="回复">
+					{if condition="$v['plug_sug_open'] eq 1"}
+					<span class="green"><i class="ace-icon fa fa-envelope-o bigger-120"></i></span>
+					{else /}
+					<span class="red"><i class="ace-icon fa fa-envelope bigger-120"></i></span>
+					{/if}
+				</a>
+				<a class="red confirm-rst-url-btn" data-info="你确定要删除吗？" href="{:url('admin/Plug/plug_sug_del',array('plug_sug_id'=>$v['plug_sug_id'],'p'=>input('p',1)))}" title="删除">
+					<i class="ace-icon fa fa-trash-o bigger-130"></i>
+				</a>
+			</div>
+		</td>
+	</tr>
+{/foreach}
+<tr>
+	<td align="left" class="hidden-xs"><button id="btnsubmit" class="btn btn-white btn-yellow btn-sm">删</button> </td>
+	<td colspan="6" align="right">{$page}</td>
+</tr>

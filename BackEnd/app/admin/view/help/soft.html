@@ -1,0 +1,51 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+	<div class="page-content">
+		<div class="row">
+			<div class="col-xs-12">
+				<div>
+					<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+						<thead>
+						<tr>
+							<th width="21%">软件名称</th>
+							<th width="52%">说明</th>
+							<th width="17%">上传日期</th>
+							<th width="10%" style="border-right:#CCC solid 1px;">操作</th>
+						</tr>
+						</thead>
+
+						<tbody>
+
+						<tr>
+							<td> 谷歌浏览器</td>
+							<td>更好的体验html5+css3效果，下载后解压进行安装。</td>
+							<td>2015-11-5</td>
+							<td>
+								<div class="action-buttons">
+									<a class="green" href="http://dlsw.baidu.com/sw-search-sp/soft/9d/14744/ChromeStandalone_50.0.2661.87_Setup.1461306176.exe" title="下载软件" target="_blank">
+										<i class="ace-icon fa fa-cloud-download bigger-130"></i>													</a>												</div>														</td>
+						</tr>
+						<tr>
+							<td>winrar压缩解压软件</td>
+							<td>用于解压压缩包文件，这里主要用于解压本系统软件包。</td>
+							<td>2015-11-5</td>
+							<td>
+								<div class="action-buttons">
+									<a class="green" href="http://dlsw.baidu.com/sw-search-sp/soft/2e/10849/wrar_5.30.0.0sc.1452057954.exe" title="下载软件" target="_blank">
+										<i class="ace-icon fa fa-cloud-download bigger-130"></i>
+									</a>
+								</div>
+							</td>
+						</tr>
+						<tr>
+
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+
+	</div><!-- /.page-content -->
+{/block}

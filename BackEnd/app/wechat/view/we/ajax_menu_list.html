@@ -1,0 +1,68 @@
+{foreach name="menu" item="v"}
+	<tr>
+		<td><input name="{$v.we_menu_id}" value="{$v.we_menu_order}" class="list_order center"/></td>
+		<td>{$v.we_menu_id}</td>
+		<td style=padding-left:{if condition='$v.leftpin neq 0'}{$v.leftpin}{/if}px; >{$v.lefthtml}{$v.we_menu_name}</span></td>
+		<td>{if condition="$v.we_menu_type eq 1"}URL菜单链接{else /}关键词回复菜单{/if}</td>
+		<td>{$v.we_menu_typeval}</td>
+		<td>
+			{if condition="$v['we_menu_open'] eq 1"}
+				<a class="red open-btn" href="{:url('wechat/We/menu_state')}" data-id="{$v.we_menu_id}" title="已开启">
+					<div><button class="btn btn-minier btn-yellow">开启</button></div>
+				</a>
+				{else/}
+				<a class="red open-btn" href="{:url('wechat/We/menu_state')}" data-id="{$v.we_menu_id}" title="已禁用">
+					<div><button class="btn btn-minier btn-danger">禁用</button></div>
+				</a>
+			{/if}
+		</td>
+		<td>
+			<div class="hidden-sm hidden-xs action-buttons">
+				<a class="green menuedit-btn" href="{:url('wechat/We/menu_edit')}" data-id="{$v.we_menu_id}" data-toggle="tooltip" title="修改">
+					<i class="ace-icon fa fa-pencil bigger-130"></i>																</a>
+				<a class="red confirm-rst-url-btn" href="{:url('wechat/We/menu_del',array('we_menu_id'=>$v['we_menu_id']))}" data-info="若存在子菜单，则子菜单将一起被删除，你确定要删除吗？" data-toggle="tooltip" title="删除">
+					<i class="ace-icon fa fa-trash-o bigger-130"></i>																</a>
+				{if condition="$v['we_menu_leftid'] eq 0"}
+				<a class="blue" href="javascript:;" onclick="return add_we_menu({$v.we_menu_id});"  data-toggle="tooltip" title="添加子类">
+					<i class="ace-icon fa fa-plus-circle bigger-130"></i>																</a>
+				{/if}
+			</div>
+			<div class="hidden-md hidden-lg">
+				<div class="inline position-relative">
+					<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+						<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+					</button>
+					<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+						<li>
+							<a href="{:url('wechat/We/menu_edit')}" data-id="{$v.we_menu_id}" class="tooltip-success menuedit-btn" data-rel="tooltip" title="修改" data-original-title="修改">
+										<span class="green">
+											<i class="ace-icon fa fa-pencil bigger-120"></i>
+										</span>
+							</a>
+						</li>
+
+						<li>
+							<a href="{:url('wechat/We/menu_del',array('we_menu_id'=>$v['we_menu_id']))}"  data-info="若存在子菜单，则子菜单将一起被删除，你确定要删除吗？" class="tooltip-error confirm-rst-url-btn" data-rel="tooltip" title="删除" data-original-title="删除">
+										<span class="red">
+											<i class="ace-icon fa fa-trash-o bigger-120"></i>
+										</span>
+							</a>
+						</li>
+						{if condition="$v['we_menu_leftid'] eq 0"}
+						<li>
+							<a href="javascript:;" onclick="return add_we_menu({$v.we_menu_id});"  class="tooltip-success" data-rel="tooltip" title="添加子类" data-original-title="添加子类">
+										<span class="green">
+											<i class="ace-icon fa fa-plus-circle bigger-120"></i>
+										</span>
+							</a>
+						</li>
+						{/if}
+					</ul>
+				</div>
+			</div>
+		</td>
+	</tr>
+{/foreach}
+<tr>
+	<td colspan="10" align="left"><button  id="btnorder" class="btn btn-white btn-yellow btn-sm">排序</button></td>
+</tr>

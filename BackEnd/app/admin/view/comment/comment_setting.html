@@ -1,0 +1,46 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+	<div class="page-content">
+		<div class="row">
+			<div class="col-xs-12">
+				<form class="form-horizontal ajaxForm" name="csys" method="post" action="{:url('admin/Comment/runcsys')}">
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right"> 是否开启评论： </label>
+						<div class="col-sm-9" style="padding-top:5px;">
+							<input name="t_open" id="t_open" {if condition='$csys.t_open eq 1'}checked{/if}  value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+							<span class="lbl"></span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right"> 评论间隔时间： </label>
+						<div class="col-sm-9">
+							<input type="number" name="t_limit" id="t_limit" value="{$csys.t_limit}"  placeholder="请输入间隔时间"  class="col-xs-10 col-sm-5" required/>
+							<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>单位(秒)</span>
+						<span class="help-inline col-xs-12 col-sm-7">
+							<span class="middle" id="resone"></span>
+						</span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="clearfix form-actions">
+						<div class="col-sm-offset-3 col-sm-9">
+							<button class="btn btn-info" type="submit">
+								<i class="ace-icon fa fa-check bigger-110"></i>
+								保存
+							</button>
+
+							&nbsp; &nbsp; &nbsp;
+							<button class="btn" type="reset">
+								<i class="ace-icon fa fa-undo bigger-110"></i>
+								重置
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div><!-- /.page-content -->
+{/block}

@@ -1,0 +1,100 @@
+<div class="reply">
+	<h3 class="title">{:lang('comments')}</h3>
+</div>
+<div class="comment-area" id="comments">
+	{if condition="!empty($user['member_list_id'])"}
+	<hr>
+	<form class="form-horizontal comment-form" action="{:url('home/Comment/runcomment')}" method="post" data-id='111'>
+		<div class="control-group">
+			<div class="comment-postbox-wraper">
+				<textarea class="form-control comment-postbox" placeholder="Write your comment here" style="min-height:60px;"  name="c_content" required></textarea>
+			</div>
+		</div>
+		<div class="control-group" style="margin-top:10px;">
+			<button type="submit" class="btn btn-primary">{:lang('send comments')}</button>
+		</div>
+		<input type="hidden" name="n_id" value="{$n_id}"/>
+		<input type="hidden" name="to_uid" value="0"/>
+		<input type="hidden" name="parentid" value="0"/>
+	</form>
+	{else /}
+	<span>
+	{:lang('need login to comment')} <a href="{:url('home/Login/index')}">{:lang('login')}</a> | <a href="{:url('home/Register/index')}">{:lang('register immediately')}</a>
+	</span>
+	{/if}
+	{if condition="!empty($user['member_list_id'])"}
+	<script class="comment-tpl" type="text/html">
+		{php}
+		if(empty($user['member_list_nickname'])){
+			if(empty($user['member_list_username'])){
+				$username="{:lang('anonymous')}";
+			}else{
+				$username=$user['member_list_username'];
+			}
+		}else{
+			$username=$user['member_list_nickname'];
+		}
+		{/php}
+		<div class="comment" data-username="{$username}" data-uid="{$user.member_list_id}">
+			<a class="pull-left" href="{:url('home/Index/visit',array('member_list_id'=>$user['member_list_id']))}">
+				{if condition="empty($user['member_list_headpic'])"}
+				<img src="{$yf_theme_path}public/images/headicon.png" class="media-object avatar"/>
+				{else /}
+				<img src="{$user['member_list_headpic']|get_imgurl=1}" class="media-object avatar"/>
+				{/if}
+			</a>
+			<div class="comment-body">
+				<div class="comment-content"><a href="{:url('home/Index/visit',array('id'=>$user['member_list_id']))}">{$username}:</a><sapn class="toname"></sapn><span class="time">{:lang('just')}</span> <a onclick="comment_reply(this);" href="javascript:;"><i class="fa fa-comment"></i></a></div>
+				<div class="comment-content"><span class="content"></span></div>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+	</script>
+	{/if}
+	<script class="comment-reply-box-tpl" type="text/html">
+		<div class="comment-reply-submit">
+			<div class="comment-reply-box">
+				<input type="text" class="textbox" placeholder="{:lang('reply')}" required>
+			</div>
+			<button class="btn" onclick="comment_cancel(this);">{:lang('cancel')}</button>
+			<button class="btn pull-right" onclick="comment_submit(this);">{:lang('reply')}</button>
+		</div>
+	</script>
+	<hr>
+	<div class="comments" style="margin-top:50px;">
+		{foreach name="comments" item="vo"}
+			<div class="comment" data-id="{$vo.c_id}" data-uid="{$vo.uid}" data-username="{$vo.member_list_nickname|default=$vo['member_list_username']}"  id="comment{$vo.c_id}">
+				<a class="pull-left" href="{:url('home/Index/visit',array('id'=>$vo['uid']))}">
+				<img src="{$vo.member_list_headpic|get_imgurl=1}" class="media-object avatar"/>
+				</a>
+				<div class="comment-body">
+					<div>
+						<a href="{:url('home/Index/visit',array('id'=>$vo['uid']))}">{$vo.member_list_nickname|default=$vo['member_list_username']}:</a><span class="time">{:date('m-d  H:i',$vo['createtime'])}</span> <a onclick="comment_reply(this);" href="javascript:;"><i class="fa fa-comment"></i></a></div>
+					<div class="comment-content">
+						<span>{$vo.c_content}</span>
+					</div>
+					{if condition="!empty($vo['children'])"}
+						{foreach name="vo.children" item="voo"}
+							<div class="comment" data-id="{$voo.c_id}" data-uid="{$voo.uid}" data-username="{$voo.member_list_nickname|default=$voo['member_list_username']}" id="comment{$voo.c_id}" style="margin-left: 80px">
+								<a class="pull-left" href="{:url('home/Index/visit',array('id'=>$voo['uid']))}">
+								<img src="{$voo.member_list_headpic|get_imgurl=1}" class="media-object avatar"/>
+								</a>
+								<div class="comment-body">
+									<div>
+										<a href="{:url('home/Index/visit',array('id'=>$voo['uid']))}">{$voo.member_list_nickname|default=$voo['member_list_username']}:</a><span>{:lang('reply')} <a href="{:url('home/Index/visit',array('id'=>$voo['to_uid']))}">{$parent_comments[$voo['parentid']]['member_list_nickname']|default=$parent_comments[$voo['parentid']]['member_list_username']}</a></span><span class="time">{:date('m-d  H:i',$voo['createtime'])}</span> <a onclick="comment_reply(this);" href="javascript:;"><i class="fa fa-comment"></i></a>
+									</div>
+									<div class="comment-content">
+										{$voo.c_content}
+									</div>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						{/foreach}
+					{/if}
+				</div>
+				<div class="clearfix"></div>
+			</div>
+		{/foreach}
+	</div>
+</div>
+

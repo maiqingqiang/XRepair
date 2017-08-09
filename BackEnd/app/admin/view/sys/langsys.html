@@ -1,0 +1,61 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+	<div class="page-content">
+
+
+
+		<!--主题-->
+		<div class="page-header">
+			<h1>
+				您当前操作
+				<small>
+					<i class="ace-icon fa fa-angle-double-right"></i>
+					多语言设置
+				</small>
+			</h1>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<form class="form-horizontal ajaxForm2" name="urlsys" method="post" action="{:url('admin/Sys/runlangsys')}">
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启多语言： </label>
+						<div class="col-sm-9" style="padding-top:5px;">
+							<input name="lang_switch_on" id="lang_switch_on" {if condition='$Think.config.lang_switch_on eq 1'}checked{/if}  value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+							<span class="lbl"></span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+					
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 默认多语言 </label>
+						<div class="col-sm-9">
+							<input type="text" name="default_lang" value="{$Think.config.default_lang}"  class="col-xs-10 col-sm-5" />
+						<span class="help-inline col-xs-12 col-sm-7">
+							<span class="middle" id="restwo"></span>
+						</span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="clearfix form-actions">
+						<div class="col-sm-offset-3 col-sm-9">
+							<button class="btn btn-info" type="submit">
+								<i class="ace-icon fa fa-check bigger-110"></i>
+								保存
+							</button>
+
+							&nbsp; &nbsp; &nbsp;
+							<button class="btn" type="reset">
+								<i class="ace-icon fa fa-undo bigger-110"></i>
+								重置
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div><!-- /.page-content -->
+{/block}
+	
+
+

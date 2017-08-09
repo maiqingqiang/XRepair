@@ -1,0 +1,147 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+	<div class="page-content">
+		<!--主题-->
+		<div class="page-header">
+			<h1>
+				您当前操作
+				<small>
+					<i class="ace-icon fa fa-angle-double-right"></i>
+					修改广告信息
+				</small>
+			</h1>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<form class="form-horizontal ajaxForm2" name="plug_ad_runedit" method="post" action="{:url('admin/Plug/plug_ad_runedit')}">
+					<input type="hidden" name="plug_ad_id" id="plug_ad_id" value="{$plug_ad.plug_ad_id}" />
+					<div class="form-group">
+						<label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 所属位置： </label>
+						<div class="col-sm-11">
+							<select name="plug_ad_adtypeid"  class="col-sm-4 selector" required>
+								<option value="" >请选择所属广告位</option>
+								{foreach name="plug_adtype_list" item="v"}
+									<option value="{$v.plug_adtype_id}" {if condition="$plug_ad['plug_ad_adtypeid'] eq $v['plug_adtype_id']"}selected{/if}>{$v.plug_adtype_name}</option>
+								{/foreach}
+							</select>
+						</div>
+					</div>
+					{if condition="config('lang_switch_on')"}
+					<div class="form-group">
+						<label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 语言： </label>
+						<div class="col-sm-11">
+							<select name="plug_ad_l"  class="col-sm-4 selector" required>
+								<option value="" >请选择语言</option>
+								<option value="zh-cn" {if condition="$plug_ad['plug_ad_l'] eq 'zh-cn'"}selected{/if}>中文</option>
+								<option value="en-us" {if condition="$plug_ad['plug_ad_l'] eq 'en-us'"}selected{/if}>英语</option>
+							</select>
+						</div>
+					</div>
+					{/if}
+
+					<div class="form-group">
+						<label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 广告名称：  </label>
+						<div class="col-sm-11">
+							<input type="text" name="plug_ad_name" id="plug_ad_name" value="{$plug_ad.plug_ad_name}" placeholder="输入广告名称" class="col-xs-10 col-sm-5" required/>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 广告模式： </label>
+						<div class="col-sm-11">
+							<div class="radio" >
+								<label>
+									<input name="plug_ad_checkid" id="plug_ad_checkid" {if condition="$plug_ad.plug_ad_checkid eq 1"}checked{/if}  type="radio" class="ace" value="1"/>
+									<span class="lbl"> 图片模式</span>
+								</label>
+								<label>
+									<input name="plug_ad_checkid" id="plug_ad_checkjsid" {if condition="$plug_ad.plug_ad_checkid eq 2"}checked{/if} type="radio" class="ace" value="2"/>
+									<span class="lbl"> JS代码</span>
+								</label>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group" id="pic_jslist" {if condition="$plug_ad.plug_ad_checkid eq 1"}style="display:none"{/if}>
+						<label class="col-sm-1 control-label no-padding-right" for="form-field-1"> JS代码：  </label>
+						<div class="col-sm-11">
+							<input type="text" name="plug_ad_js" id="plug_ad_js" value="{$plug_ad.plug_ad_js}"  placeholder="输入JS代码" class="col-xs-10 col-sm-8" />
+						</div>
+					</div>
+
+					<div class="form-group" id="pic_list" {if condition="$plug_ad.plug_ad_checkid eq 2"}style="display:none"{/if}>
+						<label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 广告图片： </label>
+						<div class="col-sm-11">
+							<input type="hidden" name="checkpic" id="checkpic" value="{$plug_ad.plug_ad_pic}" />
+							<input type="hidden" name="oldcheckpic" id="oldcheckpic" value="{$plug_ad.plug_ad_pic}" />
+							<a href="javascript:;" class="file" title="点击选择所要上传的图片">
+								<input type="file" name="file0" id="file0" multiple="multiple"/>
+								选择上传文件
+							</a>
+							&nbsp;&nbsp;
+							<a href="javascript:;" onclick="return backpic('{$plug_ad.plug_ad_pic|get_imgurl}');" title="还原修改前的图片" class="file">
+				                撤销上传
+				            </a>
+    				        <div><img src="{$plug_ad.plug_ad_pic|get_imgurl}" height="70" id="img0" ></div>
+			            </div>
+		            </div>
+
+		<div class="form-group"  id="pic_listurl" {if condition="$plug_ad.plug_ad_checkid eq 2"}style="display:none"{/if}>
+		<label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 链接URL：  </label>
+		<div class="col-sm-11">
+			<input type="text" name="plug_ad_url" id="plug_ad_url" value="{$plug_ad.plug_ad_url}"  placeholder="输入链接URL" class="col-xs-10 col-sm-8" />
+			<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必须是以http://开头</span>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 排序：  </label>
+		<div class="col-sm-11">
+			<input type="text" name="plug_ad_order" id="plug_ad_order"  value="{$plug_ad.plug_ad_order}"  class="col-xs-10 col-sm-3" />
+			<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>从小到大排序</span>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-1 control-label no-padding-right" for="form-field-1"> 内容： </label>
+		<div class="col-sm-11">
+			<textarea  name="plug_ad_content" cols="20" rows="5" class="col-xs-10 col-sm-8 limitedone" id="form-field-10">{$plug_ad.plug_ad_content}</textarea>
+			<span class="lbl">&nbsp;&nbsp;广告文字内容</span>
+		</div>
+	</div>
+
+	<div class="clearfix form-actions">
+		<div class="col-md-offset-3 col-md-9">
+			<button class="btn btn-info" type="submit">
+				<i class="ace-icon fa fa-check bigger-110"></i>
+				保存
+			</button>
+
+			&nbsp; &nbsp; &nbsp;
+			<button class="btn" type="reset">
+				<i class="ace-icon fa fa-undo bigger-110"></i>
+				重置
+			</button>
+		</div>
+	</div>
+	</form>
+	</div><!--col-xs-12-->
+	</div><!--row-->
+
+
+	</div><!-- /.page-content -->
+{/block}
+{block name="scripts"}
+	<script>
+		$("#plug_ad_checkjsid").click(function(){
+			$("#pic_jslist").show();
+			$("#pic_list").hide();
+			$("#pic_listurl").hide();
+		});
+		$("#plug_ad_checkid").click(function(){
+			$("#pic_jslist").hide();
+			$("#pic_list").show();
+			$("#pic_listurl").show();
+		});
+	</script>
+{/block}

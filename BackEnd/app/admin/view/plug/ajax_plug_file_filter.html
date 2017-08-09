@@ -1,0 +1,43 @@
+{foreach name="plug_files" item="v"}
+	<tr>
+		<td class="hidden-xs" align="center">
+			<label class="pos-rel">
+				<input name='id[]' id="navid" class="ace"  type='checkbox' value='{$v.id}'>
+				<span class="lbl"></span>
+			</label>
+		</td>
+		<td height="28" >{$v.id}</td>
+		<td>{$v.path}</td>
+		<td>{$v.filesize}</td>
+		<td>{$v.uptime|date="Y-m-d H:i:s",###}</td>
+		<td>
+			{php}
+				if(function_exists('exif_imagetype')){
+					$is_img=exif_imagetype('.'.$v['path']);
+				}else{
+					$info = getimagesize($image);
+					$is_img=$info[2];
+				}
+				if(!$is_img){
+				$suff=pathinfo($v['path'], PATHINFO_EXTENSION);
+				}
+			{/php}
+			{if condition="$is_img gt 0"}
+				<img src="__ROOT__{$v.path}" style="max-width:40px;max-height:40px;"/>
+				{else /}
+				{$suff}文件
+			{/if}
+		</td>
+		<td>
+			<div class="action-buttons">
+				<a class="red confirm-rst-url-btn" data-info="你确定要删除吗？" href="{:url('admin/Plug/plug_file_del',array('id'=>$v['id'],'p'=>input('p',1)))}" title="删除">
+					<i class="ace-icon fa fa-trash-o bigger-130"></i>
+				</a>
+			</div>
+		</td>
+	</tr>
+{/foreach}
+<tr>
+	<td align="left"><button id="btnsubmit" class="btn btn-white btn-yellow btn-sm">删</button> </td>
+	<td colspan="8" align="right">{$page}</td>
+</tr>

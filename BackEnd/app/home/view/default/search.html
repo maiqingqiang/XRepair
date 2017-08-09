@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!--[if IE 8]>			<html class="ie ie8"> <![endif]-->
+<!--[if IE 9]>			<html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <title>{:lang('search')} {$site_name}</title>
+    <meta name="keywords" content="{$menu.menu_seo_key|default=$site_seo_keywords}" />
+    <meta name="description" content="{$menu.menu_seo_des|default=$site_seo_description}">
+    {include file="public:head" /}
+</head>
+
+<body class="blog blog-small">
+<div class="wrap">
+    {include file="public:nav" /}
+    <div id="main-cmf">
+        <div class="breadcrumb-wrapper">
+            <div class="container">
+				 <div class="row">
+<!-- 					{yf:news name="result" pagesize="5" type="keyword" key="$keyword" ispage="1" order="news_time desc" /} -->
+                    <div class="col-lg-12 col-md-12 col-xs-12 col-sm-12">
+                        <h2 class="title">'{$keyword}' {:lang('search result')} </h2>
+                        <h5>{$lists['count']} {:lang('result')}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="posts-block col-lg-9 col-md-9 col-sm-8 col-xs-12" id="news_list">
+						{include file="ajax_list"/}
+                    </div>
+                    {include file="public:rightslider"/}
+                </div>
+            </div>
+        </div>
+    </div>
+    {include file="public:footer"/}
+</div>
+{include file="public:scripts"/}
+</body>
+</html>

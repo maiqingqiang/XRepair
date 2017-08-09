@@ -1,0 +1,77 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+	<div class="page-content">
+	<link rel="stylesheet" href="__PUBLIC__/bootstrap-select/css/bootstrap-select.min.css">
+
+
+		<!--主题-->
+		<div class="page-header">
+			<h1>
+				您当前操作
+				<small>
+					<i class="ace-icon fa fa-angle-double-right"></i>
+					日志设置
+				</small>
+			</h1>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<form class="form-horizontal ajaxForm2" name="urlsys" method="post" action="{:url('admin/Sys/runlogsys')}">
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否定时清日志： </label>
+						<div class="col-sm-9" style="padding-top:5px;">
+							<input name="clear_on" id="clear_on"  {if condition="config('log.clear_on')"}checked{/if} value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+							<span class="lbl"></span>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 清多久前日志：</label>
+						<div class="col-sm-9">
+							<input type="number" name="timebf" id="timebf" value="{:config('log.timebf')}" class="col-xs-5" />
+							<span class="help-inline col-xs-5">
+						<span class="lbl">  单位秒</span>
+					</span>
+						</div>
+					</div>					
+					<div class="form-group" id="input-rules">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 日志记录：</label>
+						<div class="col-sm-9">
+							<select name="log_level[]" class="selectpicker" multiple data-width="fit">
+								<option data-subtext="常规日志">log</option>
+								<option data-subtext="错误">error</option>
+								<option data-subtext="信息">info</option>
+								<option data-subtext="SQL语句">sql</option>
+								<option data-subtext="警告">notice</option>
+								<option data-subtext="警戒性错误">alert</option>
+								<option data-subtext="调试">debug</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="clearfix form-actions">
+						<div class="col-sm-offset-3 col-sm-9">
+							<button class="btn btn-info" type="submit">
+								<i class="ace-icon fa fa-check bigger-110"></i>
+								保存
+							</button>
+
+							&nbsp; &nbsp; &nbsp;
+							<button class="btn" type="reset">
+								<i class="ace-icon fa fa-undo bigger-110"></i>
+								重置
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div><!-- /.page-content -->
+{/block}
+{block name="scripts"}
+<script src="__PUBLIC__/bootstrap-select/js/bootstrap-select.min.js"></script>
+<script>
+$('.selectpicker').selectpicker('val',"{$log['level']}".split(','));
+</script>
+{/block}
+
+

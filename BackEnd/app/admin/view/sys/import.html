@@ -1,0 +1,95 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+	<div class="page-content">
+
+		<div class="row">
+			<div class="col-xs-12">
+				<div>
+					<table class="table table-striped table-bordered table-hover" id="dynamic-table">
+						<thead>
+						<tr>
+							<th>备份名称</th>
+							<th>卷数</th>
+							<th>压缩</th>
+							<th class="hidden-sm hidden-xs">数据大小</th>
+							<th class="hidden-sm hidden-xs">备份时间</th>
+							<th style="border-right:#CCC solid 1px;">操作</th>
+						</tr>
+						</thead>
+
+						<tbody>
+
+						{foreach name="data_list" item="v"}
+							<tr>
+								<td height="28">{$v.time|date='Ymd-His',###}</td>
+								<td>{$v.part}</td>
+								<td>{if condition="$v['compress'] eq 'GZ'"}{$v.compress}{else/}无压缩{/if}</td>
+								<td class="hidden-sm hidden-xs">{$v.size|format_bytes}</td>
+								<td class="hidden-sm hidden-xs">{$key}</td>
+								<td>
+									<div class="hidden-sm hidden-xs action-buttons">
+										<a class="db-import confirm-rst-url-btn" data-info="你确定要还原吗？" href="{:url('admin/Sys/restore?time='.$v['time'])}" title="还原">
+											<i class="ace-icon fa fa-reply-all bigger-130"></i>
+										</a>
+										{if condition="$v['compress'] eq 'GZ'"}
+										<a class="db-import" href="__DATA__/backup/{$v.time|date='Ymd-His',###}-{$v.part}.sql.{$v.compress}" title="下载">
+										{else/}
+										<a class="db-import" href="__DATA__/backup/{$v.time|date='Ymd-His',###}-{$v.part}.sql" title="下载">
+										{/if}
+											<i class="ace-icon fa fa-cloud-download bigger-130"></i>
+										</a>
+										<a class="confirm-rst-url-btn" href="{:url('admin/Sys/del?time='.$v['time'])}"  data-info="你确定要删除吗？" title="删除">
+											<i class="ace-icon fa fa-trash-o bigger-130"></i>
+										</a>
+									</div>
+									<div class="hidden-md hidden-lg">
+										<div class="inline position-relative">
+											<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+												<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+											</button>
+											<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+												<li>
+													<a href="{:url('admin/Sys/restore?time='.$v['time'])}"  data-info="你确定要还原吗？" class="tooltip-success confirm-rst-url-btn" data-rel="tooltip" title="" data-original-title="还原">
+																<span class="green">
+																	<i class="ace-icon fa fa-reply-all bigger-120"></i>
+																</span>
+													</a>
+												</li>
+												<li>
+													{if condition="$v['compress'] eq 'GZ'"}
+													<a href="__DATA__/backup/{$v.time|date='Ymd-His',###}-{$v.part}.sql.{$v.compress}" class="tooltip-success" data-rel="tooltip" title="" data-original-title="下载">
+													{else/}
+													<a href="__DATA__/backup/{$v.time|date='Ymd-His',###}-{$v.part}.sql" class="tooltip-success" data-rel="tooltip" title="" data-original-title="下载">
+													{/if}
+																			<span class="green">
+																	<i class="ace-icon fa fa-cloud-download bigger-120"></i>
+																</span>
+													</a>
+												</li>
+
+												<li>
+													<a href="{:url('admin/Sys/del?time='.$v['time'])}"  data-info="你确定要删除吗？" class="tooltip-error confirm-rst-url-btn" data-rel="tooltip" title="" data-original-title="删除">
+																<span class="red">
+																	<i class="ace-icon fa fa-trash-o bigger-120"></i>
+																</span>
+													</a>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</td>
+							</tr>
+						{/foreach}
+						<tr>
+							<td height="50" colspan="7" align="left">&nbsp;</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+
+
+	</div><!-- /.page-content -->
+{/block}

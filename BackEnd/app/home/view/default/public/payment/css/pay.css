@@ -1,0 +1,290 @@
+ .pack-user-meta {
+	margin: 20px 0;
+}
+.pack-user-avatar {
+	float: right;
+	width: 62px;
+	height: 62px;
+	border-radius: 50%;
+	-ms-border-radius: 50%;
+	-o-border-radius: 50%;
+}
+
+.recommended-payment-methods {
+	}
+.recommended-payment-methods .headingline {
+	width:100%;
+	height:50px;
+	border-bottom: 1px solid #ddd;
+}
+.recommended-payment-methods .headingline .rectext {
+	float:left;
+	height:50px;
+	line-height:50px;
+	text-align:center;
+	background:#fff;
+	color:#333;
+}
+.recommended-payment-methods .headingline .rechargeaccountnow {
+	float:right;
+	line-height:50px;
+}
+.recommended-payment-methods .bcardbox {
+	overflow:hidden;
+	padding-top:20px;
+	background:#fff;
+}
+.cardiconin {
+	background:#fff;
+	float:left;
+	margin-left:20px;
+	margin-bottom:20px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	overflow:hidden;
+	cursor:pointer;
+}
+.cardicon-selected {
+	width:183px;
+	height:110px;
+	background:#fff;
+	border:1px solid #f26d6d;
+	float:left;
+	margin-left:20px;
+	margin-bottom:20px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	overflow:hidden;
+	cursor:pointer;
+}
+.sys_spec_img li {
+	float:left;
+	float:left;
+	position:relative;
+	margin:1%;
+
+}
+.sys_spec_img li a {
+	border:2px solid #fff;
+	float:left;
+	background:#fff;
+	display:inline-block;
+	outline:none;
+	width:100%;
+	position: relative;
+}
+.sys_spec_img li a img {
+	display:block;
+	max-width: 100%;
+	border:1px solid #ccc;
+	border-radius: 6px;
+	width: 100%;
+}
+.sys_spec_img li a:hover {
+	border:2px solid #fff;
+	padding:0;
+	text-decoration:none;
+}
+.sys_spec_img li i {
+	position:absolute;
+	width:50px;
+	height:50px;
+	font-size:0;
+	line-height:0;
+	right:17px;
+	bottom:3px;
+	background:url(/public/payment/images/sys_item_selected.gif) no-repeat right bottom;
+	z-index:99;
+	display:none;
+}
+.sys_spec_img li.selected a {
+	border:3px solid #e4393c;
+	padding:0;
+	position: relative;
+	z-index:0
+}
+.sys_spec_img li.selected i {
+	display:block;
+}
+.sys_spec_text li {
+	float:left;
+	height:28px;
+	position:relative;
+	margin:2px 6px 2px 0;
+	outline:none;
+}
+.sys_spec_text li a {
+	height:24px;
+	padding:1px 6px;
+	border:1px solid #ccc;
+	background:#fff;
+	display:inline-block;
+	line-height:24px;
+}
+.sys_spec_text li a:hover {
+	border:2px solid #e4393c;
+	padding:0 5px;
+	text-decoration:none;
+}
+.sys_spec_text li i {
+	position:absolute;
+	width:10px;
+	height:10px;
+	font-size:0;
+	line-height:0;
+	right:2px;
+	bottom:-2px;
+	background:url(/public/payment/images/sys_item_selected.gif) right bottom;
+	z-index:1000;
+	display:none;
+}
+.sys_spec_text li.selected a {
+	border:2px solid #e4393c;
+	padding:0 5px;
+}
+.sys_spec_text li.selected i {
+	display:block;
+}
+.sys_spec_img li span {
+	position: absolute;
+	z-index:1000;
+	bottom:-2px;
+	left:2px;
+	display:block;
+	background-color:#e4393c;
+	color:#fff;
+	padding:1% 2%;
+	font-size:14px;
+	float:left
+}
+.iradio_square-green {
+	display: block;
+	margin: 4px 0px 0px 0px;
+	padding: 0;
+	width: 22px;
+	height: 22px;
+	background: url(/public/payment/images/green.png) no-repeat;
+	border: none;
+	cursor: pointer;
+}
+.icon-chevron-right {
+	background-position: -456px -72px;
+}
+[class^="icon-"],
+[class*=" icon-"] {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	margin-top: 1px;
+	*margin-right: .3em;
+	line-height: 14px;
+	vertical-align: text-top;
+	background-image: url("/public/payment/images/glyphicons-halflings.png");
+	background-repeat: no-repeat;
+}
+.icheckbox_square-green {
+	background-position: 0 0;
+}
+.icheckbox_square-green.hover {
+	background-position: -24px 0;
+}
+.icheckbox_square-green.checked {
+	background-position: -48px 0;
+}
+.icheckbox_square-green.disabled {
+	background-position: -72px 0;
+	cursor: default;
+}
+.icheckbox_square-green.checked.disabled {
+	background-position: -96px 0;
+}
+.iradio_square-green {
+	background-position: -120px 0;
+	    float: left;
+}
+.iradio_square-green.hover {
+	background-position: -144px 0;
+}
+.iradio_square-green.checked {
+	background-position: -168px 0;
+}
+.iradio_square-green.disabled {
+	background-position: -192px 0;
+	cursor: default;
+}
+.iradio_square-green.checked.disabled {
+	background-position: -216px 0;
+}
+/* Retina support*/
+	@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (min-device-pixel-ratio: 1.5) {
+	.icheckbox_square-green, .iradio_square-green {
+	background-image: url("/public/payment/images/green@2x.png");
+	-webkit-background-size: 240px 24px;
+	background-size: 240px 24px;
+}
+}
+
+ #icon{
+            position:fixed;
+            z-index:9999999;
+            width:50px; 
+            height:50px;
+            background:url(/public/payment/images/20131212010509508.png) no-repeat;
+            right: 125px;
+            bottom: 135px;
+        }
+/*	bottom start	*/
+.bottom {
+	width: 100%;
+	height: 50px;
+	background: #3a3a3a;
+	position: fixed;
+	bottom: 0;
+	z-index: 9999;
+
+}
+.bottom ul{
+    -webkit-box-orient: horizontal;
+    -moz-box-orient: horizontal;
+    box-orient: horizontal;
+    display: -webkit-box;
+}
+.bottom li {
+	height: 50px;
+	text-align: center;
+	color: #fff;
+    -webkit-box-flex: 1;
+    -moz-box-flex: 1;
+    box-flex: 1;
+    display: block;
+}
+.bottom li a {
+	color: #fff;
+	font-size: 12px;
+}
+.bottom span {
+	display: inline-block;
+	width: 100%;
+	height: 50px;
+	vertical-align: top
+}
+.bottom .icon {
+	display: inline-block;
+	width: 100%;
+	height: 27px;
+	padding-top: 7px;
+	text-align: center
+}
+.bottom .icon i {
+	font-size: 18px;
+}
+.bottom-search {
+	position: relative;
+}
+		.body-bg-color{ background:#6e6e6f}
+		.button-bg-color{ background:#dea543}
+		.box-bg-color{ background:#e44f4f}
+    .title-bg-color{ background:#544a4f;}
+		.bottom{ background:#3a3a3a;}

@@ -1,0 +1,386 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+            <div class="page-content">
+                <!--主题-->
+                <div class="page-header">
+                    <h1>
+                        您当前操作
+                        <small>
+                            <i class="ace-icon fa fa-angle-double-right"></i>
+                            个人中心
+                        </small>
+                    </h1>
+                </div>
+                <div>
+                    <div id="user-profile-1" class="user-profile row">
+                        <div class="col-xs-12 col-sm-3 center">
+                            <div>
+                                <!-- #section:pages/profile.picture -->
+								<span class="profile-picture">
+									<a href="#">
+                                        <img id="avatar" class="editable" src="{$admin['admin_avatar']|get_imgurl=2}" width="150"  data-toggle="modal" data-target="#myModal" />
+                                    </a>
+								</span>
+
+                                <!-- /section:pages/profile.picture -->
+                                <div class="space-4"></div>
+                                <div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right">
+                                    <div class="inline position-relative">
+                                        <a href="{:url('admin/Admin/admin_group_access',array('id'=>$admin['id']))}" class="user-title-label" title="配置权限">
+                                            <i class="ace-icon fa fa-circle light-green"></i>
+                                            &nbsp;
+                                            <span class="white">{$admin['title']}</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="space-6"></div>
+
+                            <!-- #section:pages/profile.contact -->
+                            <div class="profile-contact-info">
+                                <div class="profile-contact-links align-left">
+                                    <span id="edit" class="btn btn-link" data-toggle="modal" data-target="#myModaledit">
+                                        <i class="ace-icon fa fa-pencil bigger-120 green"></i>
+                                        修改个人信息
+                                    </span>
+								</div>
+                                <div class="space-6"></div>
+                            </div>
+
+                            <!-- /section:pages/profile.contact -->
+                            <div class="hr hr12 dotted"></div>
+
+                            <!-- #section:custom/extra.grid -->
+                            <div class="clearfix">
+                                <div class="grid2">
+                                    <span class="bigger-175 blue">{$admin['admin_hits']}</span>
+
+                                    <br />
+                                    登录次数												</div>
+
+                                <div class="grid2">
+                                    <a href="{:url('admin/News/news_list',array('keytype'=>'news_auto','key'=>$admin['member_id']))}">
+                                        <span class="bigger-175 blue">{$admin['news_count']}</span>
+                                    </a>
+                                    <br />
+                                    文章数												</div>
+                            </div>
+
+                            <!-- /section:custom/extra.grid -->
+                            <div class="hr hr16 dotted"></div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-9">
+
+                            <!-- #section:pages/profile.info -->
+                            <div class="profile-user-info profile-user-info-striped">
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 用户名 </div>
+
+                                    <div class="profile-info-value">
+                                        <span class="editable" id="username">{$admin['admin_username']}</span>													</div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 联系电话 </div>
+
+                                    <div class="profile-info-value">
+                                        <span class="editable" id="tel">{$admin['admin_tel']|default='未设置'}</span>													</div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 真实姓名 </div>
+
+                                    <div class="profile-info-value">
+                                        <span class="editable" id="realname">{$admin.admin_realname|default='未设置'}</span>													</div>
+                                </div>
+
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 上次登录时间 </div>
+
+                                    <div class="profile-info-value">
+                                        <span class="editable" id="lasttime">{if condition="$admin.admin_last_time eq ''"}未登陆过{else /}{$admin.admin_last_time|date="Y-m-d H:i:s",###}{/if}</span>													</div>
+                                </div>
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 上次登录IP </div>
+
+                                    <div class="profile-info-value">
+                                        <span class="editable" id="lastip">{if condition="$admin.admin_ip eq ''"}未登陆过{else /}{$admin.admin_ip}{/if}</span>													</div>
+                                </div>
+                                <div class="profile-info-row">
+                                    <div class="profile-info-name"> 本次登录IP </div>
+
+                                    <div class="profile-info-value">
+                                        <span class="editable" id="loginip">{$admin.admin_ip}</span>													</div>
+                                </div>
+                            </div>
+
+                            <!-- /section:pages/profile.info -->
+                            <div class="space-20"></div>
+
+                            <div class="widget-box transparent">
+                                <div class="widget-header widget-header-small">
+                                    <h4 class="widget-title blue profile-info-name">
+                                        <i class="ace-icon fa fa-rss orange"></i>
+                                        消息动态
+                                    </h4>
+                                </div>
+
+                                <div class="widget-body">
+                                    <div class="widget-main padding-8">
+                                        <!-- #section:pages/profile.feed -->
+                                        <div id="profile-feed-1" class="profile-feed">
+
+                                            <!-- /section:pages/profile.feed -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <link href="__PUBLIC__/shearphoto/css/ShearPhoto.css" rel="stylesheet" type="text/css" media="all">
+                <script  type="text/javascript" src="__PUBLIC__/shearphoto/js/ShearPhoto.js" ></script>
+                <script  type="text/javascript"  src="__PUBLIC__/shearphoto/js/alloyimage.js" ></script>
+                <script  type="text/javascript"  src="__PUBLIC__/shearphoto/js/handle.js" ></script>
+                <script type="text/javascript">
+                    var SHEAR = {
+                        PATH_RES: '__PUBLIC__',
+                        PATH_AVATAR: '__ROOT__/data/upload/avatar',
+                        URL:"{:url('admin/Admin/avatar')}",
+                    };
+                </script>
+                <!-- 显示模态框（Modal） -->
+                <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" style="width:70%;">
+                        <div class="modal-content"  style="min-width:450px;">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×
+                                </button>
+                                <h4 class="modal-title" id="myModalLabel">
+                                    会员头像
+                                </h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <div id="shearphoto_loading">程序加载中......</div><!--这是2.2版本加入的缓冲效果，JS方法加载前显示的等待效果-->
+                                        <div id="shearphoto_main">
+                                            <!--效果开始.............如果你不要特效，可以直接删了........-->
+                                            <div class="Effects" id="shearphoto_Effects" autocomplete="off">
+                                                <strong class="EffectsStrong">截图效果</strong>
+                                                <a href="javascript:;" StrEvent="原图" class="Aclick"><img src="__PUBLIC__/shearphoto/images/Effects/e0.jpg"/>原图</a>
+                                                <a href="javascript:;" StrEvent="美肤"><img src="__PUBLIC__/shearphoto/images/Effects/e1.jpg"/>美肤效果</a>
+                                                <a href="javascript:;" StrEvent="素描"><img src="__PUBLIC__/shearphoto/images/Effects/e2.jpg"/>素描效果</a>
+                                                <a href="javascript:;" StrEvent="自然增强"><img src="__PUBLIC__/shearphoto/images/Effects/e3.jpg" />自然增强</a>
+                                                <a href="javascript:;" StrEvent="紫调"><img src="__PUBLIC__/shearphoto/images/Effects/e4.jpg" />紫调效果</a>
+                                                <a href="javascript:;" StrEvent="柔焦"><img src="__PUBLIC__/shearphoto/images/Effects/e5.jpg"/>柔焦效果</a>
+                                                <a href="javascript:;" StrEvent="复古"><img src="__PUBLIC__/shearphoto/images/Effects/e6.jpg"/>复古效果</a>
+                                                <a href="javascript:;" StrEvent="黑白"><img src="__PUBLIC__/shearphoto/images/Effects/e7.jpg"/>黑白效果</a>
+                                                <a href="javascript:;" StrEvent="仿lomo"><img src="__PUBLIC__/shearphoto/images/Effects/e8.jpg"/>仿lomo</a>
+                                                <a href="javascript:;" StrEvent="亮白增强"><img src="__PUBLIC__/shearphoto/images/Effects/e9.jpg"/>亮白增强</a>
+                                                <a href="javascript:;" StrEvent="灰白"><img src="__PUBLIC__/shearphoto/images/Effects/e10.jpg"/>灰白效果</a>
+                                                <a href="javascript:;" StrEvent="灰色"><img src="__PUBLIC__/shearphoto/images/Effects/e11.jpg"/>灰色效果</a>
+                                                <a href="javascript:;" StrEvent="暖秋"><img src="__PUBLIC__/shearphoto/images/Effects/e12.jpg"/>暖秋效果</a>
+                                                <a href="javascript:;" StrEvent="木雕"><img src="__PUBLIC__/shearphoto/images/Effects/e13.jpg"/>木雕效果</a>
+                                                <a href="javascript:;" StrEvent="粗糙"><img src="__PUBLIC__/shearphoto/images/Effects/e14.jpg"/>粗糙效果</a>
+                                            </div>
+                                            <!--效果结束...........................如果你不要特效，可以直接删了.....................................................-->
+                                            <!--primary范围开始-->
+                                            <div class="primary">
+                                                <!--main范围开始-->
+                                                <div id="main">
+                                                    <div class="point">
+                                                    </div>
+                                                    <!--选择加载图片方式开始-->
+
+                                                    <div id="SelectBox">
+                                                        <form id="ShearPhotoForm" enctype="multipart/form-data" method="post"  target="POSTiframe">
+                                                            <input name="shearphoto" type="hidden" value="123" autocomplete="off">
+                                                            <a href="javascript:;" id="selectImage"><input type="file"  name="UpFile" autocomplete="off"/></a>
+                                                        </form>
+                                                        <a href="javascript:;" id="PhotoLoading"></a>
+                                                    </div>
+                                                    <!--选择加载图片方式结束--->
+                                                    <div id="relat">
+                                                        <div id="black">
+                                                        </div>
+                                                        <div id="movebox">
+                                                            <div id="smallbox">
+                                                                <img src="__PUBLIC__/shearphoto/images/default.gif" class="MoveImg" /><!--截框上的小图-->
+                                                            </div>
+                                                            <!--动态边框开始-->
+                                                            <i id="borderTop">
+                                                            </i>
+
+                                                            <i id="borderLeft">
+                                                            </i>
+
+                                                            <i id="borderRight">
+                                                            </i>
+
+                                                            <i id="borderBottom">
+                                                            </i>
+                                                            <!--动态边框结束-->
+                                                            <i id="BottomRight">
+                                                            </i>
+                                                            <i id="TopRight">
+                                                            </i>
+                                                            <i id="Bottomleft">
+                                                            </i>
+                                                            <i id="Topleft">
+                                                            </i>
+                                                            <i id="Topmiddle">
+                                                            </i>
+                                                            <i id="leftmiddle">
+                                                            </i>
+                                                            <i id="Rightmiddle">
+                                                            </i>
+                                                            <i id="Bottommiddle">
+                                                            </i>
+                                                        </div>
+                                                        <img src="__PUBLIC__/shearphoto/images/default.gif" class="BigImg" /><!--MAIN上的大图-->
+                                                    </div>
+                                                </div>
+                                                <!--main范围结束-->
+                                                <div style="clear: both"></div>
+                                                <!--工具条开始-->
+                                                <div id="Shearbar">
+                                                    <a id="LeftRotate" href="javascript:;">
+                                                        <em>
+                                                        </em>
+                                                        向左旋转
+                                                    </a>
+                                                    <em class="hint L">
+                                                    </em>
+                                                    <div class="ZoomDist" id="ZoomDist">
+                                                        <div id="Zoomcentre">
+                                                        </div>
+                                                        <div id="ZoomBar">
+                                                        </div>
+                        <span class="progress">
+                        </span>
+                                                    </div>
+                                                    <em class="hint R">
+                                                    </em>
+                                                    <a id="RightRotate" href="javascript:;">
+                                                        向右旋转
+                                                        <em>
+                                                        </em>
+                                                    </a>
+                                                    <p class="Psava">
+                                                        <a id="againIMG"  href="javascript:;">重新选择</a>
+                                                        <a id="saveShear" href="javascript:;">保存截图</a>
+                                                    </p>
+                                                </div>
+                                                <!--工具条结束-->
+                                            </div>
+                                            <!--primary范围结束-->
+                                            <div style="clear: both"></div>
+                                        </div>
+                                        <!--shearphoto_main范围结束-->
+
+                                        <!--主功能部份 主功能部份的标签请勿随意删除，除非你对shearphoto的原理了如指掌，否则JS找不到DOM对象，会给你抱出错误-->
+                                        <!--相册-->
+                                        <div id="photoalbum"><!--假如你不要这个相册功能。把相册标签删除了，JS会抱出一个console.log()给你，注意查收，console.log的内容是告诉，某个DOM对象找不到-->
+                                            <h1>请从相册中选择</h1>
+                                            <i id="close"></i>
+                                            <ul>
+                                                <li><img src="__PUBLIC__/shearphoto/file/photo/1.jpg" serveUrl="file/photo/1.jpg" /></li>
+                                                <li><img src="__PUBLIC__/shearphoto/file/photo/2.jpg" serveUrl="file/photo/2.jpg" /></li>
+                                                <li><img src="__PUBLIC__/shearphoto/file/photo/3.jpg" serveUrl="file/photo/3.jpg" /></li>
+                                                <li><img src="__PUBLIC__/shearphoto/file/photo/4.jpg" serveUrl="file/photo/4.jpg" /></li>
+                                            </ul>
+                                        </div>
+                                        <!--相册-->
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal -->
+
+                <!-- 显示修改资料模态框（Modal） -->
+                <div class="modal fade in" id="myModaledit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <form class="form-horizontal ajaxForm2" name="admin_runedit" method="post" action="{:url('admin/Admin/admin_runedit')}">
+                        <input type="hidden" name="admin_id" value="{$admin.admin_id}" />
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" id="gb"  data-dismiss="modal"
+                                            aria-hidden="true">×
+                                    </button>
+                                    <h4 class="modal-title" id="myModalLabel2">
+                                        修改用户信息
+                                    </h4>
+                                </div>
+                                <div class="modal-body">
+
+
+                                    <div class="row">
+                                        <div class="col-xs-12">
+
+
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 用户邮箱：  </label>
+                                                <div class="col-sm-10">
+                                                    <input type="email" name="admin_email" id="admin_email" value="{$admin.admin_email}" class="col-xs-10 col-sm-5" required/>
+                                                    <span class="lbl col-xs-12 col-sm-7"><span class="red">*</span>用于密码找回，请认真填写</span>
+                                                </div>
+                                            </div>
+                                            <div class="space-4"></div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 登录密码：  </label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="admin_pwd" id="admin_pwd" maxlength="15" minlength="6" placeholder="为空不修改密码" class="col-xs-10 col-sm-5" />
+                                                    <span class="lbl col-xs-12 col-sm-7"><span class="red">*</span>密码必须大于6位，小于15位</span>
+                                                </div>
+                                            </div>
+                                            <div class="space-4"></div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 手机号码：  </label>
+                                                <div class="col-sm-10">
+                                                    <input type="number" name="admin_tel" id="admin_tel" value="{$admin.admin_tel}" class="col-xs-10 col-sm-5" required/>
+                                                    <span class="lbl col-xs-12 col-sm-7"><span class="red">*</span>只能填写数字</span>
+                                                </div>
+                                            </div>
+                                            <div class="space-4"></div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 通用网名：  </label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" name="admin_realname" id="admin_realname" value="{$admin.admin_realname}"  class="col-xs-10 col-sm-5" required/>
+                                                    <span class="lbl col-xs-12 col-sm-7"><span class="red">*</span>用于发布信息所有人，且在前端显示</span>
+                                                </div>
+                                            </div>
+                                            <div class="space-4"></div>
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 是否审核： </label>
+                                                <div class="col-sm-10" style="padding-top:5px;">
+                                                    <input name="admin_open" id="admin_open" {if condition="$admin['admin_open'] eq 1"}checked{/if}  value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+                                                    <span class="lbl">默认关闭</span>
+                                                </div>
+                                            </div>
+                                            <div class="space-4"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">
+                                        提交保存
+                                    </button>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                                        关闭
+                                    </button>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </form>
+                </div><!-- /.modal -->
+            </div>
+{/block}
+
+

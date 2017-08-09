@@ -1,0 +1,237 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+	<div class="page-content">
+		<div class="row maintop">
+			<div class="col-xs-12">
+				<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#myModal">
+					<i class="ace-icon fa fa-plus bigger-110"></i>
+					添加自定义菜单
+				</button>
+				<a class="red rst-url-btn" href="{:url('wechat/We/menu_make')}">
+					<button class="btn btn-xs btn-info">
+						<i class="ace-icon fa fa-bolt bigger-110"></i>
+						生成菜单
+					</button>
+				</a>
+				<a class="red rst-url-btn" href="{:url('wechat/We/menu_get')}">
+					<button class="btn btn-xs btn-info">
+						<i class="ace-icon fa fa-refresh bigger-110"></i>
+						同步菜单
+					</button>
+				</a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<div>
+					<form class="ajaxForm2" name="leftnav" method="post" action="{:url('wechat/We/menu_order')}" >
+						<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+							<thead>
+							<tr>
+								<th>排序</th>
+								<th>ID</th>
+								<th>菜单标题</th>
+								<th>类型</th>
+								<th>操作值</th>
+								<th>开启状态</th>
+								<th style="border-right:#CCC solid 1px;">操作</th>
+							</tr>
+							</thead>
+
+							<tbody id="ajax-data">
+								{include file="we/ajax_menu_list"/}
+							</tbody>
+						</table>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!-- 显示模态框（Modal）-->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<form class="form-horizontal ajaxForm2" name="we_menu_runadd" id="we_menu_runadd" method="post" action="{:url('wechat/We/menu_runadd')}">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+									aria-hidden="true">×
+							</button>
+							<h4 class="modal-title" id="myModalLabel">
+								添加自定义菜单
+							</h4>
+						</div>
+						<div class="modal-body">
+
+							<div class="row">
+								<div class="col-xs-12">
+
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 上级栏目： </label>
+										<div class="col-sm-10">
+											<select name="we_menu_leftid"  id="we_menu_leftid" class="col-sm-4 selector" required>
+												<option value="0">顶级栏目</option>
+												{foreach name="menu" item="v"}
+												<option value="{$v.we_menu_id}">{$v.lefthtml}{$v.we_menu_name}</option>
+												{/foreach}
+											</select>
+										</div>
+									</div>
+									<div class="space-4"></div>
+
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 菜单名称：  </label>
+										<div class="col-sm-10">
+											<input type="text" name="we_menu_name" id="we_menu_name" placeholder="输入菜单名称" class="col-xs-10 col-sm-5" required/>
+										</div>
+									</div>
+									<div class="space-4"></div>
+
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 菜单类型： </label>
+										<div class="col-sm-10">
+											<select name="we_menu_type"  class="col-sm-4" required>
+												<option value="1" selected>URL菜单链接</option>
+												<option value="2">关键词回复菜单</option>
+											</select>
+										</div>
+									</div>
+									<div class="space-4"></div>
+
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> URL/操作值：  </label>
+										<div class="col-sm-10">
+											<input type="text" name="we_menu_typeval" id="we_menu_typeval" placeholder="如果url必须http://或https://开头" class="col-xs-10 col-sm-5" required/>
+											<span class="lbl">&nbsp;&nbsp;<span class="red"></span>如果为url必须http://或https://开头</span>
+										</div>
+									</div>
+									<div class="space-4"></div>
+
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 排序：  </label>
+										<div class="col-sm-10">
+											<input type="text" name="we_menu_order" id="we_menu_order" value="50" class="col-xs-10 col-sm-2" required/>
+											<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>从小到大排序</span>
+										</div>
+									</div>
+									<div class="space-4"></div>
+
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 是否开启： </label>
+										<div class="col-sm-10" style="padding-top:5px;">
+											<input name="we_menu_open" id="we_menu_open" value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+											<span class="lbl">&nbsp;&nbsp;默认关闭</span>
+										</div>
+									</div>
+									<div class="space-4"></div>
+
+								</div>
+							</div>
+					</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary">
+								提交保存
+							</button>
+							<button class="btn btn-info" type="reset">
+								重置
+							</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">
+								关闭
+							</button>
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</form>
+		</div><!-- /.modal -->
+		<!-- 修改自定义菜单模态框（Modal） -->
+		<div class="modal fade in" id="myModaledit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-backdrop fade in" id="gbbb" style="height: 100%;"></div>
+			<form class="form-horizontal ajaxForm2" name="we_menu_runedit" id="we_menu_runedit" method="post" action="{:url('wechat/We/menu_runedit')}">
+				<input type="hidden" name="we_menu_id" id="editwe_menu_id" value="" />
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" id="gb"  data-dismiss="modal"
+									aria-hidden="true">×
+							</button>
+							<h4 class="modal-title" id="myModalLabel">
+								修改菜单
+							</h4>
+						</div>
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-xs-12">
+
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 上级栏目： </label>
+										<div class="col-sm-10">
+											<select name="we_menu_leftid"  id="editwe_menu_leftid"  class="col-sm-4 selector" required>
+												<option value="0">顶级栏目</option>
+												{foreach name="menu" item="v"}
+												<option value="{$v.we_menu_id}">{$v.lefthtml}{$v.we_menu_name}</option>
+												{/foreach}
+											</select>
+										</div>
+									</div>
+									<div class="space-4"></div>
+
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 菜单名称：  </label>
+										<div class="col-sm-10">
+											<input type="text" name="we_menu_name" id="editwe_menu_name" placeholder="输入菜单名称" class="col-xs-10 col-sm-5" required/>
+										</div>
+									</div>
+									<div class="space-4"></div>
+
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 菜单类型： </label>
+										<div class="col-sm-10">
+											<select name="we_menu_type"  class="col-sm-4" id="editwe_menu_type" required>
+												<option value="1" selected>URL菜单链接</option>
+												<option value="2">关键词回复菜单</option>
+											</select>
+										</div>
+									</div>
+									<div class="space-4"></div>
+
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> URL/操作值：  </label>
+										<div class="col-sm-10">
+											<input type="text" name="we_menu_typeval" id="editwe_menu_typeval" placeholder="如果url必须http://或https://开头" class="col-xs-10 col-sm-5" required/>
+											<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>如果为url必须http://或https://开头</span>
+										</div>
+									</div>
+									<div class="space-4"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 排序：  </label>
+										<div class="col-sm-10">
+											<input type="text" name="we_menu_order" id="editwe_menu_order" value="50" class="col-xs-10 col-sm-2"  required/>
+											<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>从小到大排序</span>
+										</div>
+									</div>
+									<div class="space-4"></div>
+
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 是否开启： </label>
+										<div class="col-sm-10" style="padding-top:5px;">
+											<input name="we_menu_open" id="editwe_menu_open" value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+											<span class="lbl">&nbsp;&nbsp;默认关闭</span>
+										</div>
+									</div>
+									<div class="space-4"></div>
+
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary">
+								提交保存
+							</button>
+							<button type="button" class="btn btn-default" id="gbb" >
+								关闭
+							</button>
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</form>
+		</div><!-- /.modal -->
+	</div><!-- /.page-content -->
+{/block}

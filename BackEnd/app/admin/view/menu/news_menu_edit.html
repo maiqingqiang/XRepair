@@ -1,0 +1,279 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+	<div class="page-content">
+		<!--主题-->
+		<div class="page-header">
+			<h1>
+				您当前操作
+				<small>
+					<i class="ace-icon fa fa-angle-double-right"></i>
+					编辑菜单
+				</small>
+			</h1>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<form class="form-horizontal ajaxForm2" name="runnews_menuedit" method="post" action="{:url('admin/Menu/news_menu_runedit')}">
+					<input type="hidden" name="id" value="{$menu.id}" />
+					<input type="hidden" name="lang_list" value="{$menu.menu_l}" />
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 上级栏目： </label>
+						<div class="col-sm-9">
+							<select name="parentid"  id="parentid" class="col-sm-3 selector">
+								<option value="">请选择所属栏目</option>
+								{foreach name="menu_text" item="vo"}
+								<option value="{$vo.id}" {if condition="$vo.id eq $menu.parentid"} selected {/if} {if condition="$vo.menu_type eq 1"} class="bgccc"{else/}class="bgc"{/if}>{$vo.lefthtml}{$vo.menu_name}({if condition="$vo.menu_l eq 'zh-cn'"}中{else /}英{/if}) {if condition="$vo.menu_type eq 1"}(频道页){/if}</option>
+								{/foreach}
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 菜单名称： </label>
+						<div class="col-sm-9">
+							<input type="text" name="menu_name" id="menu_name" value="{$menu.menu_name}" class="col-xs-10 col-sm-5" />
+                                            <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle" id="resone"></span>
+											</span>
+						</div>
+					</div>
+
+					{if condition="config('lang_switch_on')"}
+					<div id="menu_l" class="form-group {neq name="menu.parentid" value="0"}none{/neq}">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 菜单所属语言： </label>
+						<div class="col-sm-9">
+							<select name="menu_l"  class="col-sm-3 selector" required>
+								<option value="">请选择所属语言</option>
+								<option value="zh-cn" {if condition="$menu['menu_l'] eq 'zh-cn'"}selected{/if}>中文</option>
+								<option value="en-us" {if condition="$menu['menu_l'] eq 'en-us'"}selected{/if}>英语</option>
+							</select>
+						</div>
+					</div>
+					{/if}
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 英文菜单名称： </label>
+						<div class="col-sm-9">
+							<input type="text" name="menu_enname" id="menu_enname" value="{$menu.menu_enname}" placeholder="英文菜单名称"  class="col-xs-10 col-sm-5" />
+						</div>
+					</div>
+
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启： </label>
+						<div class="col-sm-9" style="padding-top:5px;">
+							<input name="menu_open" id="menu_open" {if condition="$menu.menu_open eq 1"}checked{/if} value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+							<span class="lbl">&nbsp;&nbsp;默认关闭</span>
+						</div>
+					</div>
+
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 排序（从小到大）： </label>
+						<div class="col-sm-9">
+							<input type="text" name="listorder" id="menu_order" value="{$menu.listorder}" class="col-xs-10 col-sm-1" />
+						</div>
+					</div>
+
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 菜单类型： </label>
+						<div class="col-sm-9">
+							<div class="radio">
+								<label>
+									<input name="menu_type" type="radio" class="ace" id="type1" value="1" {if condition="$menu.menu_type eq 1"}checked{/if}/>
+									<span class="lbl"> 作为频道页，不可作为栏目发布文章</span>
+								</label>
+							</div>
+
+							<div class="radio">
+								<label>
+									<input name="menu_type" id="type2" type="radio" class="ace" value="2" {if condition="$menu.menu_type eq 2"}checked{/if}/>
+									<span class="lbl"> 不直接发布内容，用于跳转页面</span>
+								</label>
+							</div>
+
+							<div class="radio">
+								<label>
+									<input name="menu_type" id="type3" type="radio" class="ace" value="3" {if condition="$menu.menu_type eq 3"}checked{/if}/>
+									<span class="lbl"> 作为发布栏目，文章列表模式</span>
+								</label>
+							</div>
+
+							<div class="radio">
+								<label>
+									<input name="menu_type" id="type4" type="radio" class="ace" value="4" {if condition="$menu.menu_type eq 4"}checked{/if}/>
+									<span class="lbl"> 单页面模式，例如企业简介</span>
+								</label>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="form-group" id="address">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 跳转地址： </label>
+						<div class="col-sm-9">
+							<input type="text" name="menu_address" id="menu_address"  value="{$menu.menu_address}"  class="col-xs-10 col-sm-7" />
+                                            <span class="help-inline col-xs-12 col-sm-5">
+												<span class="middle">正确格式：http:// 开头</span>
+											</span>
+						</div>
+					</div>
+
+					<div class="form-group" id="model">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 使用模型选择： </label>
+						<div class="col-sm-9">
+							<select name="menu_modelid"  class="col-sm-3 selector">
+								<option value="0">请选择模型</option>
+								{foreach name="model" item="vo"}
+								<option value="{$vo.model_id}" {if condition="$vo.model_id eq $menu['menu_modelid']"}selected{/if}>{$vo.model_title}</option>
+								{/foreach}
+							</select>
+						</div>
+					</div>
+					<div class="form-group" id="listtpl">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 列表页(单页)模板选择： </label>
+						<div class="col-sm-9">
+							<select name="menu_listtpl"  class="col-sm-3 selector">
+								<option value="">请选择模板</option>
+								{foreach name="tpls" item="vo"}
+									<option value="{$vo}" {if condition="$vo eq $menu['menu_listtpl']"}selected{/if}>{$vo}</option>
+								{/foreach}
+							</select>
+						</div>
+					</div>
+
+
+					<div class="form-group" id="newstpl">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 单文章页模板选择： </label>
+						<div class="col-sm-9">
+							<select name="menu_newstpl"  class="col-sm-3 selector">
+								<option value="">请选择模板</option>
+								{foreach name="tpls" item="vo"}
+									<option value="{$vo}" {if condition="$vo eq $menu['menu_newstpl']"}selected{/if}>{$vo}</option>
+								{/foreach}
+							</select>
+						</div>
+					</div>
+
+
+					<div class="form-group" id="pic_list">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 缩略图： </label>
+						<div class="col-sm-9">
+							<input type="hidden" name="checkpic" id="checkpic" value="{$menu.menu_img}" />
+							<input type="hidden" name="oldcheckpic" id="oldcheckpic" value="{$menu.menu_img}" />
+							<a href="javascript:;" class="file" title="点击选择所要上传的图片">
+								<input type="file" name="file0" id="file0" multiple="multiple"/>
+								选择上传文件
+							</a>
+							&nbsp;&nbsp;<a href="javascript:;" onclick="return backpic('{$menu.menu_img|get_imgurl}');" title="还原修改前的图片" class="file">
+							撤销上传
+							</a>
+
+							<div><img src="{$menu.menu_img|get_imgurl}" height="70" id="img0" ></div>
+						</div>
+					</div>
+
+
+					<div class="form-group" id="menu_content">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 单页面内容：</label>
+						<div class="col-sm-9">
+							<script src="__PUBLIC__/ueditor/ueditor.config.js" type="text/javascript"></script>
+							<script src="__PUBLIC__/ueditor/ueditor.all.js" type="text/javascript"></script>
+							<textarea name="menu_content" rows="100%" style="width:100%" id="myEditor">{$menu.menu_content}</textarea>
+							<script type="text/javascript">
+								var editor = new UE.ui.Editor();
+								editor.render("myEditor");
+							</script>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> SEO标题： </label>
+						<div class="col-sm-9">
+							<input type="text" id="menu_title" name="menu_seo_title" value="{$menu.menu_seo_title}"  placeholder="SEO标题"  class="col-xs-10 col-sm-5" />
+
+						</div>
+					</div>
+
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> SEO关键字： </label>
+						<div class="col-sm-9">
+							<input type="text" id="menu_key" name="menu_seo_key" value="{$menu.menu_seo_key}"  placeholder="SEO关键字" class="col-xs-10 col-sm-5" />
+                                            <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle">每个关键字用英文 , 号隔开</span>
+											</span>
+						</div>
+					</div>
+
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> SEO描述： </label>
+						<div class="col-sm-9">
+							<input type="text" id="menu_des" name="menu_seo_des"  value="{$menu.menu_seo_des}" placeholder="SEO描述"  class="col-xs-10 col-sm-10" />
+						</div>
+					</div>
+
+
+					<div class="clearfix form-actions">
+						<div class="col-md-offset-3 col-md-9">
+							<button class="btn btn-info" type="submit">
+								<i class="ace-icon fa fa-check bigger-110"></i>
+								保存
+							</button>
+
+							&nbsp; &nbsp; &nbsp;
+							<button class="btn" type="reset">
+								<i class="ace-icon fa fa-undo bigger-110"></i>
+								重置
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+	</div><!-- /.page-content -->
+{/block}
+{block name="scripts"}
+    <script>
+        checkType();
+        function checkType(){
+            var $type=$("input[name='menu_type'][checked]").val();
+            if($type==2){
+                $('#address').show();
+                $('#menu_content,#pic_list,#listtpl,#newstpl,#model').hide();
+            }else if($type==1){
+                $('#address,#menu_content,#pic_list,#model').hide();
+                $('#listtpl,#newstpl').show();
+            }else if($type==3){
+                $('#address,#menu_content,#pic_list').hide();
+                $('#listtpl,#newstpl,#model').show();
+            }else{
+                $('#address,#newstpl,#model').hide();
+                $('#menu_content,#listtpl,#pic_list').show();
+            }
+        }
+        $('#type2').click(function(){
+            $('#address').show();
+            $("input[name='menu_type'][checked]").attr("checked",false);
+            $('#type2').attr("checked",true);
+            checkType();
+        });
+        $('#type1,#type3,#type4').click(function(){
+            $('#address').hide();
+            $("input[name='menu_type'][checked]").attr("checked",false);
+            $(this).attr("checked",true);
+            checkType();
+        });
+        //语言
+        $('#parentid').change(function(){
+            var $parentid=$(this).children('option:selected').val();
+            if($parentid){
+                $('#menu_l').hide();
+            }else{
+                $('#menu_l').show();
+            }
+        });
+    </script>
+{/block}

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<!--[if IE 8]>			<html class="ie ie8"> <![endif]-->
+<!--[if IE 9]>			<html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<title>{:lang('modify information')} {$site_name} </title>
+	<meta name="keywords" content="{$menu.menu_seo_key|default=$site_seo_keywords}" />
+	<meta name="description" content="{$menu.menu_seo_des|default=$site_seo_description}">
+	{include file="public:head" /}
+</head>
+<body class="body-white">
+<div class="wrap">
+	{include file="public:nav" /}
+	<div id="main-cmf">
+		<div class="breadcrumb-wrapper">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
+						<h2 class="title">{:lang('personal center')}</h2>
+					</div>
+					<div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
+						<div class="breadcrumbs pull-right">
+							<ul>
+								<li>{:lang('current location')}:</li>
+								<li><a href="__ROOT__/">{:lang('home')}</a></li>
+								<li><a href="{:url('home/Center/index')}">{:lang('personal center')}</a></li>
+								<li>{:lang('modify information')}</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="content">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+						{include file="public:usernav"/}
+					</div>
+					<div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+						<div id="center-content" style="padding:20px">
+							<div class="row">
+								<form class="form-light form-horizontal ajax-form" id="runedit" action="{:url('home/Center/runedit')}" method="post">
+									<div class="form-group">
+										<label class="col-lg-3 col-md-3 col-sm-3 col-xs-2 control-label">{:lang('nickname')}</label>
+										<div class="col-lg-5 col-md-5 col-sm-7 col-xs-9">
+											<input type="text" maxlength="16" class="form-control" id="input-user_nicename" placeholder="{:lang('nickname')}" name="member_list_nickname" value="{$member_list_nickname|default=$member_list_username}">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-3 col-md-3 col-sm-3 col-xs-2 control-label">{:lang('sex')}</label>
+										{php}
+											$sexs=array("1"=>lang('ProMonkey'),"2"=>lang('ProMM'),"3"=>lang('secrecy'));
+										{/php}
+										<div class="col-lg-5 col-md-5 col-sm-7 col-xs-9">
+											<select id="input-sex" name="member_list_sex" class="form-control">
+												{foreach name="sexs" item="vo"}
+													{php}$sexselected=$key==$member_list_sex?"selected":"";{/php}
+													<option value="{$key}" {$sexselected}>{$vo}</option>
+												{/foreach}
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-3 col-md-3 col-sm-3 col-xs-2 control-label">{:lang('phone')}</label>
+										<div class="col-lg-5 col-md-5 col-sm-7 col-xs-9">
+											<input type="text" class="form-control" id="member_list_tel" name="member_list_tel" value="{$member_list_tel}">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-3 col-md-3 col-sm-3 col-xs-2 control-label">{:lang('personal website')}</label>
+										<div class="col-lg-5 col-md-5 col-sm-7 col-xs-9">
+											<input type="text" class="form-control" id="input-user_url" placeholder="http://www.rainfer.cn" name="user_url" value="{$user_url}">
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-3 col-md-3 col-sm-3 col-xs-2 control-label">{:lang('signature')}</label>
+										<div class="col-lg-5 col-md-5 col-sm-7 col-xs-9">
+											<textarea id="input-signature" placeholder="{:lang('signature')}" class="form-control" name="signature">{$signature}</textarea>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-3 col-md-3 col-sm-3 col-xs-2 control-label">{:lang('province')}</label>
+										<div class="col-lg-5 col-md-5 col-sm-7 col-xs-9">
+											<select name="member_list_province" class="form-control" id="province" onChange="loadRegion('province',2,'city','{:url('admin/Ajax/getRegion')}');">
+										<option value="0">{:lang('province')}</option>
+										{volist name="province" id="vo"}
+											<option value="{$vo.id}" {if condition="$member_list_province eq $vo['id']"}selected{/if}>{$vo.name}</option>
+										{/volist}
+											</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-3 col-md-3 col-sm-3 col-xs-2 control-label">{:lang('city')}</label>
+										<div class="col-lg-5 col-md-5 col-sm-7 col-xs-9">
+											<select name="member_list_city" class="form-control" id="city"  onchange="loadRegion('city',3,'town','{:url('admin/Ajax/getRegion')}');">
+										<option  value="0">{:lang('city')}</option>
+										{foreach name="city" item="v"}
+											<option {if condition="$member_list_city eq $v['id']"}selected{/if} value="{$v.id}">{$v.name}</option>
+										{/foreach}
+
+									</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-3 col-md-3 col-sm-3 col-xs-2 control-label">{:lang('town')}</label>
+										<div class="col-lg-5 col-md-5 col-sm-7 col-xs-9">
+											<select name="member_list_town" class="form-control" id="town">
+										<option value="0">{:lang('town')}</option>
+										{volist name="town" id="vy"}
+											<option {if condition="$member_list_town eq $vy['id']"}selected{/if} value="{$vy.id}">{$vy.name}</option>
+										{/volist}
+									</select>
+										</div>
+									</div>
+									<div class="form-group">
+										<label class="col-lg-3 col-md-3 col-sm-3 col-xs-2 control-label"></label>
+										<div class="col-lg-5 col-md-5 col-sm-7 col-xs-9">
+											<button class="btn btn-primary">{:lang('save')}</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{include file="public:footer"/}
+</div>
+{include file="public:scripts"/}
+<script type="text/javascript" src="__PUBLIC__/others/region.js"></script>
+</body>
+</html>

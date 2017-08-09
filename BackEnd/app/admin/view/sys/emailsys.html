@@ -1,0 +1,129 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+	<div class="page-content">
+
+
+
+		<!--主题-->
+		<div class="page-header">
+			<h1>
+				您当前操作
+				<small>
+					<i class="ace-icon fa fa-angle-double-right"></i>
+					邮件设置
+				</small>
+			</h1>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<form class="form-horizontal ajaxForm" name="sys" method="post" action="{:url('admin/Sys/runemail')}">
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启邮箱： </label>
+						<div class="col-sm-9" style="padding-top:5px;">
+							<input name="options[email_open]" id="email_open" {if condition='$sys.email_open eq 1'}checked{/if}  value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+							<span class="lbl"></span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 发件人姓名： </label>
+						<div class="col-sm-9">
+							<input type="text" name="options[email_rename]" id="email_rename" value="{$sys.email_rename}"  class="col-xs-10 col-sm-5" required/>
+											<span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle" id="restwo"></span>
+											</span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 设置发送邮箱： </label>
+						<div class="col-sm-9">
+							<input type="email" name="options[email_name]" id="email_name" value="{$sys.email_name}"  class="col-xs-10 col-sm-5" required/>
+											<span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle" id="restwo"></span>
+											</span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> smtp服务器的名称： </label>
+						<div class="col-sm-9">
+							<input type="text" name="options[email_smtpname]" id="email_smtpname" value="{$sys.email_smtpname}"  class="col-xs-10 col-sm-5" required/>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 连接方式： </label>
+						<div class="col-sm-9">
+							<select name="options[smtpsecure]"  id="smtpsecure" class="col-xs-10 col-sm-5" >
+								<option value="" {if condition="$sys.smtpsecure eq ''"}selected{/if}>普通连接方式</option>
+								<option value="ssl" {if condition="$sys.smtpsecure eq 'ssl'"}selected{/if}>SSL连接方式</option>
+								<option value="tls" {if condition="$sys.smtpsecure eq 'tls'"}selected{/if}>TLS连接方式</option>
+							</select>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> SMTP服务器端口： </label>
+						<div class="col-sm-9">
+							<input type="number" name="options[smtp_port]" id="smtp_port" value="{$sys.smtp_port|default=25}"  class="col-xs-10 col-sm-5" required/>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 设置邮箱登录名： </label>
+						<div class="col-sm-9">
+							<input type="text" name="options[email_emname]" id="email_emname" value="{$sys.email_emname}"  class="col-xs-10 col-sm-5" required/>
+											<span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle" id="restwo"></span>
+											</span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 设置邮箱密码： </label>
+						<div class="col-sm-9">
+							<input type="password" name="options[email_pwd]" id="email_pwd" value="{$sys.email_pwd}"  class="col-xs-10 col-sm-5" required/>
+											<span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle" id="resthr"></span>
+											</span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+					<div class="clearfix form-actions">
+						<div class="col-sm-offset-3 col-sm-9">
+							<button class="btn btn-info" type="submit">
+								<i class="ace-icon fa fa-check bigger-110"></i>
+								保存
+							</button>
+
+							&nbsp; &nbsp; &nbsp;
+							<button class="btn" type="reset">
+								<i class="ace-icon fa fa-undo bigger-110"></i>
+								重置
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+{/block}
+{block name="scripts"}
+<script>
+    $(document).ready(function(){
+        $('#smtpsecure').change(function(){
+            var $type=$(this).children('option:selected').val();
+            var $port=$type=='ssl'?465:25;//不同方式默认端口
+            $('#smtp_port').val($port);
+        })
+    })
+</script>
+{/block}

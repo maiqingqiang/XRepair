@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title></title>
+<meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css"/>
+<link rel="stylesheet" href="{$yf_theme_path}public/payment/css/pay.css"/>
+<script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+<script src="//plugs.cdn.cuci.cc/app.js"></script>
+
+<!--[if lt IE 9]>
+<script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+
+<div class="container" style="overflow: hidden;">
+    <form data-callback="create_success" id="payment" name="payment" action="{url('home/Payment/index')}" class="form-horizontal" role="form" data-auto="">
+    {if condition="!empty($user['member_list_id'])"}
+      <div class="form-group">
+        <div class="col-sm-10">
+          <div class="col-sm-2">
+            <img class="pack-user-avatar " src="{$user.member_list_headpic|get_imgurl=1}" alt=""/>
+          </div>
+          <div class="col-sm-7" style="margin-top: 20px;">
+            <p>
+              Hello，<span class="label label-primary">{$user['member_list_nickname']|default=$user['member_list_username']}</span> 
+            </p>
+          </div>
+        </div>
+      </div>
+    {/if}
+    <div class="form-group">
+                        <label class="col-sm-2 control-label">商品名称：</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" name="product_name" value="测试订单" placeholder="请输入商品名称"><span style="animation-duration: 0.2s; padding-right: 20px; color: rgb(169, 68, 66); position: absolute; right: 0px; font-size: 12px; z-index: 2; display: block; width: 30px; text-align: center; pointer-events: none; top: 0px; padding-top: 6px; padding-bottom: 6px; line-height: 20px;"></span>
+                        </div>
+                    </div>
+      <div class="form-group">
+                        <label class="col-sm-2 control-label">商品描述：</label>
+                        <div class="col-sm-10">
+                            <input class="form-control" name="product_body" value="这是一个测试订单呢" placeholder="请输入商品描述"><span style="animation-duration: 0.2s; padding-right: 20px; color: rgb(169, 68, 66); position: absolute; right: 0px; font-size: 12px; z-index: 2; display: block; width: 30px; text-align: center; pointer-events: none; top: 0px; padding-top: 6px; padding-bottom: 6px; line-height: 20px;"></span>
+                        </div>
+                    </div>              
+      <div class="form-group">
+        <label class="col-sm-2 control-label">选择游戏：</label>
+        <div class="col-sm-10" style="padding: 0px;">
+          <div class="col-sm-3">
+            <select class="form-control" onchange="selectServer_pay2(this.value,'server_id')" id="game_id" name="game_id" style="float: left;">
+              <option value="-1">充值到平台</option>
+            </select>
+          </div>
+          <div class="col-sm-3 selectserver" style="float: left;display: none;" id="server_area">
+            <select class="form-control" id="server_id" name="server_id" onchange="selectPayment_pay2(this.value,'mobi')">
+              <option value="0" label="请选择伺服器">请选择伺服器</option>
+            </select>
+          </div>
+          <div class="col-sm-3" style="z-index: -99999">
+            <div class="role" id="rolename" style="display: none;">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-sm-2 control-label"></label>
+        <div class="col-sm-5">
+          <span class="label label-danger">Danger：</span>
+          <div class="alert alert-danger" role="alert" style="margin-bottom: 0px;">
+                  1、请先确认支付方式,订单生成生将不能进行修改支付方式
+            <br/> 2、订单生成后请尽快完成支付<br>
+                  3、如果是手机访问请选择手机支付类型
+          </div>
+        </div>
+      </div>
+      <!--支付渠道><-->
+      <div class="form-group">
+        <label class="col-sm-2 control-label">支付方式：</label>
+        <div class="col-sm-10" style="padding: 0px;">
+          <!--end headingline-->
+          <div class="recommended-payment-methods col-sm-12" style="padding: 0px;">
+            <div class="headingline">
+              <div class="rectext col-sm-4">
+                <ul class="nav nav-tabs" id="myTab">
+                  <li class="active" id="clear1"><a data-toggle="tab" href="#recommended" >电脑端支付</a></li>
+                  <li class="" id="clear2"><a data-toggle="tab" href="#other" >手机端支付</a></li>
+                </ul>
+              </div>
+              {if condition="!empty($user['member_list_id'])"}
+              <div class="rechargeaccountnow col-sm-8">
+          您要储值的帐号是：
+                <strong>{$user['member_list_nickname']|default=$user['member_list_username']}</strong>
+              </div>
+              {/if}
+            </div>
+            <div class="sys_item_spec">
+              <dl class="clearfix iteminfo_parameter sys_item_specpara" data-sid="1">
+                <div class="tab-content cardbgwrap" id="myTabContent">
+                  <ul class="sys_spec_img tab-pane fade active in" id="recommended">
+                    <li data-aid="1" class="cardiconin col-sm-3 "><a href="javascript:;"><img id="wxpayqrcode" onclick="PayType(this.id)" src="{$yf_theme_path}public/payment/images/wechatpay.png"/></a><i></i></li>
+                    <li data-aid="2" class="cardiconin col-sm-3 "><a href="javascript:;"><img id="alipay" onclick="PayType(this.id)" src="{$yf_theme_path}public/payment/images/alipay.png"/></a><i></i></li>
+                    <li data-aid="3" class="cardiconin col-sm-3 "><a href="javascript:;"><img id="Paypal" onclick="PayType(this.id)" src="{$yf_theme_path}public/payment/images/paypalpay.png"/></a><i></i></li>
+                  </ul>
+                  <ul class="sys_spec_img tab-pane fade" id="other">
+                  <li data-aid="1" class="cardiconin col-sm-3 "><a href="javascript:;"><img id="wxpaypub" onclick="PayType(this.id)" src="{$yf_theme_path}public/payment/images/wechatpay.png"/></a><i></i></li>
+                  <li data-aid="2" class="cardiconin col-sm-3 "><a href="javascript:;"><img id="aliwappay" onclick="PayType(this.id)" src="{$yf_theme_path}public/payment/images/alipay.png"/></a><i></i></li>
+                   
+                  </ul>
+                </div>
+              </dl>
+            </div>
+          </div>
+        </div>
+        <!--sat 支付金额-->
+        <label class="col-sm-2 control-label">支付金额：</label>
+        <div class="col-sm-10">
+          <table class="table table-hover table-no-spacing" id="pay_li">
+          <thead>
+          <tr>
+            <th>
+              #
+            </th>
+            <th>
+              支付金额
+            </th>
+            <th>
+              平台点数
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>
+              <div class="carticonloc">
+                <i class="icon-chevron-right"></i>
+              </div>
+            </td>
+            <td>
+              <span class="bignumber-b">4</span><span class="light-type">元</span>
+            </td>
+            <td>
+              <span class="bignumber-b">8</span><span class="light-type">点数</span>
+            </td>
+            <td>
+              <input type="radio" name="coins" value="4" style="visibility: hidden"/>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="carticonloc">
+                <i class="icon-chevron-right"></i>
+              </div>
+            </td>
+            <td>
+              <span class="bignumber-b">8</span><span class="light-type">元</span>
+            </td>
+            <td>
+              <span class="bignumber-b">16</span><span class="light-type">点数</span>
+            </td>
+            <td>
+              <input type="radio" name="coins" value="8" style="visibility: hidden"/>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="carticonloc">
+                <i class="icon-chevron-right"></i>
+              </div>
+            </td>
+            <td>
+              <span class="bignumber-b">16</span><span class="light-type">元</span>
+            </td>
+            <td>
+              <span class="bignumber-b">32</span><span class="light-type">点数</span>
+            </td>
+            <td>
+              <input type="radio" name="coins" value="16" checked="checked" style="visibility: hidden"/>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="carticonloc">
+                <i class="icon-chevron-right"></i>
+              </div>
+            </td>
+            <td>
+              <span class="bignumber-b">96</span><span class="light-type">元</span>
+            </td>
+            <td>
+              <span class="bignumber-b">192</span><span class="light-type">点数</span>
+            </td>
+            <td>
+              <input type="radio" name="coins" value="96" style="visibility: hidden"/>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="carticonloc">
+                <i class="icon-chevron-right"></i>
+              </div>
+            </td>
+            <td>
+              <span class="bignumber-b">192</span><span class="light-type">元</span>
+            </td>
+            <td>
+              <span class="bignumber-b">384</span><span class="light-type">点数</span>
+            </td>
+            <td>
+              <input type="radio" name="coins" value="192" style="visibility: hidden"/>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="carticonloc">
+                <i class="icon-chevron-right"></i>
+              </div>
+            </td>
+            <td>
+              <span class="bignumber-b">1536</span><span class="light-type">元</span>
+            </td>
+            <td>
+              <span class="bignumber-b">3072</span><span class="light-type">点数</span>
+            </td>
+            <td>
+              <input type="radio" name="coins" value="1536" style="visibility: hidden"/>
+            </td>
+          </tr>
+          </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="submit_payment" style="margin-bottom: 80px;">
+        <label class="col-sm-2 control-label"></label>
+        <div class="col-sm-10">
+          <input type="hidden" name="pay_type" id="pay_type" value=""/>
+          <button type="submit" class="btn btn-primary btn-lg" id="goPayment">确认充值</button>
+        </div>
+      </div>
+      <div class="modal fade fade bs-example-modal-sm" id="qrcode" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content ">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+              <h4 class="modal-title" id="myModalLabel">扫码支付</h4>
+            </div>
+            <div class="modal-body">
+              <div id="icon">
+              </div>
+              <div id="qrc_img" style="padding:0px 20px 10px 7px">
+                <div id="codeico">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  <!--container end><!-->
+</div>
+<script>
+$(function () {
+        $('#goPayment').click(function () {
+            var Paytype = $("#pay_type").val();
+            var amount = parseInt($('input[name="coins"]:checked').val());
+            if (!Paytype) {
+                layer.msg('请选择支付方式！', {
+                    icon: 2,
+                    shade: 0.1,
+                    time: 1000
+                });
+                return false;
+            } else if (!amount) {
+                layer.msg('请选择支付金额！', {
+                    icon: 2,
+                    shade: 0.1,
+                    time: 1000
+                });
+                return false;
+            } else {
+              var index = layer.load(2, {
+                    shade: false,
+                    time: 500
+                }); //0代表加载的风格，支持0-2
+                if (Paytype == 'wxpayqrcode' || Paytype == 'alipay' || Paytype == 'aliwappay') {
+                    goPayment();
+                } else if (Paytype == 'Paypal') {
+                    remind();
+                    return false;
+                }
+            }
+           // return false;
+        });
+        /*选中效果*/
+        $("#clear1").click(function () {
+            $("#other li").removeClass("selected");
+            $("#pay_type").val("");
+        });
+        $("#clear2").click(function () {
+            $("#recommended  li").removeClass("selected");
+            $("#pay_type").val("");
+        });
+        $(".sys_item_spec .sys_item_specpara").each(function () {
+                var i = $(this);
+                var p = i.find("ul>li");
+                p.click(function () {
+                    if (!!$(this).hasClass("selected")) {
+                        $(this).removeClass("selected");
+                        i.removeAttr("data-attrval");
+                    } else {
+                        $(this).addClass("selected").siblings("li").removeClass("selected");
+                        i.attr("data-attrval", $(this).attr("data-aid"))
+                    }
+                })
+            })
+            //单选按钮
+        require(['jquery.icheck'], function () {
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+                increaseArea: '20%' // optional
+            });
+        });
+
+});
+
+    function remind() {
+        layer.msg('暫未開放，敬請期待！', {
+            icon: 2,
+            shade: 0.1,
+            time: 3000
+        });
+        return false;
+    }
+
+    function PayType(id) {
+        $("#pay_type").val(id);
+    }
+
+    function goPayment(){
+
+      $("#payment").attr("action", "{:url('home/Payment/runpay')}");
+      return true;
+    }
+
+
+    window.create_success = function (ret) {
+        if (ret.code == 'SUCCESS') {
+            location.href =ret.url;
+        }
+        if (ret.code == 'JSAPI_SUCCESS') {
+            
+        }
+
+    };
+
+
+</script>
+</body>
+</html>

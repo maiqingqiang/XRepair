@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<!--[if IE 8]>			<html class="ie ie8"> <![endif]-->
+<!--[if IE 9]>			<html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <title>{:lang('personal center')} {$site_name} </title>
+    <meta name="keywords" content="{$menu.menu_seo_key|default=$site_seo_keywords}" />
+    <meta name="description" content="{$menu.menu_seo_des|default=$site_seo_description}">
+    {include file="public:head" /}
+	<!--加载Css-->
+	{switch name="lang"}
+		{case value="zh-cn"}{load href="__PUBLIC__/shearphoto/css/ShearPhoto_f_zh-cn.css" /}{/case}
+		{case value="en-us"}{load href="__PUBLIC__/shearphoto/css/ShearPhoto_f_en-us.css" /}{/case}
+		{default /}{load href="__PUBLIC__/shearphoto/css/ShearPhoto_f_zh-cn.css" /}
+	{/switch}
+</head>
+<body class="body-white">
+<div class="wrap">
+    {include file="public:nav" /}
+    <div id="main-cmf">
+        <div class="breadcrumb-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
+                        <h2 class="title">{:lang('personal center')}</h2>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
+                        <div class="breadcrumbs pull-right">
+                            <ul>
+                                <li>{:lang('current location')}:</li>
+                                <li><a href="__ROOT__/">{:lang('home')}</a></li>
+                                <li>{:lang('personal center')}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                        {include file="public:usernav"/}
+                    </div>
+                    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                        <div id="center-content" style="padding:20px">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                                    <a href="#">
+										<span class="profile-picture">
+                                            <img src="{$member_list_headpic|get_imgurl=1}" class="headicon" data-toggle="modal" data-target="#myModal" />
+										</span>
+                                    </a>
+                                </div>
+                                <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                                    <table class="table" style="TABLE-LAYOUT:fixed;WORD-BREAK:break-all">
+                                        <tbody>
+                                        <tr>
+                                            <td style="border:none;width:7em">{:lang('nickname')}:</td>
+                                            <td style="border:none;">{$member_list_nickname|default=$member_list_username}</td>
+                                        </tr>
+										<tr>
+                                            <td style="border:none;width:7em">{:lang('score coin')}:</td>
+                                            <td style="border:none;">{$score|default='0'}({$coin|default='0'})</td>
+                                        </tr>
+										<tr>
+                                            <td style="border:none;width:7em">{:lang('last login')}:</td>
+                                            <td style="border:none;">{$last_login_time|date="Y-m-d",###}({$last_login_ip|default=""})</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border:none;width:7em">{:lang('sex')}:</td>
+                                            <td style="border:none;">{php}
+                                                $sexs=array("1"=>lang('ProMonkey'),"2"=>lang('ProMM'),"3"=>lang('secrecy'));
+                                            {/php}
+                                                {$sexs[$member_list_sex]}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border:none;width:7em">{:lang('phone')}:</td>
+                                            <td style="border:none;">{$member_list_tel|default=""}</td>
+                                        </tr>
+										<tr>
+                                            <td style="border:none;width:7em">{:lang('personal website')}:</td>
+                                            <td style="border:none;">{$user_url|default=""}</td>
+                                        </tr>
+										<tr>
+                                            <td style="border:none;width:7em">{:lang('signature')}:</td>
+                                            <td style="border:none;">{$signature|default=""}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="border:none;width:7em">{:lang('address')}:</td>
+                                            <td style="border:none;">{$address|default=""}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <div>
+                                        <a href="{:url('home/Center/edit')}" type="submit" class="btn btn-primary js-ajax-submit  col-lg-3 col-md-3 col-sm-3 col-xs-3">{:lang('edit')}</a>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {include file="public:footer"/}
+</div>
+{include file="public:scripts"/}
+<script  type="text/javascript" src="__PUBLIC__/shearphoto/js/ShearPhoto.js" ></script>
+<script  type="text/javascript"  src="__PUBLIC__/shearphoto/js/alloyimage.js" ></script>
+<script  type="text/javascript"  src="__PUBLIC__/shearphoto/js/handle_f.js" ></script>
+<script type="text/javascript">
+	var SHEAR = {
+		PATH_RES: '__PUBLIC__',
+		PATH_AVATAR: '__ROOT__/data/upload/avatar',
+		URL:"{:url('home/Center/avatar')}",
+	};
+</script>
+        <!-- 显示模态框（Modal） -->
+        <div class="modal fade modal-avatar" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" style="width:60%;">
+                <div class="modal-content"  style="min-width:620px;">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">
+                            {:lang('member avatar')}
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-xs-12">
+									<div id="shearphoto_loading">{:lang('program loading')}......</div>
+									<div id="shearphoto_main">
+										<div class="Effects" id="shearphoto_Effects" autocomplete="off">
+											<strong class="EffectsStrong">{:lang('pic effect')}</strong>
+											<a href="javascript:;" StrEvent="原图" class="Aclick"><img src="__PUBLIC__/shearphoto/images/Effects/e0.jpg"/>{:lang('original')}</a>
+											<a href="javascript:;" StrEvent="美肤"><img src="__PUBLIC__/shearphoto/images/Effects/e1.jpg"/>{:lang('Skin effect')}</a>
+											<a href="javascript:;" StrEvent="素描"><img src="__PUBLIC__/shearphoto/images/Effects/e2.jpg"/>{:lang('Sketch effect')}</a>
+											<a href="javascript:;" StrEvent="自然增强"><img src="__PUBLIC__/shearphoto/images/Effects/e3.jpg" />{:lang('Enhancement effect')}</a>
+											<a href="javascript:;" StrEvent="紫调"><img src="__PUBLIC__/shearphoto/images/Effects/e4.jpg" />{:lang('Purple effect')}</a>
+											<a href="javascript:;" StrEvent="柔焦"><img src="__PUBLIC__/shearphoto/images/Effects/e5.jpg"/>{:lang('Soft focus')}</a>
+											<a href="javascript:;" StrEvent="复古"><img src="__PUBLIC__/shearphoto/images/Effects/e6.jpg"/>{:lang('Retro effect')}</a>
+											<a href="javascript:;" StrEvent="黑白"><img src="__PUBLIC__/shearphoto/images/Effects/e7.jpg"/>{:lang('Black-white effect')}</a>
+											<a href="javascript:;" StrEvent="仿lomo"><img src="__PUBLIC__/shearphoto/images/Effects/e8.jpg"/>{:lang('Imitation LOMO')}</a>
+											<a href="javascript:;" StrEvent="亮白增强"><img src="__PUBLIC__/shearphoto/images/Effects/e9.jpg"/>{:lang('Bright white effect')}</a>
+											<a href="javascript:;" StrEvent="灰白"><img src="__PUBLIC__/shearphoto/images/Effects/e10.jpg"/>{:lang('Grey-white effect')}</a>
+											<a href="javascript:;" StrEvent="灰色"><img src="__PUBLIC__/shearphoto/images/Effects/e11.jpg"/>{:lang('Grey effect')}</a>
+											<a href="javascript:;" StrEvent="暖秋"><img src="__PUBLIC__/shearphoto/images/Effects/e12.jpg"/>{:lang('Warm autumn effect')}</a>
+											<a href="javascript:;" StrEvent="木雕"><img src="__PUBLIC__/shearphoto/images/Effects/e13.jpg"/>{:lang('Wood carving effect')}</a>
+											<a href="javascript:;" StrEvent="粗糙"><img src="__PUBLIC__/shearphoto/images/Effects/e14.jpg"/>{:lang('Rough effect')}</a>
+										</div>
+										<div class="primary">
+											<div id="main">
+												<div class="point"></div>
+												<div id="SelectBox">
+													<form    id="ShearPhotoForm" enctype="multipart/form-data" method="post"  target="POSTiframe">
+														<a href="javascript:;" id="selectImage"><input type="file"  name="UpFile" autocomplete="off"/></a>
+													</form>
+													<a href="javascript:;" id="PhotoLoading"></a>
+												</div>
+												<div id="relat">
+													<div id="black"></div>
+													<div id="movebox">
+														<div id="smallbox">
+															<img src="__PUBLIC__/shearphoto/images/default.gif" class="MoveImg"  style="max-width:300%"/>
+														</div>
+														<i id="borderTop"></i>
+														<i id="borderLeft"></i>
+														<i id="borderRight"></i>
+														<i id="borderBottom"></i>
+														<i id="BottomRight"></i>
+														<i id="TopRight"></i>
+														<i id="Bottomleft"></i>
+														<i id="Topleft"></i>
+														<i id="Topmiddle"></i>
+														<i id="leftmiddle"></i>
+														<i id="Rightmiddle"></i>
+														<i id="Bottommiddle"></i>
+													</div>
+													<img src="__PUBLIC__/shearphoto/images/default.gif" class="BigImg" />
+												</div>
+											</div>
+											<div style="clear: both"></div>
+											<div id="Shearbar">
+												<a id="LeftRotate" href="javascript:;"><em></em>{:lang('turn L')}</a>
+												<em class="hint L"></em>
+												<div class="ZoomDist" id="ZoomDist">
+													<div id="Zoomcentre"></div>
+													<div id="ZoomBar"></div>
+													<span class="progress"></span>
+												</div>
+												<em class="hint R"></em>
+												<a id="RightRotate" href="javascript:;">{:lang('turn R')}<em></em></a>
+												<p class="Psava">
+													<a id="againIMG"  href="javascript:;">{:lang('reselection')}</a>
+													<a id="saveShear" href="javascript:;">{:lang('save capture')}</a>
+												</p>
+											</div>
+										</div>
+										<div style="clear: both"></div>
+									</div>
+									<div id="photoalbum">
+										<i id="close"></i>
+										<ul>
+											<li><img src="__PUBLIC__/shearphoto/file/photo/1.jpg" serveUrl="file/photo/1.jpg" /></li>
+											<li><img src="__PUBLIC__/shearphoto/file/photo/2.jpg" serveUrl="file/photo/2.jpg" /></li>
+											<li><img src="__PUBLIC__/shearphoto/file/photo/3.jpg" serveUrl="file/photo/3.jpg" /></li>
+											<li><img src="__PUBLIC__/shearphoto/file/photo/4.jpg" serveUrl="file/photo/4.jpg" /></li>
+									</div>
+							</div>
+                        </div>
+                    </div>
+
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+</body>
+</html>

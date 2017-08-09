@@ -1,0 +1,45 @@
+{include file='admin@public:header' /}
+{block name="styles"}{/block}
+<!-- 整个页面内容开始 -->
+<div class="main-container" id="main-container">
+	<!-- 菜单栏开始 -->
+	{include file='admin@public:left_nav' /}
+	<!-- 菜单栏结束 -->
+
+	<!-- 主要内容开始 -->
+	<div class="main-content">
+		<div class="main-content-inner">
+			<!-- 右侧主要内容页顶部标题栏开始 -->
+			{include file='admin@public:head_nav' /}
+			<!-- 右侧主要内容页顶部标题栏结束 -->
+			<!-- 右侧下主要内容开始 -->
+			{block name="main-content"}{/block}
+			<!-- 右侧下主要内容结束 -->
+		</div>
+	</div><!-- 主要内容结束 -->
+	<!-- 页脚开始 -->
+	{include file='admin@public:footer' /}
+	<!-- 页脚结束 -->
+	<!-- 返回顶端开始 -->
+	<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+		<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+	</a>
+	<!-- 返回顶端结束 -->
+</div><!-- 整个页面内结束 -->
+
+<!-- ace的js,可以通过打包生成,避免引入文件数多 -->
+<script src="__PUBLIC__/ace/js/ace.js"></script>
+<script src="__PUBLIC__/ace/js/ace.min.js"></script>
+<!-- jquery.form、layer、yfcmf的js -->
+<script src="__PUBLIC__/others/jquery.form.js"></script>
+<script src="__PUBLIC__/others/maxlength.js"></script>
+<script src="__PUBLIC__/layer/layer_zh-cn.js"></script>
+<script src="__PUBLIC__/datePicker/bootstrap-datepicker.js"></script>
+<script src="__PUBLIC__/datetimepicker/bootstrap-datetimepicker.js"></script>
+<script src="__PUBLIC__/datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="__PUBLIC__/yfcmf/yfcmf.js?{php}echo time();{/php}"></script>
+<!-- 此页相关插件js -->
+{block name="scripts"}{/block}
+<!-- 与此页相关的js -->
+</body>
+</html>

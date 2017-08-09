@@ -1,0 +1,105 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+	<div class="page-content">
+		<!--主题-->
+		<div class="page-header">
+			<h1>
+				您当前操作
+				<small>
+					<i class="ace-icon fa fa-angle-double-right"></i>
+					修改权限菜单
+				</small>
+			</h1>
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<form class="form-horizontal ajaxForm2" name="admin_rule_edit" method="post" action="{:url('admin/Sys/admin_rule_runedit')}">
+					<input type="hidden" name="id" value="{$rule.id}" />
+					<input type="hidden" name="old_pid" value="{$rule.pid}" />
+					<input type="hidden" name="old_level" value="{$rule.level}" />
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 父级权限： </label>
+						<div class="col-sm-9">
+							<select name="pid"  class="col-xs-10 col-sm-5" required>
+								<option value="0">--默认顶级--</option>
+								{foreach name="admin_rule" item="v"}
+									<option value="{$v.id}" {if condition="$v['id'] eq $rule['pid']"}selected{/if}>{$v.lefthtml}{$v.title}</option>
+								{/foreach}
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 导航标题： </label>
+						<div class="col-sm-9">
+							<input type="text" name="title" id="title"  value="{$rule.title}"  class="col-xs-10 col-sm-5" required/>
+                                            <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle" id="resone"></span>
+											</span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 控制器/方法： </label>
+						<div class="col-sm-9">
+							<input type="text" name="name" id="name"  value="{$rule.name}"  class="col-xs-10 col-sm-5" required/>
+                                            <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle" id="restwo"></span>
+											</span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 样式名称： </label>
+						<div class="col-sm-9">
+							<input type="text" name="css" id="css"  value="{$rule.css}" class="col-xs-10 col-sm-5" />
+                                            <span class="help-inline col-xs-12 col-sm-7">
+												<span class="middle">只针对顶级栏目有效</span>
+											</span>
+						</div>
+						<span class="col-sm-3"></span><span class="col-sm-9" style="font-size:12px; color:#999; margin-top:5px;">预留样式：fa-tachometer ， fa-folder ， fa-list ， fa-list-alt ， fa-calendar</span>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启： </label>
+						<div class="col-sm-9" style="padding-top:5px;">
+							<input name="status" value="1"  {if condition="$rule['status'] eq 1"}checked{/if}  class="ace ace-switch ace-switch-5" type="checkbox" />
+							<span class="lbl"></span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 权限不检测： </label>
+						<div class="col-sm-9" style="padding-top:5px;">
+							<input name="notcheck" value="1"  {if condition="$rule['notcheck'] eq 1"}checked{/if}  class="ace ace-switch ace-switch-5" type="checkbox" />
+							<span class="lbl"></span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 排序（从小到大）： </label>
+						<div class="col-sm-9">
+							<input type="text" name="sort" id="sort"  value="{$rule.sort}" class="col-xs-10 col-sm-1" required/>
+						</div>
+					</div>
+					<div class="space-4"></div>
+					<div class="clearfix form-actions">
+						<div class="col-md-offset-3 col-md-9">
+							<button class="btn btn-info" type="submit">
+								<i class="ace-icon fa fa-check bigger-110"></i>
+								保存
+							</button>
+							&nbsp; &nbsp; &nbsp;
+							<button class="btn" type="reset">
+								<i class="ace-icon fa fa-undo bigger-110"></i>
+								重置
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div><!-- /.page-content -->
+{/block}

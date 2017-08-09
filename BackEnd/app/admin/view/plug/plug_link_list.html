@@ -1,0 +1,326 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+	<div class="page-content">
+
+		<div class="row maintop">
+			<div class="col-xs-4 col-sm-2 margintop5">
+				<!-- 点击模态框（Modal） -->
+				<button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#myModal">
+					<i class="ace-icon fa fa-bolt bigger-110"></i>
+					添加链接
+				</button>
+
+			</div>
+			<form name="admin_list_sea" class="form-search" id="list-filter" method="post" action="{:url('admin/Plug/plug_link_list')}">
+				<div class="col-xs-6 col-sm-3  margintop5">
+					<select name="type" class="ajax_change">
+						<option value="">按广告位置</option>
+						{foreach name="link_type" item="v"}
+							<option value="{$v.plug_linktype_id}" {if condition="$type eq $v['plug_linktype_id']"}selected{/if}>{$v.plug_linktype_name}</option>
+						{/foreach}
+					</select>
+					{if condition="config('lang_switch_on')"}
+					<select name="plug_link_l" class="ajax_change">
+						<option value="">按语言</option>
+						<option value="zh-cn" {if condition="$plug_link_l eq 'zh-cn'"}selected="selected"{/if}>中文</option>
+						<option value="en-us" {if condition="$plug_link_l eq 'en-us'"}selected="selected"{/if} >英语</option>
+					</select>
+					{/if}
+				</div>
+				<div class="col-xs-12 col-sm-4 margintop5">
+					<div class="input-group">
+										<span class="input-group-addon">
+											<i class="ace-icon fa fa-check"></i>
+										</span>
+						<input type="text" name="val" id="val" class="form-control" value="{$val}" placeholder="输入链接名称或URL"/>
+										<span class="input-group-btn">
+											<button type="submit" class="btn btn-purple btn-sm ajax-search-form">
+												<span class="ace-icon fa fa-search icon-on-right bigger-110"></span>
+												搜索
+											</button>
+										</span>
+					</div>
+				</div>
+				<div class="col-xs-4 col-sm-3 margintop5">
+					<div class="input-group-btn">
+						<a href="{:url('admin/Plug/plug_link_list')}">
+							<button type="button" class="btn btn-sm  btn-purple ajax-display-all">
+								<span class="ace-icon fa fa-globe icon-on-right bigger-110"></span>
+								显示全部
+							</button>
+						</a>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-12">
+				<div>
+					<table class="table table-striped table-bordered table-hover" id="dynamic-table">
+						<thead>
+						<tr>
+							<th>ID</th>
+							<th>链接名称</th>
+							<th>链接URL</th>
+							<th class="hidden-sm hidden-xs">联系QQ</th>
+							<th class="hidden-xs">所属栏目</th>
+							{if condition="config('lang_switch_on')"}
+							<th class="hidden-xs">语言</th>
+							{/if}
+							<th class="hidden-sm hidden-xs">添加时间</th>
+							<th class="hidden-xs" style="border-right:#CCC solid 1px;">状态</th>
+							<th style="border-right:#CCC solid 1px;">操作</th>
+						</tr>
+						</thead>
+
+						<tbody id="ajax-data">
+							{include file="plug/ajax_plug_link_list"/}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+
+	</div><!-- /.page-content -->
+	<!-- 显示模态框（Modal） -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<form class="form-horizontal ajaxForm2" name="plug_link_add" method="post" action="{:url('admin/Plug/plug_link_runadd')}">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true">×
+						</button>
+						<h4 class="modal-title" id="myModalLabel">
+							添加友情链接
+						</h4>
+					</div>
+					<div class="modal-body">
+
+
+						<div class="row">
+							<div class="col-xs-12">
+
+								<div class="form-group">
+									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 所属栏目： </label>
+									<div class="col-sm-10">
+										<select name="plug_link_typeid"  class="col-sm-4 selector" required>
+											<option value="">请选择所属栏目</option>
+											{foreach name="link_type" item="v"}
+												<option value="{$v.plug_linktype_id}">{$v.plug_linktype_name}</option>
+											{/foreach}
+										</select>
+									</div>
+								</div>
+								<div class="space-4"></div>
+								{if condition="config('lang_switch_on')"}
+								<div class="form-group">
+									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 语言： </label>
+									<div class="col-sm-10">
+										<select name="plug_link_l"  class="col-sm-4 selector" required>
+											<option value="">请语言</option>
+											<option value="zh-cn">中文</option>
+											<option value="en-us">英语</option>
+										</select>
+									</div>
+								</div>
+								<div class="space-4"></div>
+								{/if}
+								
+								<div class="form-group">
+									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 链接名称：  </label>
+									<div class="col-sm-10">
+										<input type="text" name="plug_link_name" id="plug_link_name" placeholder="输入链接名称" class="col-xs-10 col-sm-5" required/>
+										<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必须是以字母开头，数字、符号组合</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+								<div class="form-group">
+									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 链接URL：  </label>
+									<div class="col-sm-10">
+										<input type="url" name="plug_link_url" id="plug_link_url" placeholder="输入链接URL" class="col-xs-10 col-sm-8" required/>
+										<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必须是以http://开头</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+								<div class="form-group">
+									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 打开方式：  </label>
+									<div class="col-sm-10">
+										<select name="plug_link_target" class="col-xs-10 col-sm-5" required>
+											<option value="_blank">新标签页打开</option>
+											<option value="_self">本窗口打开</option>
+										</select>
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+								<div class="form-group">
+									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 是否审核： </label>
+									<div class="col-sm-10" style="padding-top:5px;">
+										<input name="plug_link_open" id="plug_link_open" value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+										<span class="lbl">&nbsp;&nbsp;默认关闭</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+								<div class="form-group">
+									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 联系站长：  </label>
+									<div class="col-sm-10">
+										<input type="text" name="plug_link_qq" id="plug_link_qq" placeholder="输入QQ或其他联系方式" class="col-xs-10 col-sm-5" />
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+								<div class="form-group">
+									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 排序：  </label>
+									<div class="col-sm-10">
+										<input type="text" name="plug_link_order" id="plug_link_order" value="50" class="col-xs-10 col-sm-3" />
+										<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>从小到大排序</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+							</div>
+						</div>
+
+
+
+
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary">
+							提交保存
+						</button>
+						<button class="btn btn-info" type="reset">
+							重置
+						</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">
+							关闭
+						</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</form>
+	</div><!-- /.modal -->
+
+
+
+
+
+
+	<!-- 显示模态框（Modal） -->
+	<div class="modal fade in" id="myModaledit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-backdrop fade in" id="gbbb" style="height: 100%;"></div>
+		<form class="form-horizontal ajaxForm2" name="plug_link_runedit" method="post" action="{:url('admin/Plug/plug_link_runedit')}">
+			<input type="hidden" name="plug_link_id" id="editplug_link_id" value="" />
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" id="gb"  data-dismiss="modal"
+								aria-hidden="true">×
+						</button>
+						<h4 class="modal-title" id="myModalLabel">
+							修改友情链接
+						</h4>
+					</div>
+					<div class="modal-body">
+
+
+						<div class="row">
+							<div class="col-xs-12">
+
+								<div class="form-group">
+									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 所属栏目： </label>
+									<div class="col-sm-10">
+										<select name="plug_link_typeid" id="editplug_link_typeid"  class="col-sm-4" required>
+											<option value="">请选择所属栏目</option>
+											{foreach name="link_type" item="v"}
+												<option value="{$v.plug_linktype_id}">{$v.plug_linktype_name}</option>
+											{/foreach}
+										</select>
+									</div>
+								</div>
+								<div class="space-4"></div>
+								{if condition="config('lang_switch_on')"}
+								<div class="form-group">
+									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 语言： </label>
+									<div class="col-sm-10">
+										<select name="plug_link_l" id="editplug_link_l"  class="col-sm-4" required>
+											<option value="">请选择语言</option>
+											<option value="zh-cn">中文</option>
+											<option value="en-us">英语</option>
+										</select>
+									</div>
+								</div>
+								<div class="space-4"></div>
+								{/if}
+
+								<div class="form-group">
+									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 链接名称：  </label>
+									<div class="col-sm-10">
+										<input type="text" name="plug_link_name" id="editplug_link_name" value="" class="col-xs-10 col-sm-5" required/>
+										<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必须是以字母开头，数字、符号组合</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+								<div class="form-group">
+									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 链接URL：  </label>
+									<div class="col-sm-10">
+										<input type="url" name="plug_link_url" id="editplug_link_url" value="" class="col-xs-10 col-sm-8" required/>
+										<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>必须是以http://开头</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 打开方式：  </label>
+									<div class="col-sm-10">
+										<select name="plug_link_target" id="editplug_link_target" class="col-xs-10 col-sm-5" required>
+											<option value="_blank">新标签页打开</option>
+											<option value="_self">本窗口打开</option>
+										</select>
+									</div>
+								</div>
+								<div class="space-4"></div>
+								<div class="form-group">
+									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 联系站长：  </label>
+									<div class="col-sm-10">
+										<input type="text" name="plug_link_qq" id="editplug_link_qq" value="" placeholder="输入QQ或其他联系方式" class="col-xs-10 col-sm-5" />
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+								<div class="form-group">
+									<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 排序：  </label>
+									<div class="col-sm-10">
+										<input type="text" name="plug_link_order" id="editplug_link_order" value="" class="col-xs-10 col-sm-3" />
+										<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>从小到大排序</span>
+									</div>
+								</div>
+								<div class="space-4"></div>
+
+							</div>
+						</div>
+
+
+
+
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary">
+							提交保存
+						</button>
+						<button type="button" class="btn btn-default"  id="gbb" >
+							关闭
+						</button>
+					</div>
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</form>
+	</div><!-- /.modal -->
+{/block}
+

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<!--[if IE 8]>			<html class="ie ie8"> <![endif]-->
+<!--[if IE 9]>			<html class="ie ie9"> <![endif]-->
+<!--[if gt IE 9]><!-->	<html> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <title>{$menu.menu_seo_title|default=$site_seo_title} {$site_name}</title>
+    <meta name="keywords" content="{$menu.menu_seo_key|default=$site_seo_keywords}" />
+    <meta name="description" content="{$menu.menu_seo_des|default=$site_seo_description}">
+    {include file="public:head" /}
+</head>
+<body class="blog blog-small">
+<div class="wrap">
+    {include file="public:nav" /}
+    <div id="main-cmf">
+        <div class="breadcrumb-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
+                        <h2 class="title">{$menu.menu_name}</h2>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-xs-12 col-sm-6">
+                        <div class="breadcrumbs pull-right">
+                            <ul>
+                                <li>{:lang('current location')}:</li>
+                                <li><a href="__ROOT__/">{:lang('home')}</a></li>
+                                <li>{$menu.menu_name}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="posts-block col-lg-9 col-md-9 col-sm-8 col-xs-12" id="news_list">
+						{volist name="lists['news']" id="vo"}
+							<article class="post hentry">
+								<div class="post-content-wrap">
+									<header class="post-header">
+										<h3 class="content-title"><a href="{:url('home/Model/index',['id'=>$vo['faq_id'],'cid'=>$menu['id']])}">{$vo.faq_title}</a></h3>
+									</header>
+									<div class="post-content">
+										<p>{$vo.faq_answer|html_trim=100}</p>
+									</div>
+								</div>
+								<div class="clearfix"></div>
+							</article>
+							<div class="blog-divider"></div>
+						{/volist}
+						<div class="pagination-centered">
+							{$page_html}
+						</div>
+                    </div>
+                    {include file="public:rightslider"/}
+                </div>
+            </div>
+        </div>
+    </div>
+    {include file="public:footer"/}
+</div>
+{include file="public:scripts"/}
+</body>
+</html>

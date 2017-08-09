@@ -1,0 +1,55 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+	<div class="page-content">
+
+		<div class="row">
+			<div class="col-xs-12">
+				<div>
+					<form class="ajaxForm" name="addons_order" method="post" action="{:url('admin/Addons/addons_order')}" >
+						<table class="table table-striped table-bordered table-hover" id="dynamic-table">
+							<thead>
+							<tr>
+								<th>ID</th>
+								<th>排序</th>
+								<th>插件标识</th>
+								<th>插件名称</th>
+								<th>插件描述</th>
+								<th>作者</th>
+								<th>版本</th>
+								<th style="border-right:#CCC solid 1px;">操作</th>
+							</tr>
+							</thead>
+
+							<tbody>
+
+							{foreach name="addons" item="v"}
+								<tr>
+									{notempty name="v.id"}
+									<td height="28" >{$v.id}</td>
+									<td><input name="{$v.id}" value="{$v.sort}" class="list_order center"/></td>
+									{else /}
+									<td height="28" ></td>
+									<td></td>
+									{/notempty}
+									<td>{$v.name}</td>
+									<td>{$v.title}</td>
+									<td>{$v.description}</td>
+									<td>{$v.author}</td>
+									<td>{$v.version}</td>
+									<td>{$v.actions}
+									</td>
+								</tr>
+							{/foreach}
+							<tr>
+								<td height="50" colspan="10" align="left"><button  id="btnorder" class="btn btn-white btn-yellow btn-sm">排序</button></td>
+							</tr>
+							</tbody>
+						</table>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div><!-- /.page-content -->
+{/block}
+
+

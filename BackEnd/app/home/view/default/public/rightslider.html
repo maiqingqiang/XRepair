@@ -1,0 +1,84 @@
+<div class="sidebar col-lg-3 col-md-3 col-sm-4 col-xs-12">
+    <div class="blog-entry-meta-tags">
+    </div>
+    <form action="{:url('home/Listn/search')}" class="search-ajaxform" method="post">
+        <div class="widget search-form">
+            <div class="input-group">
+                <input name="keyword" type="text" value="Search..." onfocus="if(this.value=='Search...')this.value='';" onblur="if(this.value=='')this.value='Search...';" class="search-input form-control">
+                              <span class="input-group-btn">
+                              <button type="submit" class="subscribe-btn btn"><i class="fa fa-search"></i></button>
+                              </span>
+            </div>
+        </div>
+    </form>
+    <div class="widget tabs">
+        <div id="horizontal-tabs">
+            <ul class="tabs">
+                <li id="tab1" class="current">{:lang('hot articles')}</li>
+                <li id="tab2">{:lang('recent articles')}</li>
+                <li id="tab3">{:lang('recent comments')}</li>
+            </ul>
+            <div class="contents">
+                <div class="tabscontent" id="content1" style="display: block;">
+                    <ul class="posts">
+						{yf:news name="hot_articles" cid="$portal_hot_articles" field="news_title,news_time,news_scontent,n_id,news_img" limit="5" order="news_hits desc" /}
+						{foreach name="hot_articles" item="vo"}
+                        <li>
+                            <a href="{:url('home/News/index',array('id'=>$vo['n_id']))}"><img class="img-thumbnail recent-post-img" alt="" src="{$vo['news_img']|get_imgurl}"></a>
+                            <p><a href="{:url('home/News/index',array('id'=>$vo['n_id']))}">{$vo.news_title|msubstr=0,20}</a></p>
+                            <span class="color">{$vo.news_time||date="Y-m-d",###}</span>
+                        </li>
+						{/foreach}
+                    </ul>
+                </div>
+                <div class="tabscontent" id="content2">
+                    <ul class="posts">
+						{yf:news name="last_post" cid="$portal_last_post" field="news_title,news_time,news_scontent,n_id,news_img" limit="5" order="news_time desc" /}
+						{foreach name="last_post" item="vo"}
+                        <li>
+                            <a href="{:url('home/News/index',array('id'=>$vo['n_id']))}"><img class="img-thumbnail recent-post-img" alt="" src="{$vo['news_img']|get_imgurl}"></a>
+                            <p><a href="{:url('home/News/index',array('id'=>$vo['n_id']))}">{$vo.news_title|msubstr=0,20}</a></p>
+                            <span class="color">{$vo.news_time|date="Y-m-d",###}</span>
+                        </li>
+						{/foreach}
+                    </ul>
+                </div>
+                <div class="tabscontent" id="content3">
+                    <ul class="posts">
+						{yf:comments name="last_comments" limit="5" order="createtime desc" /}
+                        {foreach name="last_comments" item="vo"}
+                            <li>
+								<a class="pull-left" href="{:url('home/News/index',array('id'=>$vo['t_id']))}" title="{:lang('see')}">
+									<img src="{$vo.member_list_headpic|get_imgurl=1}" class="img-thumbnail recent-post-img"/>
+								</a>
+                                <i class="fa fa-comment"></i>
+                                <a href="{:url('home/Index/visit',array('id'=>$vo['uid']))}">{$vo['member_list_nickname']|default=$vo['member_list_username']}:</a>
+                                <p>{$vo.c_content|htmlspecialchars}</p>
+                                <span class="comment-time">{$vo.createtime|date="Y-m-d H:i:s",###}</span>
+                            </li>{/foreach}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="widget ads">
+        <h3 class="title">{:lang('ads contribution')}</h3>
+        <div class="ads-img row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <img class="img-thumbnail" alt="" src="{$yf_theme_path}public/images/ads-small.jpg">
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <img class="img-thumbnail" alt="" src="{$yf_theme_path}public/images/ads-small.jpg">
+            </div>
+        </div>
+        <div class="ads-img row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <img class="img-thumbnail" alt="" src="{$yf_theme_path}public/images/ads-small.jpg">
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <img class="img-thumbnail" alt="" src="{$yf_theme_path}public/images/ads-small.jpg">
+            </div>
+        </div>
+    </div>
+</div>
+                     

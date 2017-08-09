@@ -1,0 +1,91 @@
+{foreach name="mats_list" item="v"}
+	<tr>
+		<td class="hidden-xs" align="center">
+			<label class="pos-rel">
+				<input name='mats_id_id[]' id="navid" class="ace"  type='checkbox' value='{$v.mats_id}'>
+				<span class="lbl"></span>
+			</label>
+		</td>
+		<td>
+			{if condition="in_array($v.mats_type,['news','image','video'])"}
+			<div class="action-buttons">
+						<a href="#" class="green bigger-140 show-details-btn" title="查看详细">
+							<i class="ace-icon fa fa-angle-double-down"></i>
+							<span class="sr-only">详细</span>
+						</a>
+			</div>
+			{/if}
+		</td>
+		<td>{$v.mats_id}</td>
+		<td>{$v.mats_name}</td>
+		<td>{$v.mats_type}</td>
+		<td>{$v.media_id}</td>
+		<td>{if condition="$v['mats_type'] eq 'news'"}{$v.news_index}{/if}</td>
+		<td class="hidden-sm hidden-xs">{$v.create_time|date='Y-m-d',###}</td>
+		<td>
+			<div class="hidden-sm hidden-xs action-buttons">
+				{if condition="$v['mats_type'] eq 'news'"}
+				<a class="green" href="{:url('wechat/We/mats_edit',['mats_id'=>$v['mats_id']])}" data-toggle="tooltip" title="修改">
+					<i class="ace-icon fa fa-pencil bigger-130"></i>
+				</a>
+				{/if}
+				<a class="red confirm-rst-url-btn" href="{:url('wechat/We/mats_del',array('mats_id'=>$v['mats_id']))}" data-info="您确定要删除吗？" data-toggle="tooltip" title="删除">
+					<i class="ace-icon fa fa-trash-o bigger-130"></i>																</a>
+			</div>
+			<div class="hidden-md hidden-lg">
+				<div class="inline position-relative">
+					<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+						<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+					</button>
+					<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+						{if condition="$v['mats_type'] eq 'news'"}
+						<li>
+							<a href="{:url('wechat/We/mats_edit',['mats_id'=>$v['mats_id']])}" class="tooltip-success" data-rel="tooltip" title="修改" data-original-title="修改">
+										<span class="green">
+											<i class="ace-icon fa fa-pencil bigger-120"></i>
+										</span>
+							</a>
+						</li>
+						{/if}
+						<li>
+							<a href="{:url('wechat/We/mats_del',array('mats_id'=>$v['mats_id']))}"  data-info="您确定要删除吗？" class="tooltip-error confirm-rst-url-btn" data-rel="tooltip" title="删除" data-original-title="删除">
+							<span class="red">
+								<i class="ace-icon fa fa-trash-o bigger-120"></i>
+							</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</td>
+	</tr>
+	{if condition="in_array($v.mats_type,['news','image','video'])"}
+	<tr class="detail-row">
+		<td colspan="10">
+			<div class="row">
+				{switch name="v['mats_type']" }
+				{case value="news"}
+				<label class="form-label col-xs-1 text-right">图文内容：</label>
+				<div class="formControls col-xs-11">
+					<textarea  name="" readonly="readonly" cols="" rows="8" class="col-xs-12"   id="form-field-9"  maxlength="">{$v.news_content|json_decode=true|var_export}</textarea>
+				</div>
+				{/case}
+				{case value="video"}
+				<label class="form-label col-xs-1 text-right">视频简介：</label>
+				<div class="formControls col-xs-11">
+					<textarea  name="" readonly="readonly" cols="" rows="4" class="col-xs-12"   id="form-field-9"  maxlength="">{$v.video_content|json_decode=true|var_export}</textarea>
+				</div>
+				{/case}
+				{default /}
+				<label class="form-label col-xs-1 text-right">图片地址：</label>
+				<div class="formControls col-xs-11">{$v.url}</div>
+				{/switch}
+			</div>
+		</td>
+	</tr>
+	{/if}
+{/foreach}
+<tr>
+	<td align="center"><button id="btnsubmit" class="btn btn-white btn-yellow btn-sm">删</button> </td>
+	<td colspan="8" align="right">{$page}</td>
+</tr>

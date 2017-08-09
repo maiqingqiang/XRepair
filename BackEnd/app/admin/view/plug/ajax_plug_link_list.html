@@ -1,0 +1,57 @@
+{foreach name="plug_link" item="v"}
+	<tr>
+		<td height="28" >{$v.plug_link_id}</td>
+		<td>{$v.plug_link_name}</td>
+		<td><a href="{$v.plug_link_url}" target="_blank">{$v.plug_link_url}</a></td>
+		<td class="hidden-sm hidden-xs">{$v.plug_link_qq}</td>
+		<td class="hidden-xs">{$v.plug_linktype_name}</td>
+		{if condition="config('lang_switch_on')"}
+		<td class="hidden-xs">{$v.plug_link_l}</td>
+		{/if}
+		<td class="hidden-sm hidden-xs">{$v.plug_link_addtime|date='Y-m-d',###}</td>
+		<td class="hidden-xs">
+			{if condition='$v.plug_link_open eq 1'}
+				<a class="red open-btn" href="{:url('admin/Plug/plug_link_state')}" data-id="{$v.plug_link_id}" title="已开启">
+					<div id="zt{$v.plug_link_id}"><button class="btn btn-minier btn-yellow">开启</button></div>
+				</a>
+				{else/}
+				<a class="red open-btn" href="{:url('admin/Plug/plug_link_state')}" data-id="{$v.plug_link_id}" title="已禁用">
+					<div id="zt{$v.plug_link_id}"><button class="btn btn-minier btn-danger">禁用</button></div>
+				</a>														{/if}														</td>
+		<td>
+			<div class="hidden-sm hidden-xs action-buttons">
+				<a class="green linkedit-btn"  href="{:url('admin/Plug/plug_link_edit')}" data-id="{$v.plug_link_id}"  title="修改">
+					<i class="ace-icon fa fa-pencil bigger-130"></i>																</a>
+				<a class="red confirm-rst-url-btn" data-info="你确定要删除吗？" href="{:url('admin/Plug/plug_link_del',array('plug_link_id'=>$v['plug_link_id']))}" title="删除">
+					<i class="ace-icon fa fa-trash-o bigger-130"></i>																</a>										</div>
+			<div class="hidden-md hidden-lg">
+				<div class="inline position-relative">
+					<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+						<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+					</button>
+					<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+						<li>
+							<a href="{:url('admin/Plug/plug_link_edit')}" data-id="{$v.plug_link_id}" class="tooltip-success linkedit-btn" data-rel="tooltip" title="" data-original-title="修改">
+											<span class="green">
+												<i class="ace-icon fa fa-pencil bigger-120"></i>
+											</span>
+							</a>
+						</li>
+
+						<li>
+							<a href="{:url('admin/Plug/plug_link_del',array('plug_link_id'=>$v['plug_link_id']))}"  class="tooltip-error confirm-rst-url-btn" data-rel="tooltip" title="" data-info="你确定要删除吗？" data-original-title="删除">
+											<span class="red">
+												<i class="ace-icon fa fa-trash-o bigger-120"></i>
+											</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</td>
+	</tr>
+{/foreach}
+	<tr>
+		<td height="50" colspan="12" align="left">{$page}</td>
+	</tr>
+

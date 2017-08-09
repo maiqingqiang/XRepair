@@ -1,0 +1,101 @@
+<header id="header">
+    <div class="top-bar">
+        <div class="slidedown collapse">
+            <div class="container">
+                <div class="phone-email pull-left">
+                    <a><i class="fa fa-phone"></i>{:lang('phone')}: {$site_tel}</a>
+                    <a href="mailto:{$site_admin_email}"><i class="fa fa-envelope"></i>{:lang('email')}: {$site_admin_email}</a>
+                </div>
+                <div class="pull-right">
+					{if condition="config('lang_switch_on')"}
+                    <div class="phone-email pull-left">
+                        {if condition="$lang eq 'en-us'"}
+                        <a href="{:url('home/Index/lang',array('lang_s'=>'cn'))}" class="js-lang-btn"><i class="fa fa-angle-double-right">中文简体</i></a>
+                        {else /}
+                        <a href="{:url('home/Index/lang',array('lang_s'=>'en'))}" class="js-lang-btn"><i class="fa fa-angle-double-right">ENGLISH</i></a>
+                        {/if}
+                    </div>
+					{/if}
+                    <div id="search-form" class="pull-right">
+                        <form action="{:url('home/Listn/search')}" class="search-ajaxform" method="post">
+                            <input type="text" class="search-text-box" name="keyword" value="{:input('keyword')}" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main-header">
+        <div class="container">
+            <div class="topnav navbar-header">
+                <a class="navbar-toggle down-button" data-toggle="collapse" data-target=".slidedown">
+                    <i class="fa fa-angle-down icon-current"></i>
+                </a>
+            </div>
+            <div class="logo pull-left">
+                <h1>
+                    <a href="__ROOT__/">
+						<img src="{$site_logo|get_imgurl}" alt="logo" style="margin-top:-14px;height:86px;">
+                    </a>
+                </h1>
+            </div>
+            <div class="mobile navbar-header">
+                <a class="navbar-toggle" data-toggle="collapse"  data-target=".menu">
+                    <i class="fa fa-reorder icon-2x"></i>
+                </a>
+            </div>
+            <nav class="collapse navbar-collapse menu">
+                {yf:menu top_ul_class="nav navbar-nav sf-menu" haschild_a_class="sf-with-ul" haschild_span_class="sf-sub-indicator" nochild_a_class="sf-with-ul"}
+				<ul class="nav navbar-nav sf-menu">
+                    {if condition="!empty($user['member_list_id'])"}
+                        <li style="height:86px">
+                            <a href="#" class="sf-with-ul menu-login">
+								<img src="{$user.member_list_headpic|get_imgurl=1}" class="img-thumbnail headicon"/>
+                                <span class="user-nicename">{$user['member_list_nickname']|default=$user['member_list_username']}</span>
+							<span class="sf-sub-indicator">
+                           <i class="fa fa-angle-down "></i>
+                           </span>
+                            </a>
+                            <ul>
+                                <li><a href="{:url('home/Center/index')}"><i class="fa fa-user"></i> &nbsp;{:lang('personal center')}</a></li>
+                                
+								{if condition="$is_admin"}
+								<li><a href="{:url('home/admin/Index/index')}" target="_blank"><i class="fa fa-tachometer"></i> &nbsp;{:lang('admin manage')}</a></li>
+								{/if}
+								<li><a href="{:url('home/Login/logout')}"><i class="fa fa-sign-out"></i> &nbsp;{:lang('sign out')}</a></li>
+                            </ul>
+                        </li>
+                    {else /}
+                        <li>
+                            <a href="#" class="sf-with-ul menu-login">
+                                <img src="{$yf_theme_path}public/images/headicon.png" class="img-thumbnail headicon"/>{:lang('login')}
+						<span class="sf-sub-indicator">
+                           <i class="fa fa-angle-down "></i>
+                           </span>
+                            </a>
+                            <ul>
+                                {if condition="config('think_sdk_sina.display')"}
+								<li><a href="{:url('home/Oauth/login',array('type'=>'sina'))}"><i class="fa fa-weibo"></i> &nbsp;{:lang('weibo login')}</a></li>
+								{/if}
+								{if condition="config('think_sdk_qq.display')"}
+                                <li><a href="{:url('home/Oauth/login',array('type'=>'qq'))}"><i class="fa fa-qq"></i> &nbsp;{:lang('qq login')}</a></li>
+								{/if}
+								{if condition="config('think_sdk_facebook.display')"}
+                                <li><a href="{:url('home/Oauth/login',array('type'=>'facebook'))}"><i class="fa fa-qq"></i> &nbsp;{:lang('facebook login')}</a></li>
+                                {/if}
+                                {if condition="config('think_sdk_weixin.display')"}
+                                <li><a href="{:url('home/Oauth/login',array('type'=>'weixin'))}"><i class="fa fa-qq"></i> &nbsp;{:lang('weixin login')}</a></li>
+                                {/if}
+								{if condition="config('think_sdk_wechat.display')"}
+                                <li><a href="{:url('home/Oauth/login',array('type'=>'wechat'))}"><i class="fa fa-qq"></i> &nbsp;{:lang('wechat login')}</a></li>
+                                {/if}
+                                <li><a href="{:url('home/Login/index')}"><i class="fa fa-sign-in"></i> &nbsp;{:lang('login')}</a></li>
+                                <li><a href="{:url('home/Register/index')}"><i class="fa fa-user"></i> &nbsp;{:lang('register')}</a></li>
+                            </ul>
+                        </li>
+                    {/if}
+                </ul>
+            </nav>
+        </div>
+    </div>
+</header>

@@ -1,0 +1,79 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+<div class="page-content">
+	<div class="row maintop">
+		<div class="col-xs-4 col-sm-3 margintop5">
+			<a href="{:addon_url('security://Admin/security_generate')}" id="security_generate">
+				<button class="btn btn-xs btn-danger">
+					<i class="ace-icon fa fa-bolt bigger-110"></i>
+					<span class="tip">重新生成安全文件</span>
+				</button>
+			</a>
+
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-12">
+			<div>
+				<table class="table table-striped table-bordered table-hover" id="dynamic-table">
+					<thead>
+					<tr>
+						<th>文件名称</th>
+						<th>文件大小</th>
+						<th>上传时间</th>
+						<th>查看</th>
+					</tr>
+					</thead>
+
+					<tbody>
+					{foreach name="finger_files" item="v"}
+					<tr>
+						<td>{$v.filename}</td>
+						<td>{$v.size}</td>
+						<td>{$v.mtime|date="Y-m-d H:i:s",###}</td>
+						<td>
+							<div class="action-buttons">
+								<a class="red" data-info="检测需要花一点时间，要执行吗？" href="{:addon_url('security://Admin/security_check',array('file'=>md5($v['filename'])))}" title="检测">
+									<i class="ace-icon fa fa-check bigger-130"></i>
+								</a>
+								<a class="red confirm-rst-url-btn" data-info="你确定要彻底删除安全文件吗？" href="{:addon_url('security://Admin/security_delete',array('file'=>md5($v['filename'])))}" title="删除">
+									<i class="ace-icon fa fa-close bigger-130"></i>
+								</a>
+							</div>
+							<div class="hidden-md hidden-lg hidden-sm hidden-xs">
+								<div class="inline position-relative">
+									<button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+										<i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+									</button>
+									<ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+										<li>
+											<a href="{:addon_url('security://Admin/security_check',array('file'=>md5($v['filename'])))}" class="tooltip-success confirm-rst-url-btn" data-info="检测需要花一点时间，要执行吗？" data-rel="tooltip" title="" data-original-title="检测">
+												<span class="green">
+													<i class="ace-icon fa fa-check bigger-120"></i>
+												</span>
+											</a>
+										</li>
+
+										<li>
+											<a href="{:addon_url('security://Admin/security_delete',array('file'=>md5($v['filename'])))}"  class="tooltip-error confirm-rst-url-btn" data-info="你确定要彻底删除安全文件吗？" data-rel="tooltip" title="" data-original-title="删除">
+												<span class="red">
+													<i class="ace-icon fa fa-close bigger-120"></i>
+												</span>
+											</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</td>
+					</tr>
+					{/foreach}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+
+</div><!-- /.page-content -->
+{/block}
+

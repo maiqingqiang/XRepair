@@ -1,0 +1,84 @@
+<div id="sidebar" class="sidebar responsive sidebar-fixed ace-save-state">
+	<script type="text/javascript">
+		try{ace.settings.loadState('sidebar')}catch(e){}
+	</script>
+	<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+		<!--左侧顶端按钮-->
+		<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+			<a class="btn btn-success" href="{:url('admin/News/news_list')}" role="button" title="文章列表"><i class="ace-icon fa fa-signal"></i></a>
+			<a class="btn btn-info" href="{:url('admin/News/news_add')}" role="button" title="添加文章"><i class="ace-icon fa fa-pencil"></i></a>
+			<a class="btn btn-warning" href="{:url('admin/Member/member_list')}" role="button" title="会员列表"><i class="ace-icon fa fa-users"></i></a>
+			<a class="btn btn-danger" href="{:url('admin/Sys/sys')}" role="button" title="站点设置"><i class="ace-icon fa fa-cogs"></i></a>
+		</div>
+		<!--左侧顶端按钮（手机）-->
+		<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+			<a class="btn btn-success" href="{:url('admin/News/news_list')}" role="button" title="文章列表"></a>
+			<a class="btn btn-info" href="{:url('admin/News/news_add')}" role="button" title="添加文章"></a>
+			<a class="btn btn-warning" href="{:url('admin/Member/member_list')}" role="button" title="会员列表"></a>
+			<a class="btn btn-danger" href="{:url('admin/Sys/sys')}" role="button" title="站点设置"></a>
+		</div>
+	</div>
+	<!-- 菜单列表开始 -->
+	<ul class="nav nav-list">
+		<!--一级菜单遍历开始-->
+		{foreach name="menus" item="v"}
+			{if condition="!empty($v['_child'])"}
+				<li class="{if condition="(count($menus_curr) egt 1) AND ($menus_curr[0] eq $v['id'])"}open{/if}">
+			<a href="javascript:void(0);" class="dropdown-toggle">
+				<i class="menu-icon fa {$v.css}"></i>
+				<span class="menu-text">{$v.title}</span>
+				<b class="arrow fa fa-angle-down"></b>
+			</a>
+			<ul class="submenu">
+				<!--二级菜单遍历开始-->
+				{foreach name="v._child" item="vv"}
+					{if condition="!empty($vv['_child'])"}
+						<li class="{if condition="(count($menus_curr) egt 2) AND ($menus_curr[1] eq $vv['id'])"}active open{/if}">
+					<a href="javascript:void(0);" class="dropdown-toggle">
+						<i class="menu-icon fa fa-caret-right"></i>
+						{$vv.title}
+						<b class="arrow fa fa-angle-down"></b>
+					</a>
+					<b class="arrow"></b>
+					<ul class="submenu">
+						<!--三级菜单遍历开始-->
+						{foreach name="vv._child" item="vvv"}
+							<li class="{if condition="(count($menus_curr) egt 3) AND ($menus_curr[2] eq $vvv['id'])"}active{/if}">
+							<a href="{:url($vvv['name'])}">
+								<i class="menu-icon fa fa-caret-right"></i>
+								{$vvv.title}
+							</a>
+							<b class="arrow"></b>
+							</li>
+						{/foreach}<!--三级菜单遍历结束-->
+					</ul>
+					</li>
+					{else /}
+					<li class="{if condition="(count($menus_curr) egt 2) AND ($menus_curr[1] eq $vv['id'])"}active{/if}">
+					<a href="{:url($vv['name'])}">
+						<i class="menu-icon fa fa-caret-right"></i>
+						{$vv.title}
+					</a>
+					<b class="arrow"></b>
+					</li>
+					{/if}
+				{/foreach}<!--二级菜单遍历结束-->
+			</ul>
+			</li>
+			{else /}
+			<li class="{if condition="(count($menus_curr) egt 1) AND ($menus_curr[0] eq $v['id'])"}active{/if}">
+			<a href="{:url($v['name'])}">
+				<i class="menu-icon fa fa-caret-right"></i>
+				{$v.title}
+			</a>
+			<b class="arrow"></b>
+			</li>
+			{/if}
+		{/foreach}<!--一级菜单遍历结束-->
+	</ul><!-- 菜单列表结束 -->
+
+	<!-- 菜单栏缩进开始 -->
+	<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+		<i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+	</div><!-- 菜单栏缩进结束 -->
+</div>

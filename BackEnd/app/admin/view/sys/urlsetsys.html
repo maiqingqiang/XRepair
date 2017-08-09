@@ -1,0 +1,297 @@
+{extend name="admin@public/base" /}
+{block name="main-content"}
+	<div class="page-content">
+
+
+
+		<!--主题-->
+		<div class="page-header">
+			<h1>
+				您当前操作
+				<small>
+					<i class="ace-icon fa fa-angle-double-right"></i>
+					URL美化
+				</small>
+			</h1>
+		</div>
+		<div class="row">
+
+			<div class="tabbable">
+				<ul class="nav nav-tabs" id="myTab">
+					<li>
+						<a data-toggle="tab" href="#basic">
+							基本设置
+						</a>
+					</li>
+
+					<li class="active">
+						<a data-toggle="tab" href="#urllist">
+							URL美化
+						</a>
+					</li>
+				</ul>
+				<div class="tab-content">
+				<div id="basic" class="tab-pane fade">
+						<form class="form-horizontal ajaxForm2" name="urlsys" method="post" action="{:url('admin/Sys/runurlsys')}">
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否开启路由： </label>
+						<div class="col-sm-9" style="padding-top:5px;">
+							<input name="route_on" id="route_on" {if condition='$Think.config.url_route_on eq 1'}checked{/if}  value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+							<span class="lbl"></span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否强制路由： </label>
+						<div class="col-sm-9" style="padding-top:5px;">
+							<input name="route_must" id="route_must" {if condition='$Think.config.url_route_must eq 1'}checked{/if}  value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+							<span class="lbl"></span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+					
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 是否完整匹配： </label>
+						<div class="col-sm-9" style="padding-top:5px;">
+							<input name="complete_match" id="complete_match" {if condition='$Think.config.route_complete_match eq 1'}checked{/if}  value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" />
+							<span class="lbl"></span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+					
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> URL伪静态后缀 </label>
+						<div class="col-sm-9">
+							<input type="text" name="html_suffix" value="{$Think.config.url_html_suffix}"  class="col-xs-10 col-sm-5" />
+						<span class="help-inline col-xs-12 col-sm-7">
+							<span class="middle" id="restwo"></span>
+						</span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+					<div class="form-group">
+						<label class="col-sm-3 control-label no-padding-right" for="form-field-1"> 路由模式： </label>
+						<div class="col-sm-9">
+						<select name="url_route_mode"  class="col-sm-4" required>
+								<option value="">请选择路由模式</option>
+								<option value="1" {if condition="$Think.config.url_route_mode eq 1"}selected{/if}>标准模式</option>
+								<option value="2" {if condition="$Think.config.url_route_mode eq 2"}selected{/if}>高极模式</option>							
+							</select>
+                            <span class="help-inline col-xs-12 col-sm-7">
+							<span class="middle" id="resthr">* 开启路由配置生效,高极模式会解析自定义路由规则 </span>
+							</span>
+						</div>
+					</div>
+					<div class="space-4"></div>
+
+					<div class="clearfix form-actions">
+						<div class="col-sm-offset-3 col-sm-9">
+							<button class="btn btn-info" type="submit">
+								<i class="ace-icon fa fa-check bigger-110"></i>
+								保存
+							</button>
+
+							&nbsp; &nbsp; &nbsp;
+							<button class="btn" type="reset">
+								<i class="ace-icon fa fa-undo bigger-110"></i>
+								重置
+							</button>
+						</div>
+					</div>
+				</form>
+					</div>
+
+					<div id="urllist" class="tab-pane fade in active">
+						<div class="row maintop">
+							<div class="col-xs-12 col-sm-1">
+								<!-- 点击添加模态框（Modal） -->
+								<button class="btn btn-xs btn-danger" data-toggle="modal" data-target="#myModal">
+									<i class="ace-icon fa fa-bolt bigger-110"></i>
+									添加规则
+								</button>
+
+							</div>
+
+						</div>
+
+						<div class="row">
+							<div class="col-xs-12">
+								<div>
+									<form class="ajaxForm" name="route_order" method="post" action="{:url('admin/Sys/route_order')}" >
+										<table class="table table-striped table-bordered table-hover" id="dynamic-table">
+											<thead>
+											<tr>
+												<th>ID</th>
+												<th>原始网址</th>
+												<th>显示网址</th>
+												<th class="hidden-xs">状态</th>
+												<th style="border-right:#CCC solid 1px;">排序</th>
+												<th style="border-right:#CCC solid 1px;">操作</th>
+											</tr>
+											</thead>
+
+											<tbody id="ajax-data">
+												{include file="sys/ajax_urlsetsys"/}
+											</tbody>
+										</table>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 显示添加模态框（Modal） -->
+		<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<form class="form-horizontal ajaxForm2" name="route_add" method="post" action="{:url('admin/Sys/route_runadd')}">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+									aria-hidden="true">×
+							</button>
+							<h4 class="modal-title" id="myModalLabel">
+								添加URL规则
+							</h4>
+						</div>
+						<div class="modal-body">
+
+							<div class="row">
+								<div class="col-xs-12">
+
+
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 原始地址：  </label>
+										<div class="col-sm-10">
+											<input type="text" name="full_url" id="full_url" placeholder="原始地址" class="col-xs-10 col-sm-5" required/>
+										</div>
+									</div>
+									<div class="space-4"></div>
+
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 显示地址：  </label>
+										<div class="col-sm-10">
+											<input type="text" name="url" id="url" placeholder="显示地址" class="col-xs-10 col-sm-5" required/>
+										</div>
+									</div>
+									<div class="space-4"></div>
+
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 是否启用： </label>
+										<div class="col-sm-10" style="padding-top:5px;">
+											<input name="status" id="status" value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox" checked/>
+											<span class="lbl">&nbsp;&nbsp;默认启用</span>
+										</div>
+									</div>
+									<div class="space-4"></div>
+
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 排序：  </label>
+										<div class="col-sm-10">
+											<input type="number" name="listorder" id="listorder" value="0" class="col-xs-10 col-sm-3" required/>
+											<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>从小到大排序</span>
+										</div>
+									</div>
+									<div class="space-4"></div>
+
+								</div>
+							</div>
+
+
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary">
+								提交保存
+							</button>
+							<button class="btn btn-info" type="reset">
+								重置
+							</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal">
+								关闭
+							</button>
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</form>
+		</div><!-- /.modal -->
+
+		<!-- 显示修改模态框（Modal） -->
+		<div class="modal fade in" id="myModaledit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-backdrop fade in" id="gbbb" style="height: 100%;"></div>
+			<form class="form-horizontal ajaxForm2" name="route_runedit" method="post" action="{:url('admin/Sys/route_runedit')}">
+				<input type="hidden" name="id" id="editroute_id" value="" />
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" id="gb"  data-dismiss="modal"
+									aria-hidden="true">×
+							</button>
+							<h4 class="modal-title" id="myModalLabel">
+								修改规则
+							</h4>
+						</div>
+						<div class="modal-body">
+
+
+							<div class="row">
+								<div class="col-xs-12">
+
+
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 原始地址：  </label>
+										<div class="col-sm-10">
+											<input type="text" name="full_url" id="editroute_full_url" placeholder="输入原始地址" class="col-xs-10 col-sm-5" required/>
+										</div>
+									</div>
+									<div class="space-4"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 显示地址：  </label>
+										<div class="col-sm-10">
+											<input type="text" name="url" id="editroute_url" placeholder="输入显示地址" class="col-xs-10 col-sm-5" required/>
+										</div>
+									</div>
+									<div class="space-4"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 是否启用： </label>
+										<div class="col-sm-10" style="padding-top:5px;">
+											<input name="status" id="editroute_status" value="1" class="ace ace-switch ace-switch-4 btn-flat" type="checkbox"/>
+											<span class="lbl">&nbsp;&nbsp;默认启用</span>
+										</div>
+									</div>
+									<div class="space-4"></div>
+									<div class="form-group">
+										<label class="col-sm-2 control-label no-padding-right" for="form-field-1"> 排序：  </label>
+										<div class="col-sm-10">
+											<input type="number" name="listorder" id="editroute_listorder" value="50" class="col-xs-10 col-sm-3" required/>
+											<span class="lbl">&nbsp;&nbsp;<span class="red">*</span>从小到大排序</span>
+										</div>
+									</div>
+									<div class="space-4"></div>
+
+								</div>
+							</div>
+
+
+
+
+						</div>
+						<div class="modal-footer">
+							<button type="submit" class="btn btn-primary">
+								提交保存
+							</button>
+							<button type="button" class="btn btn-default"  id="gbb" >
+								关闭
+							</button>
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</form>
+		</div><!-- /.modal -->
+
+	</div><!-- /.page-content -->
+{/block}
+	
+
+
