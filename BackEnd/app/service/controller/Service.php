@@ -9,7 +9,7 @@
 namespace app\service\controller;
 
 
-use Lib\Jwt\JWT;
+use Jwt\JWT;
 use think\Loader;
 
 class Service extends Base
@@ -35,6 +35,10 @@ class Service extends Base
         }
     }
 
+    public function register(){
+
+    }
+
     //获取当前登录用户TOKEN
     public function getToken()
     {
@@ -53,7 +57,6 @@ class Service extends Base
 
     private function getLoginInfo($entity)
     {
-//        $tokenId = base64_encode(String::uuid());
         $tokenId = base64_encode(self::uuid());
         $issuedAt = time();
         $notBefore = $issuedAt;
@@ -70,18 +73,11 @@ class Service extends Base
                 'id' => $entity['id'],
                 'nickname' => $entity['nickname'],
                 'phone' => $entity['phone'],
-//                'face' => $entity['face']
             ]
         ];
-        $key = "xiaomak";
+        $key = config('x_repair.api_key');
         $secretKey = base64_encode($key);
-//        $token = \Jwt\JWT::encode($payload, $secretKey);
-//        Loader::import('Lib.Jwt.JWT');
-//        \thinksdk\ThinkOauth::getInstance('21');
-        $token = \Jwt\JWT::encode($payload, $secretKey);
-//        $pModel = D('Proxy');
-//        $result['userInfo']['is_proxy'] = $pModel->where(array('uid' => $entity['id']))->getField('id');
-//        $result['token'] = $token;
+        $token = JWT::encode($payload, $secretKey);
         return $token;
     }
 
@@ -89,7 +85,7 @@ class Service extends Base
     {
         $charid = md5(uniqid(mt_rand(), true));
         $hyphen = chr(45); // "-"
-        $uuid   = chr(123) // "{"
+        $uuid = chr(123) // "{"
             . substr($charid, 0, 8) . $hyphen
             . substr($charid, 8, 4) . $hyphen
             . substr($charid, 12, 4) . $hyphen
