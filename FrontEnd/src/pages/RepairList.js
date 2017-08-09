@@ -1,26 +1,18 @@
 import React, {Component} from 'react'
-import {observer, inject} from 'mobx-react';
-import {List, Button, WhiteSpace, WingBlank, Card, Badge} from 'antd-mobile';
+import {observer} from 'mobx-react';
+import {List, Badge} from 'antd-mobile';
 import {HeadTitle} from './../components/Index'
 import './../styles/pages/RepairList.less'
 
 const Item = List.Item;
 const Brief = Item.Brief;
 
-@inject("store")
 @observer
 export default class RepairList extends Component {
     constructor(props) {
         super(props);
-        this.store = props.store;
         this.history = props.history;
     }
-
-    login = () => {
-        this.store.isLogin = true;
-        const {from} = this.props.location.state || {from: {pathname: '/'}}
-        this.history.push(from)
-    };
 
     render() {
         return (

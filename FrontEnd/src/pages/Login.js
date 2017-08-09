@@ -5,19 +5,15 @@ import {HeadTitle} from './../components/Index'
 import {createForm} from 'rc-form';
 
 
-@inject("store")
+@inject('userStore')
 @observer
 class Login extends Component {
-    constructor(props) {
-        super(props);
-        this.store = props.store;
-        this.history = props.history;
-    }
 
     login = () => {
-        this.store.isLogin = true;
-        const {from} = this.props.location.state || {from: {pathname: '/'}}
-        this.history.push(from)
+        const {userStore} = this.props;
+        userStore.isLogin = true;
+        const {from} = this.props.location.state || {from: {pathname: '/'}};
+        this.props.history.replace(from)
     };
 
     render() {

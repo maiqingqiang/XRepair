@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {observer, inject} from 'mobx-react';
+import {observer} from 'mobx-react';
 import {List, InputItem, TextareaItem, Picker, Button, WhiteSpace, WingBlank} from 'antd-mobile';
 import {HeadTitle} from './../../components/Index'
 import {createForm} from 'rc-form';
@@ -32,13 +32,8 @@ const seasons = [
 ];
 
 @Protected
-@inject("store")
 @observer
 class Index extends Component {
-    constructor(props) {
-        super(props);
-        this.store = props.store;
-    }
 
     save(e) {
         if (e) e.preventDefault();

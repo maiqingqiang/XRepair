@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import registerServiceWorker from './registerServiceWorker';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import {Provider} from "mobx-react";
-import store from './stores/store';
+import * as store from './stores';
 import routes from './router';
 import axios from 'axios';
 
@@ -39,9 +39,11 @@ React.Component.prototype.axios = axios;
 //         return Promise.reject(error.response.data) // 返回接口返回的错误信息
 //     });
 
+let basename =window.location.host==='localhost'?'/XRepair/BackEnd/webapp/app/index':'';
+
 ReactDOM.render(
-    <Provider store={store}>
-        <Router>
+    <Provider {...store}>
+        <Router basename={basename}>
             <div>
                 <Switch>
                     {routes.map((route, index) => (

@@ -38,24 +38,29 @@ const data = [{
     sub: '更多功能敬请期待',
     color1: '#e8e8e8',
     color2: '#c5c5c5'
+}, {
+    icon: Feedback,
+    title: '关于',
+    sub: '关于我们',
+    color1: '#e8e8e8',
+    color2: '#c5c5c5',
+    to: '/about'
 }];
 
 
-@inject("store")
+@inject("uiStore")
 @observer
 export default class Home extends Component {
     constructor(props) {
         super(props);
-        this.store = props.store;
         this.history = props.history;
-        // console.log(this.store)
         this.state = {
             selectedTab: 'homeTab'
         };
     }
 
     render() {
-        // const {token} = this.store;
+        const {uiStore} = this.props;
         const {history} = this;
         return (
             <div id="home">
@@ -68,11 +73,9 @@ export default class Home extends Component {
                         key="首页"
                         icon={<Icon className="icon-img" type={homeIcon} alt="icon"/>}
                         selectedIcon={<Icon className="icon-img" type={homeIconAct} alt="icon"/>}
-                        selected={this.state.selectedTab === 'homeTab'}
+                        selected={uiStore.selectedTab === 'homeTab'}
                         onPress={() => {
-                            this.setState({
-                                selectedTab: 'homeTab',
-                            });
+                            uiStore.selectedTab = 'homeTab'
                         }}
                         data-seed="logId">
                         <Grid data={data}
@@ -98,11 +101,9 @@ export default class Home extends Component {
                         selectedIcon={<Icon className="icon-img" type={meIconAct} alt="icon"/>}
                         title="我的"
                         key="我的"
-                        selected={this.state.selectedTab === 'meTab'}
+                        selected={uiStore.selectedTab === 'meTab'}
                         onPress={() => {
-                            this.setState({
-                                selectedTab: 'meTab',
-                            });
+                            uiStore.selectedTab = 'meTab'
                         }}>
                         <List renderHeader={() => '我的'} className="my-list">
                             <Item arrow="horizontal" onClick={() => {history.push('')}}>个人资料</Item>
