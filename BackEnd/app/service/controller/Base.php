@@ -42,10 +42,7 @@ class Base{
         $this->ajaxResult(200, '获取成功', $this->userInfo);
     }
 
-    protected function ajaxResult($code, $message, $list = array()) {
-        $data['code'] = $code;
-        $data['message'] = $message;
-        $data['result'] = $list;
-        $this->ajaxReturn($data, "JSON");
+    protected function ajaxResult($code, $message, $result = []) {
+        return json(['code'=>$code,'message'=>$message,'result'=>$result]);
     }
 }

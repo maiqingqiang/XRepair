@@ -256,8 +256,8 @@ $configs= [
 		'fontSize' => 20,
 		'fontttf'=>'4.ttf',
 		'imageH' => 42,
-		'imageW' => 250,
-		'length' => 5,
+		'imageW' => 150,
+		'length' => 4,
 		'useCurve' => false,
 	],
 ];

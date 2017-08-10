@@ -7,13 +7,13 @@ import {createForm} from 'rc-form';
 
 @inject('userStore')
 @observer
-class Login extends Component {
+class Register extends Component {
 
-    login = () => {
-        const {userStore} = this.props;
-        userStore.isLogin = true;
-        const {from} = this.props.location.state || {from: {pathname: '/'}};
-        this.props.history.replace(from)
+    register = () => {
+        // const {userStore} = this.props;
+        // userStore.isLogin = true;
+        // const {from} = this.props.location.state || {from: {pathname: '/'}};
+        // this.props.history.replace(from)
     };
 
     render() {
@@ -29,6 +29,16 @@ class Login extends Component {
                         placeholder="请输入你的登录帐号"
                     >帐号</InputItem>
                     <InputItem
+                        {...getFieldProps('username')}
+                        clear
+                        placeholder="请输入你的真实姓名"
+                    >真实姓名</InputItem>
+                    <InputItem
+                        {...getFieldProps('username')}
+                        clear
+                        placeholder="请输入你的手机号码"
+                    >手机号码</InputItem>
+                    <InputItem
                         {...getFieldProps('phone')}
                         clear
                         type="password"
@@ -38,13 +48,13 @@ class Login extends Component {
 
                 <WhiteSpace size="lg"/>
                 <WingBlank size="sm">
-                    <Button onClick={this.login} type="primary">登录</Button>
+                    <Button onClick={this.register} type="primary">马上注册</Button>
                     <WhiteSpace size="lg"/>
-                    <Button onClick={() => {history.push('/register')}}>注册</Button>
+                    <Button onClick={this.login}>注册</Button>
                 </WingBlank>
             </div>
         );
     }
 }
 
-export default createForm()(Login)
+export default createForm()(Register)
