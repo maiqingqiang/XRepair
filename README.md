@@ -1,7 +1,7 @@
 # XRepair
 X报修平台
 
-ThinkPHP5 + React + React Router V4 + Mobx +Antd-mobile
+ThinkPHP5 + React + React Router V4 + Mobx +Antd-mobile + JWT
 
 ![home](Preview/home.png)
 ![me](Preview/me.png)
