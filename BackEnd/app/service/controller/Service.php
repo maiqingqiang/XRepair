@@ -135,9 +135,9 @@ class Service extends Base
         $entity = session('userInfo');
 
         $entity = array(
-            'id' => 126, //2997
-            'nickname' => '365D1!',
-            'phone' => '15078812525'
+            'id' => 1, //2997
+            'nickname' => 'Admin',
+            'phone' => '12345678912'
         );
 
         $result = $this->getLoginInfo($entity);
