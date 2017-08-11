@@ -8,6 +8,8 @@ import routes from './router';
 import axios from 'axios';
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+axios.defaults.baseURL = 'http://192.168.31.188';
+axios.defaults.baseURL = 'http://localhost';
 
 React.Component.prototype.axios = axios;
 

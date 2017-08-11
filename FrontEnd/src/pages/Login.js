@@ -17,8 +17,9 @@ class Login extends Component {
     };
 
     render() {
-        const {getFieldProps} = this.props.form;
+        const {getFieldProps,getFieldsValue} = this.props.form;
         const {history} = this.props;
+        console.log(getFieldsValue)
         return (
             <div id="login">
                 <HeadTitle title="登录" subTitle="X 报修平台 by Mak"/>
