@@ -17,17 +17,19 @@ class WebAppBaseController extends BaseController
 
     public function _initializeView()
     {
+
+        $template = "template";
         $root = cmf_get_root();
 
         $viewReplaceStr = [
             '__ROOT__'     => $root,
-            '__TMPL__'     => "{$root}",
+            '__TMPL__'     => "{$root}/$template",
             '__STATIC__'   => "{$root}/static",
             '__WEB_ROOT__' => $root
         ];
 
         $viewReplaceStr = array_merge(config('view_replace_str'), $viewReplaceStr);
-        config('template.view_base', "./");
+        config('template.view_base', "$template/");
         config('view_replace_str', $viewReplaceStr);
     }
 

@@ -66,7 +66,7 @@
         p = t(65),
         d = t.n(p);
     d.a.defaults.headers.post["Content-Type"] = "application/x-www-form-urlencoded", r.a.Component.prototype.axios = d.a;
-    var b = "localhost" === _$1.window.location.host ? "/XRepair/BackEnd/public/webapp/app" : "";
+    var b = "localhost" === _$1.window.location.host ? "/XRepair/BackEnd/public/webapp/app/index" : "";
     a.a.render(r.a.createElement(u.Provider, s, r.a.createElement(l.a, {
       basename: b
     }, r.a.createElement("div", null, r.a.createElement(l.d, null, f.a.map(function (e, n) {
@@ -84,10 +84,10 @@
 
     function i() {
       if ("serviceWorker" in navigator) {
-        if (new URL("/XRepair/BackEnd/public/webapp/app", _$1.window.location).origin !== _$1.window.location.origin) return;
+        if (new URL("/XRepair/BackEnd/public/template/webapp/app", _$1.window.location).origin !== _$1.window.location.origin) return;
 
         _$1.window.addEventListener("load", function () {
-          var e = "/XRepair/BackEnd/public/webapp/app/service-worker.js";
+          var e = "/XRepair/BackEnd/public/template/webapp/app/service-worker.js";
           a ? o(e) : r(e);
         });
       }

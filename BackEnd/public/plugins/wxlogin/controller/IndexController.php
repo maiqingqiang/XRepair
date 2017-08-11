@@ -16,8 +16,10 @@ class IndexController extends PluginBaseController
     function index()
     {
         $this->config = $this->getPlugin('Wxlogin')->getConfig();
-        $appid = $this->config['appid'];
-        $appkey = $this->config['appkey'];
+//        $appid = $this->config['appid'];
+        $appid = 'wxfd4ab1b9bf40bcd1';
+//        $appkey = $this->config['appkey'];
+        $appkey = 'a65711d69478af49bf33f671e9966abf';
         $redirect_uri = cmf_plugin_url('Wxlogin://Index/index',array(),true);//回调地址
         $year = date("Y");
         $month = date("m");
@@ -25,8 +27,10 @@ class IndexController extends PluginBaseController
         $dayBegin = mktime(0, 0, 0, $month, $day, $year);
         if (!isset($_GET['code'])) {
             $state = md5(uniqid(rand(), true));
-            $callback = urlencode($redirect_uri);
+            $callback = urlencode('http://www.xiaotaokeji.com');
             $wxurl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=$appid&redirect_uri=$callback&response_type=code&scope=snsapi_userinfo&state=$state#wechat_redirect";
+            echo $wxurl;
+            exit();
             header("Location: $wxurl");
         }else{
             $url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' . $appid .'&secret=' . $appkey . '&code=' . $_GET['code'] .'&grant_type=authorization_code';
@@ -60,8 +64,12 @@ class IndexController extends PluginBaseController
             $userinfo['openid'] = $openid;
 
             $log = registerOauth($userinfo);
+
+            echo 12;
         }
-        return $this->fetch("/index");
+        echo 12;
+
+//        return $this->fetch("/index");
     }
 }
 

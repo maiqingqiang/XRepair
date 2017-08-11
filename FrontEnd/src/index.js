@@ -39,7 +39,7 @@ React.Component.prototype.axios = axios;
 //         return Promise.reject(error.response.data) // 返回接口返回的错误信息
 //     });
 
-let basename =window.location.host==='localhost'?'/XRepair/BackEnd/public/webapp/app':'';
+let basename =window.location.host==='localhost'?'/XRepair/BackEnd/public/webapp/app/index':'';
 
 ReactDOM.render(
     <Provider {...store}>
