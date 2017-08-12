@@ -1,73 +1,83 @@
 import React, {Component} from 'react'
 import {observer, inject} from 'mobx-react';
-import {List, InputItem, Button, WhiteSpace, WingBlank,Toast} from 'antd-mobile';
+import {List, InputItem, Button, WhiteSpace, WingBlank, Toast} from 'antd-mobile';
 import {HeadTitle} from './../components/Index'
 import {createForm} from 'rc-form';
 import Qs from 'qs';
 import '../styles/pages/Register.less';
 import Geetest from 'geetest3'
-import $ from 'jquery'
+
+const Item = List.Item;
 
 @inject('userStore')
 @observer
 class Register extends Component {
 
-    componentDidMount(){
+    state = {
+        captchaTips: true
+    };
+
+    constructor(props) {
+        super(props);
+        this.captcha = null;
+        this.random = (new Date()).getTime();
+        this.offline = 0;
+    }
+
+    componentDidMount() {
         this.initCaptcha();
     }
 
     register = () => {
-        Toast.loading('正在提交……',0);
-        let data = this.props.form.getFieldsValue();
-        this.axios.post('/XRepair/BackEnd/public/service/public/register',Qs.stringify(data)).then((res)=>{
-            let data = res.data;
-            if (data.code==200){
-                Toast.success(data.message+',2s后自动跳转~~',2,()=>this.props.history.push('/login'));
-            }else {
-                Toast.fail(data.message,1.5);
-            }
-        }).catch((e)=>{
-            Toast.offline(e.message,1.5);
-        });
+        let result = this.captcha.getValidate();
+
+        if (this.captcha.getValidate()) {
+            let data = Object.assign(this.props.form.getFieldsValue(), result, {
+                random: this.random,
+                offline: this.offline
+            });
+
+            this.axios.post('/XRepair/BackEnd/public/service/public/register', Qs.stringify(data)).then((res) => {
+                let data = res.data;
+                if (data.code == 200) {
+                    Toast.success(data.message + ',2s后自动跳转~~', 2, () => this.props.history.push('/login'));
+                } else{
+                    this.captcha.reset();
+                    Toast.fail(data.message, 1.5);
+                }
+            }).catch((e) => {
+                this.captcha.reset();
+                Toast.offline(e.message, 1.5);
+            });
+        } else {
+            Toast.fail('未点击验证', 1.5);
+        }
+
     };
 
-    initCaptcha=()=>{
-        let data = this.props.form.getFieldsValue();
-        this.axios.post('/XRepair/BackEnd/public/service/public/initCaptcha',Qs.stringify(data)).then((res)=>{
+    initCaptcha = () => {
+        let _this = this;
+        this.axios.post('/XRepair/BackEnd/public/service/public/initCaptcha', Qs.stringify({random: this.random})).then((res) => {
             let data = res.data;
-            if (data.success==1){
-                let captcha = new Geetest({
-                    gt: data.gt,
-                    challenge: data.challenge,
-                    offline: !data.success,
-                    // jsonp: true,
-                    lang: 'en',
-                    width: '100%',
-                    product: 'custom',
-                    area: '#captcha', // 假设页面有一个id为area的标签
-                    next_width: '7rem',
-                    bg_color: 'black'
-                });
-                captcha.appendTo('#captcha');
-
-                captcha.onReady(function () {
-                    $('#tip').hide();
-                });
-
-                $('#submit').click(function (e) {
-                    var result = captcha.getValidate();
-                    if (result) {
-                        // login(result);
-                    } else {
-                        alert('please complete verification');
-                    }
-                    e.preventDefault();
-                })
-            }else {
-                Toast.fail('验证码初始化失败',1.5);
-            }
-        }).catch((e)=>{
-            Toast.offline(e.message,1.5);
+            this.offline = data.success ? 0 : 1;
+            this.captcha = new Geetest({
+                gt: data.gt,
+                challenge: data.challenge,
+                offline: !data.success,
+                // jsonp: true,
+                lang: 'zh-cn',
+                width: '100%',
+                product: 'custom',
+                area: '#captcha', // 假设页面有一个id为area的标签
+                next_width: '6rem',
+                bg_color: 'black'
+            });
+            this.captcha.appendTo('#captcha');
+            this.captcha.onReady(function () {
+                _this.setState({captchaTips: false})
+            });
+        }).catch((e) => {
+            Toast.offline(e.message, 1.5);
         });
     };
 
@@ -112,22 +122,12 @@ class Register extends Component {
                         type="email"
                         placeholder="请输入你的登录密码"
                     >再输入密码</InputItem>
-                    <div className="field">
-                        <label>verify: </label>
-                        <div id="captcha" style={{height:'0.88rem',width:'100%'}}></div>
-                        <div id="tip">loading captcha</div>
-                    </div>
-                    {/*<InputItem*/}
-                        {/*{...getFieldProps('captcha')}*/}
-                        {/*placeholder="请输入验证码"*/}
-                        {/*className='captcha'*/}
-                        {/*extra={<img*/}
-                            {/*src={this.axios.defaults.baseURL+'/XRepair/BackEnd/public/captcha/new.html?width=160&amp;font_size=30'}*/}
-                            {/*onClick={(_el) => {*/}
-                                {/*_el.target.src = this.axios.defaults.baseURL+'/XRepair/BackEnd/public/captcha/new.html?width=160&amp;font_size=30&amp;time=' + Math.random();*/}
-                            {/*}}*/}
-                            {/*title="点击换一张"/>}*/}
-                    {/*>验证码</InputItem>*/}
+                </List>
+
+                <List renderHeader={() => '验证'}>
+                    <div id="captcha"></div>
+                    {this.state.captchaTips ? '正在加载验证码……' : ''}
+                    {/*<div id="Tips">正在加载验证码……</div>*/}
                 </List>
 
                 <WhiteSpace size="lg"/>

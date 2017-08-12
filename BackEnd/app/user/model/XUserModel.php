@@ -50,4 +50,114 @@ class XUserModel extends Model {
             return 2;
         }
     }
+
+    public function doMobile($user)
+    {
+        $userQuery = Db::name("user");
+
+        $result = $userQuery->where('mobile', $user['mobile'])->find();
+
+
+        if (!empty($result)) {
+            $comparePasswordResult = cmf_compare_password($user['user_pass'], $result['user_pass']);
+//            $hookParam =[
+//                'user'=>$user,
+//                'compare_password_result'=>$comparePasswordResult
+//            ];
+//            hook_one("user_login_start",$hookParam);
+            if ($comparePasswordResult) {
+                //拉黑判断。
+                if($result['user_status']==0){
+                    return 3;
+                }
+                $data = [
+                    'last_login_time' => time(),
+                    'last_login_ip'   => get_client_ip(0, true),
+                ];
+                $userQuery->where('id', $result["id"])->update($data);
+                return 0;
+            }
+            return 1;
+        }
+//        $hookParam =[
+//            'user'=>$user,
+//            'compare_password_result'=>false
+//        ];
+//        hook_one("user_login_start",$hookParam);
+        return 2;
+    }
+
+    public function doName($user)
+    {
+        $userQuery = Db::name("user");
+
+        $result = $userQuery->where('user_login', $user['user_login'])->find();
+        if (!empty($result)) {
+            $comparePasswordResult = cmf_compare_password($user['user_pass'], $result['user_pass']);
+//            $hookParam =[
+//                'user'=>$user,
+//                'compare_password_result'=>$comparePasswordResult
+//            ];
+//            hook_one("user_login_start",$hookParam);
+            if ($comparePasswordResult) {
+                //拉黑判断。
+                if($result['user_status']==0){
+                    return 3;
+                }
+                session('user', $result);
+                $data = [
+                    'last_login_time' => time(),
+                    'last_login_ip'   => get_client_ip(0, true),
+                ];
+                $userQuery->where('id', $result["id"])->update($data);
+                return 0;
+            }
+            return 1;
+        }
+//        $hookParam =[
+//            'user'=>$user,
+//            'compare_password_result'=>false
+//        ];
+//        hook_one("user_login_start",$hookParam);
+        return 2;
+    }
+
+    public function doEmail($user)
+    {
+
+        $userQuery = Db::name("user");
+
+        $result = $userQuery->where('user_email', $user['user_email'])->find();
+
+
+        if (!empty($result)) {
+            $comparePasswordResult = cmf_compare_password($user['user_pass'], $result['user_pass']);
+//            $hookParam =[
+//                'user'=>$user,
+//                'compare_password_result'=>$comparePasswordResult
+//            ];
+//            hook_one("user_login_start",$hookParam);
+            if ($comparePasswordResult) {
+
+                //拉黑判断。
+                if($result['user_status']==0){
+                    return 3;
+                }
+                session('user', $result);
+                $data = [
+                    'last_login_time' => time(),
+                    'last_login_ip'   => get_client_ip(0, true),
+                ];
+                $userQuery->where('id', $result["id"])->update($data);
+                return 0;
+            }
+            return 1;
+        }
+//        $hookParam =[
+//            'user'=>$user,
+//            'compare_password_result'=>false
+//        ];
+//        hook_one("user_login_start",$hookParam);
+        return 2;
+    }
 }

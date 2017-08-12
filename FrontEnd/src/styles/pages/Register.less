@@ -1,13 +1,139 @@
 #register {
-  .captcha {
-    padding-right: 0;
-    .am-input-extra {
-      max-height: 0.88rem;
-      img{
-        cursor: pointer;
-        width:2.5rem;
-        height: 0.88rem;
-      }
-    }
+  .geetest_holder.geetest_wind {
+    position: relative;
+    width: 5.2rem;
+    min-width: 5.2rem;
+    height: 0.88rem;
   }
+
+  .geetest_holder.geetest_wind .geetest_radar {
+    position: absolute;
+    margin: 0.12rem;
+    width: 0.6rem;
+    height: 0.6rem;
+    -moz-transition: all .5s ease;
+    -o-transition: all .5s ease;
+    -webkit-transition: all .5s ease;
+    transition: all .5s ease;
+  }
+
+  .geetest_holder.geetest_wind .geetest_radar_tip, .geetest_holder.geetest_wind .geetest_success_radar_tip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    padding: 0 0 0 0.92rem;
+    height: 0.84rem;
+    width: 100%;
+    line-height: 0.84rem;
+    font-size: 0.28rem;
+    color: #666;
+    white-space: nowrap;
+    text-align: left;
+    -moz-transform: translate3d(0, 0, 0);
+    -ms-transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  .geetest_holder.geetest_wind .geetest_radar_tip .geetest_reset_tip_content, .geetest_holder.geetest_wind .geetest_success_radar_tip .geetest_reset_tip_content {
+    margin-left: 0.1rem;
+    color: #005aff;
+    cursor: pointer;
+    display: none;
+  }
+
+  .geetest_holder.geetest_wind .geetest_logo, .geetest_holder.geetest_wind .geetest_success_logo {
+    position: absolute;
+    right: 0.24rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    top: 0.2rem;
+    background-size: 290%;
+    background-position: 0 39.07634%;
+  }
+
+  .geetest_holder.geetest_wind .geetest_wait {
+    top: 0;
+    position: absolute;
+    margin: 0.34rem 0.24rem;
+    font-size: 0;
+    opacity: 0;
+    -moz-transition: opacity .5s ease;
+    -o-transition: opacity .5s ease;
+    -webkit-transition: opacity .5s ease;
+    transition: opacity .5s ease;
+  }
+
+  .geetest_holder.geetest_wind .geetest_success_btn .geetest_success_box {
+    position: absolute;
+    top: 0.18rem;
+    left: 0.14rem;
+    border-radius: 50%;
+    width: 0.48rem;
+    height: 0.48rem;
+  }
+
+  .geetest_holder.geetest_wind .geetest_success_btn .geetest_success_box .geetest_success_show {
+    position: relative;
+    left: 0;
+    top: 0;
+    width: 0.48rem;
+    height: 0.48rem;
+    background-color: #EEFFF5;
+    display: none \9;
+  }
+
+  .geetest_holder.geetest_wind .geetest_success_btn .geetest_success_box .geetest_success_correct {
+    position: absolute;
+    right: -0.08rem;
+    top: -0.08rem;
+    border-radius: 50%;
+    width: 0.56rem;
+    height: 0.56rem;
+    overflow: hidden;
+    -moz-transform: translate3d(0, 0, 0);
+    -ms-transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  .geetest_holder.geetest_wind .geetest_success_btn .geetest_success_box .geetest_success_correct .geetest_success_icon {
+    position: absolute;
+    top: 0.12rem;
+    right: 0.12rem;
+    width: 0.36rem;
+    height: 0.36rem;
+    background-size: 322.22222%;
+    background-position: 0 71.53558%;
+    -moz-transform: translate(-0.56rem, 0.56rem);
+    -ms-transform: translate(-0.56rem, 0.56rem);
+    -webkit-transform: translate(-0.56rem, 0.56rem);
+    transform: translate(-0.56rem, 0.56rem);
+  }
+
+  .geetest_holder.geetest_mobile.geetest_ant .geetest_widget .geetest_window .geetest_result {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    color: white;
+    bottom: -0.5rem !important;
+    height: 0.48rem !important;
+    -moz-transition: bottom .3s ease;
+    -o-transition: bottom .3s ease;
+    -webkit-transition: bottom .3s ease;
+    transition: bottom .3s ease;
+  }
+
+  .geetest_holder.geetest_mobile.geetest_ant .geetest_widget .geetest_window .geetest_result .geetest_result_content {
+    position: absolute;
+    top: 0 !important;
+    text-indent: 0.32rem !important;
+    font-size: 0.28rem !important;
+    line-height: 0.48rem !important;
+    height: 0.48rem !important;
+  }
+
 }
+
+

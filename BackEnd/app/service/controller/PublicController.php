@@ -19,14 +19,70 @@ class PublicController extends BaseController {
         header('Access-Control-Allow-Methods: GET, POST, PUT,DELETE');
     }
 
+    public function login(){
+        if (request()->isPost()) {
+            $validate = new Validate([
+                'username' => 'require',
+                'password' => 'require|min:5|max:32',
+            ]);
+            $validate->message([
+                'username.require' => '用户名不能为空',
+                'password.require' => '密码不能为空',
+                'password.max'     => '密码不能超过32个字符',
+                'password.min'     => '密码不能小于5个字符',
+            ]);
+
+            $data = request()->post();
+            if (!$validate->check($data)) {
+                return json(['code' => 400,
+                    'message' => $validate->getError()]);
+            }
+
+            if (!$this->captcha($data['random'], $data['offline'], $data['geetest_challenge'], $data['geetest_validate'], $data['geetest_seccode'])) {
+                return json(['code' => 401,
+                    'message' => '验证码错误']);
+            }
+
+            $userModel         = new XUserModel();
+            $user['user_pass'] = $data['password'];
+            if (filter_var($data['username'], FILTER_VALIDATE_EMAIL)) {
+                $user['user_email'] = $data['username'];
+                $log                = $userModel->doEmail($user);
+            } else if (preg_match('/(^(13\d|15[^4\D]|17[13678]|18\d)\d{8}|170[^346\D]\d{7})$/', $data['username'])) {
+                $user['mobile'] = $data['username'];
+                $log            = $userModel->doMobile($user);
+            } else {
+                $user['user_login'] = $data['username'];
+                $log                = $userModel->doName($user);
+            }
+            switch ($log) {
+                case 0:
+                    return json(['code' => 200, 'message' => '登录成功']);
+                    break;
+                case 1:
+                    return json(['code' => 400, 'message' => '登录密码错误']);
+                    break;
+                case 2:
+                    return json(['code' => 400, 'message' => '账户不存在']);
+                    break;
+                case 3:
+                    return json(['code' => 400, 'message' => '账号被禁止访问系统']);
+                    break;
+                default :
+                    return json(['code' => 400, 'message' => '未受理的请求']);
+            }
+        } else {
+            return json(['code' => 500, 'message' => '请求错误']);
+        }
+    }
+
     public function register() {
         if (request()->isPost()) {
-            $rules = ['username' => 'require|min:4|max:12|alphaDash|unique:user,user_login',
+            $rules = ['username' => 'require|min:4|max:10|alphaDash|unique:user,user_login',
                 'name' => 'require|min:2|chs',
                 'email' => 'require|email|unique:user,user_email',
                 'mobile' => 'require|length:11|unique:user,mobile',
-//                'captcha' => 'require',
-                'password' => 'require|min:6|max:32|confirm',];
+                'password' => 'require|min:5|max:32|confirm',];
 
             $isOpenRegistration = cmf_is_open_registration();
 
@@ -38,7 +94,7 @@ class PublicController extends BaseController {
             $validate = new Validate($rules);
             $validate->message(['username.require' => '用户名不能为空',
                 'username.min' => '用户名不能小于4个字符',
-                'username.max' => '用户名不能大于12个字符',
+                'username.max' => '用户名不能大于10个字符',
                 'username.alphaDash' => '用户名存在不支持字符',
                 'username.unique' => '用户名已存在',
                 'name.require' => '姓名不能为空',
@@ -50,10 +106,9 @@ class PublicController extends BaseController {
                 'mobile.require' => '手机号码不能为空',
                 'mobile.length' => '手机号码长度只能为11位',
                 'mobile.unique' => '手机号码已使用',
-//                'captcha.require' => '验证码不能为空',
                 'password.require' => '密码不能为空',
                 'password.max' => '密码不能超过32个字符',
-                'password.min' => '密码不能小于6个字符',
+                'password.min' => '密码不能小于5个字符',
                 'password.confirm' => '两个密码不一样',]);
 
             $data = request()->post();
@@ -67,10 +122,10 @@ class PublicController extends BaseController {
                     'message' => $validate->getError()]);
             }
 
-//            if (!cmf_captcha_check($data['captcha'])) {
-//                return json(['code' => 400,
-//                    'message' => '验证码错误']);
-//            }
+            if (!$this->captcha($data['random'], $data['offline'], $data['geetest_challenge'], $data['geetest_validate'], $data['geetest_seccode'])) {
+                return json(['code' => 401,
+                    'message' => '验证码错误']);
+            }
 
             $model = new XUserModel();
 
@@ -101,20 +156,41 @@ class PublicController extends BaseController {
 
     }
 
-    public function captcha($geetest_challenge,$geetest_validate,$geetest_seccode)
-    {
+    private function captcha($random, $offline, $geetest_challenge, $geetest_validate, $geetest_seccode) {
+        $data = array("user_id" => $random,
+            "client_type" => "h5",
+            "ip_address" => get_client_ip());
+
         $GtSdk = new GeetestLib(config('geetest_captcha_id'), config('geetest_private_key'));
-        if ($GtSdk->fail_validate($_POST['geetest_challenge'], $_POST['geetest_validate'], $_POST['geetest_seccode'])) {
-            echo '{"status":"success"}';
-        } else {
-            echo '{"status":"fail"}';
+
+        if ($offline==1) {   //服务器正常
+            if ($GtSdk->fail_validate($geetest_challenge, $geetest_validate, $geetest_seccode)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {  //服务器宕机,走failback模式
+            $result = $GtSdk->success_validate($geetest_challenge, $geetest_validate, $geetest_seccode, $data);
+            if ($result) {
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 
-    public function initCaptcha()
-    {
+
+    public function initCaptcha() {
+        $random = input('random');
+
         $GtSdk = new GeetestLib(config('geetest_captcha_id'), config('geetest_private_key'));
-        $GtSdk->pre_process();
+
+        $data = array("user_id" => $random,
+            "client_type" => "h5",
+            "ip_address" => get_client_ip());
+
+        $GtSdk->pre_process($data, 1);
+
         return $GtSdk->get_response_str();
     }
 }
