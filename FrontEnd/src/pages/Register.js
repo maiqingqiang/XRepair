@@ -120,7 +120,7 @@ class Register extends Component {
                         {...getFieldProps('password_confirm')}
                         clear
                         type="email"
-                        placeholder="请输入你的登录密码"
+                        placeholder="请再次输入你的登录密码"
                     >再输入密码</InputItem>
                 </List>
 
