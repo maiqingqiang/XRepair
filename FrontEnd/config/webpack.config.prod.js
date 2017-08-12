@@ -281,7 +281,10 @@ module.exports = {
             filename: '[name]_[hash].js',
             entry: {
                 vendor: Object.keys(pkg.dependencies),
-            }
+            },
+            plugins: [
+                new webpack.optimize.UglifyJsPlugin()
+            ]
         }),
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',

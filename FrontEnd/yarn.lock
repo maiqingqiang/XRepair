@@ -7442,6 +7442,10 @@ yargs@~3.10.0:
     decamelize "^1.0.0"
     window-size "0.1.0"
 
+zepto@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/zepto/-/zepto-1.2.0.tgz#e127bd9e66fd846be5eab48c1394882f7c0e4f98"
+
 zscroller@~0.3.0:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/zscroller/-/zscroller-0.3.1.tgz#def4d040378de4297fd3cd31169119e65363dcf7"
