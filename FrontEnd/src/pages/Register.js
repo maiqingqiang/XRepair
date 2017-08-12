@@ -41,9 +41,13 @@ class Register extends Component {
                     gt: data.gt,
                     challenge: data.challenge,
                     offline: !data.success,
-                    product: 'embed',
                     // jsonp: true,
-                    lang: 'en'
+                    lang: 'en',
+                    width: '100%',
+                    product: 'custom',
+                    area: '#captcha', // 假设页面有一个id为area的标签
+                    next_width: '7rem',
+                    bg_color: 'black'
                 });
                 captcha.appendTo('#captcha');
 
@@ -111,7 +115,7 @@ class Register extends Component {
                     >再输入密码</InputItem>
                     <div className="field">
                         <label>verify: </label>
-                        <div id="captcha"></div>
+                        <div id="captcha" style={{height:'0.88rem',width:'100%'}}></div>
                         <div id="tip">loading captcha</div>
                     </div>
                     {/*<InputItem*/}

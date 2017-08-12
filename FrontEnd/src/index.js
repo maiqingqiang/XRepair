@@ -8,8 +8,8 @@ import routes from './router';
 import axios from 'axios';
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-axios.defaults.baseURL = 'http://192.168.31.188';
-axios.defaults.baseURL = 'http://localhost';
+axios.defaults.baseURL = 'http://192.168.2.106';
+// axios.defaults.baseURL = 'http://localhost';
 
 React.Component.prototype.axios = axios;
 
@@ -41,7 +41,7 @@ React.Component.prototype.axios = axios;
 //         return Promise.reject(error.response.data) // 返回接口返回的错误信息
 //     });
 
-let basename =window.location.host==='localhost'?'/XRepair/BackEnd/public/webapp/app/index':'';
+let basename =window.location.host==='192.168.2.106'?'/XRepair/BackEnd/public/webapp/app/index':'';
 
 ReactDOM.render(
     <Provider {...store}>

@@ -134,16 +134,25 @@
   function _5(e, t, n) {
     "use strict";
 
-    function o(e, t) {
-      if (!(e instanceof t)) throw new _$1.TypeError("Cannot call a class as a function");
+    function o(e, t, n) {
+      return t in e ? _$1.Object.defineProperty(e, t, {
+        value: n,
+        enumerable: !0,
+        configurable: !0,
+        writable: !0
+      }) : e[t] = n, e;
     }
 
     function i(e, t) {
+      if (!(e instanceof t)) throw new _$1.TypeError("Cannot call a class as a function");
+    }
+
+    function r(e, t) {
       if (!e) throw new _$1.ReferenceError("this hasn't been initialised - super() hasn't been called");
       return !t || "object" !== typeof t && "function" !== typeof t ? e : t;
     }
 
-    function r(e, t) {
+    function a(e, t) {
       if ("function" !== typeof t && null !== t) throw new _$1.TypeError("Super expression must either be null or a function, not " + typeof t);
       e.prototype = _$1.Object.create(t && t.prototype, {
         constructor: {
@@ -159,35 +168,39 @@
       value: !0
     });
 
-    var a,
-        l,
-        s = n(168),
-        u = (n.n(s), n(169)),
-        c = n.n(u),
-        d = n(131),
-        f = (n.n(d), n(132)),
-        p = n.n(f),
-        m = n(170),
-        h = (n.n(m), n(171)),
-        b = n.n(h),
-        v = n(99),
-        y = (n.n(v), n(133)),
-        g = n.n(y),
-        E = n(189),
-        _ = (n.n(E), n(190)),
-        w = n.n(_),
-        k = n(351),
-        A = (n.n(k), n(354)),
-        x = n.n(A),
-        C = n(0),
-        O = n.n(C),
-        R = n(17),
-        S = (n.n(R), n(166)),
-        P = n(191),
-        T = n(369),
-        N = n.n(T),
-        D = n(370),
-        M = (n.n(D), _$1.Object.assign || function (e) {
+    var l,
+        s,
+        u = n(168),
+        c = (n.n(u), n(169)),
+        d = n.n(c),
+        f = n(131),
+        p = (n.n(f), n(132)),
+        m = n.n(p),
+        h = n(170),
+        b = (n.n(h), n(171)),
+        v = n.n(b),
+        y = n(99),
+        g = (n.n(y), n(133)),
+        E = n.n(g),
+        _ = n(189),
+        w = (n.n(_), n(190)),
+        k = n.n(w),
+        A = n(351),
+        x = (n.n(A), n(354)),
+        C = n.n(x),
+        O = n(0),
+        R = n.n(O),
+        S = n(17),
+        P = (n.n(S), n(166)),
+        T = n(191),
+        N = n(369),
+        D = n.n(N),
+        M = n(370),
+        z = (n.n(M), n(372)),
+        L = n.n(z),
+        I = n(373),
+        B = n.n(I),
+        j = _$1.Object.assign || function (e) {
       for (var t = 1; t < arguments.length; t++) {
         var n = arguments[t];
 
@@ -195,8 +208,8 @@
       }
 
       return e;
-    }),
-        z = function () {
+    },
+        V = function () {
       function e(e, t) {
         for (var n = 0; n < t.length; n++) {
           var o = t[n];
@@ -208,78 +221,117 @@
         return n && e(t.prototype, n), o && e(t, o), t;
       };
     }(),
-        L = (a = _$1.Object(R.inject)("userStore"))(l = _$1.Object(R.observer)(l = function (e) {
+        F = (l = _$1.Object(S.inject)("userStore"))(s = _$1.Object(S.observer)(s = function (e) {
       function t() {
-        var e, n, r, a;
-        o(this, t);
+        var e, n, a, l;
+        i(this, t);
 
-        for (var l = arguments.length, s = _$1.Array(l), u = 0; u < l; u++) s[u] = arguments[u];
+        for (var s = arguments.length, u = _$1.Array(s), c = 0; c < s; c++) u[c] = arguments[c];
 
-        return n = r = i(this, (e = t.__proto__ || _$1.Object.getPrototypeOf(t)).call.apply(e, [this].concat(s))), r.register = function () {
-          x.a.loading("\u6b63\u5728\u63d0\u4ea4\u2026\u2026", 0);
-          var e = r.props.form.getFieldsValue();
-          r.axios.post("/XRepair/BackEnd/public/service/public/register", N.a.stringify(e)).then(function (e) {
+        return n = a = r(this, (e = t.__proto__ || _$1.Object.getPrototypeOf(t)).call.apply(e, [this].concat(u))), a.register = function () {
+          C.a.loading("\u6b63\u5728\u63d0\u4ea4\u2026\u2026", 0);
+          var e = a.props.form.getFieldsValue();
+          a.axios.post("/XRepair/BackEnd/public/service/public/register", D.a.stringify(e)).then(function (e) {
             var t = e.data;
-            200 == t.code ? x.a.success(t.message + ",2s\u540e\u81ea\u52a8\u8df3\u8f6c~~", 2, function () {
-              return r.props.history.push("/login");
-            }) : x.a.fail(t.message, 1.5);
+            200 == t.code ? C.a.success(t.message + ",2s\u540e\u81ea\u52a8\u8df3\u8f6c~~", 2, function () {
+              return a.props.history.push("/login");
+            }) : C.a.fail(t.message, 1.5);
           }).catch(function (e) {
-            x.a.offline(e.message, 1.5);
+            C.a.offline(e.message, 1.5);
           });
-        }, a = n, i(r, a);
+        }, a.initCaptcha = function () {
+          var e = a.props.form.getFieldsValue();
+          a.axios.post("/XRepair/BackEnd/public/service/public/initCaptcha", D.a.stringify(e)).then(function (e) {
+            var t = e.data;
+
+            if (_$1.console.log(t), 1 == t.success) {
+              var n,
+                  i = new L.a((n = {
+                gt: t.gt,
+                challenge: t.challenge,
+                offline: !t.success,
+                product: "embed",
+                lang: "en",
+                width: "100%"
+              }, o(n, "product", "custom"), o(n, "area", "#captcha"), o(n, "next_width", "7rem"), o(n, "bg_color", "black"), n));
+              i.appendTo("#captcha"), i.onReady(function () {
+                B()("#tip").hide();
+              }), B()("#submit").click(function (e) {
+                i.getValidate() || alert("please complete verification"), e.preventDefault();
+              });
+            } else C.a.fail("\u9a8c\u8bc1\u7801\u521d\u59cb\u5316\u5931\u8d25", 1.5);
+          }).catch(function (e) {
+            C.a.offline(e.message, 1.5);
+          });
+        }, l = n, r(a, l);
       }
 
-      return r(t, e), z(t, [{
+      return a(t, e), V(t, [{
+        key: "componentDidMount",
+        value: function () {
+          this.initCaptcha();
+        }
+      }, {
         key: "render",
         value: function () {
           var e = this.props.form.getFieldProps,
               t = this.props.history;
-          return O.a.createElement("div", {
+          return R.a.createElement("div", {
             id: "register"
-          }, O.a.createElement(S.a, {
+          }, R.a.createElement(P.a, {
             title: "\u767b\u5f55",
             subTitle: "X \u62a5\u4fee\u5e73\u53f0 by Mak"
-          }), O.a.createElement(g.a, null, O.a.createElement(w.a, M({}, e("username"), {
+          }), R.a.createElement(E.a, null, R.a.createElement(k.a, j({}, e("username"), {
             clear: !0,
             placeholder: "\u8bf7\u8f93\u5165\u4f60\u7684\u5e10\u53f7"
-          }), "\u5e10\u53f7"), O.a.createElement(w.a, M({}, e("name"), {
+          }), "\u5e10\u53f7"), R.a.createElement(k.a, j({}, e("name"), {
             clear: !0,
             placeholder: "\u8bf7\u8f93\u5165\u4f60\u7684\u771f\u5b9e\u59d3\u540d"
-          }), "\u771f\u5b9e\u59d3\u540d"), O.a.createElement(w.a, M({}, e("mobile"), {
+          }), "\u771f\u5b9e\u59d3\u540d"), R.a.createElement(k.a, j({}, e("mobile"), {
             clear: !0,
             type: "phone",
             placeholder: "\u8bf7\u8f93\u5165\u4f60\u7684\u624b\u673a\u53f7\u7801"
-          }), "\u624b\u673a\u53f7\u7801"), O.a.createElement(w.a, M({}, e("email"), {
+          }), "\u624b\u673a\u53f7\u7801"), R.a.createElement(k.a, j({}, e("email"), {
             clear: !0,
             type: "email",
             placeholder: "\u8bf7\u8f93\u5165\u4f60\u7684\u90ae\u7bb1"
-          }), "\u90ae\u7bb1"), O.a.createElement(w.a, M({}, e("password"), {
+          }), "\u90ae\u7bb1"), R.a.createElement(k.a, j({}, e("password"), {
             clear: !0,
             type: "email",
             placeholder: "\u8bf7\u8f93\u5165\u4f60\u7684\u767b\u5f55\u5bc6\u7801"
-          }), "\u5bc6\u7801"), O.a.createElement(w.a, M({}, e("password_confirm"), {
+          }), "\u5bc6\u7801"), R.a.createElement(k.a, j({}, e("password_confirm"), {
             clear: !0,
             type: "email",
             placeholder: "\u8bf7\u8f93\u5165\u4f60\u7684\u767b\u5f55\u5bc6\u7801"
-          }), "\u518d\u8f93\u5165\u5bc6\u7801")), O.a.createElement(b.a, {
+          }), "\u518d\u8f93\u5165\u5bc6\u7801"), R.a.createElement("div", {
+            className: "field"
+          }, R.a.createElement("label", null, "verify: "), R.a.createElement("div", {
+            id: "captcha",
+            style: {
+              height: "0.88rem",
+              width: "100%"
+            }
+          }), R.a.createElement("div", {
+            id: "tip"
+          }, "loading captcha"))), R.a.createElement(v.a, {
             size: "lg"
-          }), O.a.createElement(c.a, {
+          }), R.a.createElement(d.a, {
             size: "sm"
-          }, O.a.createElement(p.a, {
+          }, R.a.createElement(m.a, {
             onClick: this.register,
             type: "primary"
-          }, "\u9a6c\u4e0a\u6ce8\u518c"), O.a.createElement(b.a, {
+          }, "\u9a6c\u4e0a\u6ce8\u518c"), R.a.createElement(v.a, {
             size: "lg"
-          }), O.a.createElement(p.a, {
+          }), R.a.createElement(m.a, {
             onClick: function () {
               t.replace("/login");
             }
           }, "\u5df2\u6ce8\u518c\uff0c\u76f4\u63a5\u767b\u5f55")));
         }
       }]), t;
-    }(C.Component)) || l) || l;
+    }(O.Component)) || s) || s;
 
-    t.default = _$1.Object(P.createForm)()(L);
+    t.default = _$1.Object(T.createForm)()(F);
   }
 
   function _6(e, t, n) {
@@ -690,15 +742,15 @@
   }
 
   function _i(e, t, n) {
-    e.exports = n(1)(294);
+    e.exports = n(1)(295);
   }
 
   function _j(e, t, n) {
-    e.exports = n(1)(321);
+    e.exports = n(1)(322);
   }
 
   function _k(e, t, n) {
-    e.exports = n(1)(327);
+    e.exports = n(1)(328);
   }
 
   function _l(e, t, n) {
@@ -1410,7 +1462,7 @@
   }
 
   function _J(e, t, n) {
-    e.exports = n(1)(334);
+    e.exports = n(1)(335);
   }
 
   function _K(e, t, n) {
@@ -3187,7 +3239,7 @@
   }
 
   function _1X(e, t, n) {
-    e.exports = n(1)(290);
+    e.exports = n(1)(291);
   }
 
   function _1Y(e, t, n) {
@@ -4836,7 +4888,7 @@
   }
 
   function _2H(e, t, n) {
-    e.exports = n(1)(287);
+    e.exports = n(1)(288);
   }
 
   function _2I(e, t, n) {
@@ -4852,6 +4904,14 @@
     t = e.exports = n(75)(void 0), t.push([e.i, "#register .captcha{padding-right:0}#register .captcha .am-input-extra{max-height:.88rem}#register .captcha .am-input-extra img{cursor:pointer;width:2.5rem;height:.88rem}", ""]);
   }
 
+  function _2K(e, t, n) {
+    e.exports = n(1)(284);
+  }
+
+  function _2L(e, t, n) {
+    e.exports = n(1)(285);
+  }
+
   var _0 = this;
 
   var _1 = _0.webpackJsonp;
@@ -4860,5 +4920,5 @@
     throw new Error("Prepack model invariant violation: " + _0.webpackJsonp);
   }
 
-  var _$0 = _1([0], [,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,, _4, _5,,,, _6, _7, _8, _9, _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t,, _u, _v, _w, _x, _y, _z, _A, _B, _C, _D, _E, _F, _G, _H, _I, _J, _K, _L, _M, _N, _O, _P, _Q, _R, _S, _T, _U, _V, _W, _X, _Y, _Z, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _1a, _1b, _1c, _1d, _1e, _1f, _1g, _1h, _1i, _1j, _1k, _1l, _1m, _1n, _1o, _1p, _1q, _1r, _1s, _1t, _1u, _1v, _1w, _1x, _1y, _1z, _1A,, _1B, _1C, _1D, _1E, _1F, _1G, _1H, _1I, _1J, _1K, _1L, _1M, _1N, _1O, _1P, _1Q, _1R, _1S, _1T, _1U,, _1V, _1W, _1X, _1Y, _1Z, _20, _21, _22, _23, _24, _25, _26, _27, _28, _29, _2a, _2b, _2c, _2d, _2e, _2f, _2g, _2h,,,,,,,,,,,,,,,,,,,,,,, _2i, _2j, _2k, _2l, _2m, _2n, _2o,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,, _2p, _2q, _2r, _2s, _2t, _2u, _2v, _2w, _2x, _2y, _2z, _2A, _2B, _2C, _2D, _2E, _2F, _2G, _2H, _2I, _2J]);
+  var _$0 = _1([0], [,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,, _4, _5,,,, _6, _7, _8, _9, _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q, _r, _s, _t,, _u, _v, _w, _x, _y, _z, _A, _B, _C, _D, _E, _F, _G, _H, _I, _J, _K, _L, _M, _N, _O, _P, _Q, _R, _S, _T, _U, _V, _W, _X, _Y, _Z, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _1a, _1b, _1c, _1d, _1e, _1f, _1g, _1h, _1i, _1j, _1k, _1l, _1m, _1n, _1o, _1p, _1q, _1r, _1s, _1t, _1u, _1v, _1w, _1x, _1y, _1z, _1A,, _1B, _1C, _1D, _1E, _1F, _1G, _1H, _1I, _1J, _1K, _1L, _1M, _1N, _1O, _1P, _1Q, _1R, _1S, _1T, _1U,, _1V, _1W, _1X, _1Y, _1Z, _20, _21, _22, _23, _24, _25, _26, _27, _28, _29, _2a, _2b, _2c, _2d, _2e, _2f, _2g, _2h,,,,,,,,,,,,,,,,,,,,,,, _2i, _2j, _2k, _2l, _2m, _2n, _2o,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,, _2p, _2q, _2r, _2s, _2t, _2u, _2v, _2w, _2x, _2y, _2z, _2A, _2B, _2C, _2D, _2E, _2F, _2G, _2H, _2I, _2J, _2K, _2L]);
 }).call(this);

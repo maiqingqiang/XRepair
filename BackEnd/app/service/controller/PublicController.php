@@ -93,7 +93,7 @@ class PublicController extends BaseController
         }
     }
 
-    public function captcha()
+    public function captcha($geetest_challenge,$geetest_validate,$geetest_seccode)
     {
         $GtSdk = new GeetestLib(config('geetest_captcha_id'), config('geetest_private_key'));
         if ($GtSdk->fail_validate($_POST['geetest_challenge'], $_POST['geetest_validate'], $_POST['geetest_seccode'])) {
