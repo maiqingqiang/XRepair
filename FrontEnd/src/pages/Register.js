@@ -35,9 +35,8 @@ class Register extends Component {
         let data = this.props.form.getFieldsValue();
         this.axios.post('/XRepair/BackEnd/public/service/public/initCaptcha',Qs.stringify(data)).then((res)=>{
             let data = res.data;
-            console.log(data);
             if (data.success==1){
-                var captcha = new Geetest({
+                let captcha = new Geetest({
                     gt: data.gt,
                     challenge: data.challenge,
                     offline: !data.success,
