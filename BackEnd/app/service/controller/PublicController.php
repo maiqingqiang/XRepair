@@ -5,12 +5,15 @@
  * Date: 2017/8/11
  * Time: 15:41
  */
+
 namespace app\service\controller;
 
 use app\user\model\UserModel;
+use geetest\GeetestLib;
 use think\Validate;
 
-class PublicController extends BaseController{
+class PublicController extends BaseController
+{
     protected function _initialize()
     {
         header('Access-Control-Allow-Origin: *');
@@ -22,13 +25,13 @@ class PublicController extends BaseController{
     {
         if (request()->isPost()) {
             $rules = [
-                'captcha'  => 'require',
-                'code'     => 'require',
+                'captcha' => 'require',
+                'code' => 'require',
                 'password' => 'require|min:6|max:32',
 
             ];
 
-            $isOpenRegistration=cmf_is_open_registration();
+            $isOpenRegistration = cmf_is_open_registration();
 
             if ($isOpenRegistration) {
                 unset($rules['code']);
@@ -36,41 +39,41 @@ class PublicController extends BaseController{
 
             $validate = new Validate($rules);
             $validate->message([
-                'code.require'     => '验证码不能为空',
+                'code.require' => '验证码不能为空',
                 'password.require' => '密码不能为空',
-                'password.max'     => '密码不能超过32个字符',
-                'password.min'     => '密码不能小于6个字符',
-                'captcha.require'  => '验证码不能为空',
+                'password.max' => '密码不能超过32个字符',
+                'password.min' => '密码不能小于6个字符',
+                'captcha.require' => '验证码不能为空',
             ]);
 
             $data = request()->post();
             if (!$validate->check($data)) {
-                return json(['code'=>401,'message'=>$validate->getError()]);
+                return json(['code' => 401, 'message' => $validate->getError()]);
             }
             if (!cmf_captcha_check($data['captcha'])) {
-                return json(['code'=>401,'message'=>'验证码错误']);
+                return json(['code' => 401, 'message' => '验证码错误']);
             }
 
-            if(!$isOpenRegistration){
+            if (!$isOpenRegistration) {
                 $errMsg = cmf_check_verification_code($data['username'], $data['code']);
                 if (!empty($errMsg)) {
-                    return json(['code'=>401,'message'=>$errMsg]);
+                    return json(['code' => 401, 'message' => $errMsg]);
                 }
             }
 
-            $register          = new UserModel();
+            $register = new UserModel();
             $user['user_pass'] = $data['password'];
             if (Validate::is($data['username'], 'email')) {
                 $user['user_email'] = $data['username'];
-                $log                = $register->registerEmail($user);
+                $log = $register->registerEmail($user);
             } else if (preg_match('/(^(13\d|15[^4\D]|17[13678]|18\d)\d{8}|170[^346\D]\d{7})$/', $data['username'])) {
                 $user['mobile'] = $data['username'];
-                $log            = $register->registerMobile($user);
+                $log = $register->registerMobile($user);
             } else {
                 $log = 2;
             }
             $sessionLoginHttpReferer = session('login_http_referer');
-            $redirect                = empty($sessionLoginHttpReferer) ? cmf_get_root() . '/' : $sessionLoginHttpReferer;
+            $redirect = empty($sessionLoginHttpReferer) ? cmf_get_root() . '/' : $sessionLoginHttpReferer;
             switch ($log) {
                 case 0:
                     $this->success('注册成功', $redirect);
@@ -88,6 +91,22 @@ class PublicController extends BaseController{
         } else {
             $this->error("请求错误");
         }
+    }
 
+    public function captcha()
+    {
+        $GtSdk = new GeetestLib(config('geetest_captcha_id'), config('geetest_private_key'));
+        if ($GtSdk->fail_validate($_POST['geetest_challenge'], $_POST['geetest_validate'], $_POST['geetest_seccode'])) {
+            echo '{"status":"success"}';
+        } else {
+            echo '{"status":"fail"}';
+        }
+    }
+
+    public function initCaptcha()
+    {
+        $GtSdk = new GeetestLib(config('geetest_captcha_id'), config('geetest_private_key'));
+        $GtSdk->pre_process();
+        return $GtSdk->get_response_str();
     }
 }
