@@ -6,3 +6,4 @@
 composer.lock
 /api
 /public/api
+/public/template/webapp/app/
