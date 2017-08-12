@@ -6,7 +6,7 @@ import {createForm} from 'rc-form';
 import Qs from 'qs';
 import '../styles/pages/Register.less';
 import Geetest from 'geetest3'
-import $ from 'zepto'
+import $ from 'jquery'
 
 @inject('userStore')
 @observer
