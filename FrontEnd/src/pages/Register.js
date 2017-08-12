@@ -5,10 +5,16 @@ import {HeadTitle} from './../components/Index'
 import {createForm} from 'rc-form';
 import Qs from 'qs';
 import '../styles/pages/Register.less';
+import Geetest from 'geetest3'
+import $ from 'jquery'
 
 @inject('userStore')
 @observer
 class Register extends Component {
+
+    componentDidMount(){
+        this.initCaptcha();
+    }
 
     register = () => {
         Toast.loading('正在提交……',0);
@@ -19,6 +25,43 @@ class Register extends Component {
                 Toast.success(data.message+',2s后自动跳转~~',2,()=>this.props.history.push('/login'));
             }else {
                 Toast.fail(data.message,1.5);
+            }
+        }).catch((e)=>{
+            Toast.offline(e.message,1.5);
+        });
+    };
+
+    initCaptcha=()=>{
+        let data = this.props.form.getFieldsValue();
+        this.axios.post('/XRepair/BackEnd/public/service/public/initCaptcha',Qs.stringify(data)).then((res)=>{
+            let data = res.data;
+            console.log(data);
+            if (data.success==1){
+                var captcha = new Geetest({
+                    gt: data.gt,
+                    challenge: data.challenge,
+                    offline: !data.success,
+                    product: 'embed',
+                    // jsonp: true,
+                    lang: 'en'
+                });
+                captcha.appendTo('#captcha');
+
+                captcha.onReady(function () {
+                    $('#tip').hide();
+                });
+
+                $('#submit').click(function (e) {
+                    var result = captcha.getValidate();
+                    if (result) {
+                        // login(result);
+                    } else {
+                        alert('please complete verification');
+                    }
+                    e.preventDefault();
+                })
+            }else {
+                Toast.fail('验证码初始化失败',1.5);
             }
         }).catch((e)=>{
             Toast.offline(e.message,1.5);
@@ -66,6 +109,11 @@ class Register extends Component {
                         type="email"
                         placeholder="请输入你的登录密码"
                     >再输入密码</InputItem>
+                    <div className="field">
+                        <label>verify: </label>
+                        <div id="captcha"></div>
+                        <div id="tip">loading captcha</div>
+                    </div>
                     {/*<InputItem*/}
                         {/*{...getFieldProps('captcha')}*/}
                         {/*placeholder="请输入验证码"*/}
