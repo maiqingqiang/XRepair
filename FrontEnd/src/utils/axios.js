@@ -3,7 +3,11 @@ import config from './config';
 import UserStore from './../stores/UserStore';
 import createHistory from 'history/createBrowserHistory';
 
-const history = createHistory();
+const history = createHistory({
+    forceRefresh: true
+});
+
+let _this = this;
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.baseURL = 'http://' + config.host;
@@ -14,7 +18,6 @@ axios.interceptors.request.use(
         if (UserStore.token) {
             config.headers.Authorization = UserStore.token;
             config.headers.method = 'OPTIONS';
-            console.log(config)
         }
         return config;
     },
@@ -31,8 +34,8 @@ axios.interceptors.response.use(
         if (error.response) {
             switch (error.response.status) {
                 case 401:
+                    history.push('/login',{from: history.location});
                     UserStore.cleanData();
-                    history.push('/login');
                     break;
             }
         }

@@ -3,26 +3,27 @@ import {observer,inject} from 'mobx-react';
 import {List, InputItem, TextareaItem, Picker, Button, WhiteSpace, WingBlank, Toast} from 'antd-mobile';
 import {HeadTitle} from './../../components/Index'
 import {createForm} from 'rc-form';
+import Qs from 'qs';
 
 import {Protected} from "./../../components/Index";
 
 @Protected
-@inject('repairStore','generalStore')
+@inject('repairStore','generalStore','userStore')
 @observer
 class Index extends Component {
 
     state = {
         region: [],
-        regionCols: 1
+        regionCols: 1,
+        UserNameStatus:false
     };
 
     constructor(props) {
         super(props);
-        console.log(props)
-
         this.store={
             repairStore:props.repairStore,
-            generalStore:props.generalStore
+            generalStore:props.generalStore,
+            userStore:props.userStore
         };
         this.store.repairStore.getRegion();
         this.store.generalStore.getCategory();
@@ -30,7 +31,15 @@ class Index extends Component {
 
     save(e) {
         if (e) e.preventDefault();
-        console.log(this.props.form.getFieldsValue())
+        let post = this.props.form.getFieldsValue();
+        this.axios.post('/XRepair/BackEnd/public/service/general/addOrder', Qs.stringify(post)).then((res) => {
+            let data = res.data;
+            if (data.code == 200) {
+                Toast.success(data.message, 1.5);
+            } else {
+                Toast.fail(data.message, 1.5);
+            }
+        });
     }
 
     render() {
@@ -38,28 +47,33 @@ class Index extends Component {
         const {getFieldProps} = this.props.form;
         const {regionList,regionCols} = this.store.repairStore;
         const {categoryList,categoryCols} = this.store.generalStore;
+        const {userInfo} = this.store.userStore;
         return (
             <div id="general-index">
                 <HeadTitle title="通用报修" subTitle="集合多种报修项目"/>
 
                 <List renderHeader={() => '个人信息'}>
                     <InputItem
-                        {...getFieldProps('username')}
+                        {...getFieldProps('name',{
+                            initialValue:userInfo.name
+                        })}
                         clear
                         placeholder="请输入你的姓名"
                     >姓名</InputItem>
                     <InputItem
-                        {...getFieldProps('phone')}
+                        {...getFieldProps('mobile',{
+                            initialValue:userInfo.mobile
+                        })}
                         clear
                         placeholder="请输入你的手机号码"
                     >手机号码</InputItem>
                 </List>
 
                 <List renderHeader={() => '报修信息'}>
-                    <Picker data={regionList} cols={regionCols} {...getFieldProps('address')} className="forss">
+                    <Picker data={regionList} cols={regionCols} {...getFieldProps('regions')}>
                         <List.Item arrow="horizontal">区域</List.Item>
                     </Picker>
-                    <Picker data={categoryList} cols={categoryCols} {...getFieldProps('report_type')} className="forss">
+                    <Picker data={categoryList} cols={categoryCols} {...getFieldProps('categorys')}>
                         <List.Item arrow="horizontal">选择报修项目</List.Item>
                     </Picker>
                 </List>

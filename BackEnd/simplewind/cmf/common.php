@@ -1734,3 +1734,22 @@ function cmf_is_open_registration()
 
     return empty($cmfSettings['open_registration']) ? false : true;
 }
+
+/**
+ * object转array
+ * @param $array
+ *
+ * @return array
+ */
+function object_array($array)
+{
+    if (is_object($array)) {
+        $array = (array)$array;
+    }
+    if (is_array($array)) {
+        foreach ($array as $key => $value) {
+            $array[$key] = object_array($value);
+        }
+    }
+    return $array;
+}
