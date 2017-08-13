@@ -1,49 +1,43 @@
 import React, {Component} from 'react'
-import {observer} from 'mobx-react';
-import {List, InputItem, TextareaItem, Picker, Button, WhiteSpace, WingBlank} from 'antd-mobile';
+import {observer,inject} from 'mobx-react';
+import {List, InputItem, TextareaItem, Picker, Button, WhiteSpace, WingBlank, Toast} from 'antd-mobile';
 import {HeadTitle} from './../../components/Index'
 import {createForm} from 'rc-form';
-import {district} from 'antd-mobile-demo-data';
 
 import {Protected} from "./../../components/Index";
 
-const seasons = [
-    {
-        label: '2013',
-        value: '2013',
-        children: [{
-            label: '2014',
-            value: '2014',
-            children: [{
-                label: '春',
-                value: '春',
-                children: [{
-                    label: '春',
-                    value: '春',
-                    children: [{
-                        label: '春',
-                        value: '春',
-                    },]
-                },]
-            },]
-        },]
-    },
-
-];
-
 @Protected
+@inject('repairStore','generalStore')
 @observer
 class Index extends Component {
 
+    state = {
+        region: [],
+        regionCols: 1
+    };
+
+    constructor(props) {
+        super(props);
+        console.log(props)
+
+        this.store={
+            repairStore:props.repairStore,
+            generalStore:props.generalStore
+        };
+        this.store.repairStore.getRegion();
+        this.store.generalStore.getCategory();
+    }
+
     save(e) {
         if (e) e.preventDefault();
-        console.log(this.props.form)
         console.log(this.props.form.getFieldsValue())
     }
 
     render() {
         const _this = this;
         const {getFieldProps} = this.props.form;
+        const {regionList,regionCols} = this.store.repairStore;
+        const {categoryList,categoryCols} = this.store.generalStore;
         return (
             <div id="general-index">
                 <HeadTitle title="通用报修" subTitle="集合多种报修项目"/>
@@ -62,10 +56,10 @@ class Index extends Component {
                 </List>
 
                 <List renderHeader={() => '报修信息'}>
-                    <Picker data={district} cols={1} {...getFieldProps('address')} className="forss">
+                    <Picker data={regionList} cols={regionCols} {...getFieldProps('address')} className="forss">
                         <List.Item arrow="horizontal">区域</List.Item>
                     </Picker>
-                    <Picker data={seasons} cols={4} {...getFieldProps('report_type')} className="forss">
+                    <Picker data={categoryList} cols={categoryCols} {...getFieldProps('report_type')} className="forss">
                         <List.Item arrow="horizontal">选择报修项目</List.Item>
                     </Picker>
                 </List>

@@ -9,6 +9,7 @@
 namespace app\service\controller;
 
 use app\user\model\XUserModel;
+use Firebase\JWT\JWT;
 use geetest\GeetestLib;
 use think\Validate;
 
@@ -19,18 +20,14 @@ class PublicController extends BaseController {
         header('Access-Control-Allow-Methods: GET, POST, PUT,DELETE');
     }
 
-    public function login(){
+    public function login() {
         if (request()->isPost()) {
-            $validate = new Validate([
-                'username' => 'require',
-                'password' => 'require|min:5|max:32',
-            ]);
-            $validate->message([
-                'username.require' => '用户名不能为空',
+            $validate = new Validate(['username' => 'require',
+                'password' => 'require|min:5|max:32',]);
+            $validate->message(['username.require' => '用户名不能为空',
                 'password.require' => '密码不能为空',
-                'password.max'     => '密码不能超过32个字符',
-                'password.min'     => '密码不能小于5个字符',
-            ]);
+                'password.max' => '密码不能超过32个字符',
+                'password.min' => '密码不能小于5个字符',]);
 
             $data = request()->post();
             if (!$validate->check($data)) {
@@ -43,36 +40,44 @@ class PublicController extends BaseController {
                     'message' => '验证码错误']);
             }
 
-            $userModel         = new XUserModel();
+            $userModel = new XUserModel();
             $user['user_pass'] = $data['password'];
             if (filter_var($data['username'], FILTER_VALIDATE_EMAIL)) {
                 $user['user_email'] = $data['username'];
-                $log                = $userModel->doEmail($user);
+                $result = $userModel->doEmail($user);
             } else if (preg_match('/(^(13\d|15[^4\D]|17[13678]|18\d)\d{8}|170[^346\D]\d{7})$/', $data['username'])) {
                 $user['mobile'] = $data['username'];
-                $log            = $userModel->doMobile($user);
+                $result = $userModel->doMobile($user);
             } else {
                 $user['user_login'] = $data['username'];
-                $log                = $userModel->doName($user);
+                $result = $userModel->doName($user);
             }
-            switch ($log) {
+            switch ($result['status']) {
                 case 0:
-                    return json(['code' => 200, 'message' => '登录成功']);
+                    $data = $this->getLoginInfo($result['userInfo']);
+                    return json(['code' => 200,
+                        'message' => '登录成功',
+                        'result' => $data]);
                     break;
                 case 1:
-                    return json(['code' => 400, 'message' => '登录密码错误']);
+                    return json(['code' => 400,
+                        'message' => '登录密码错误']);
                     break;
                 case 2:
-                    return json(['code' => 400, 'message' => '账户不存在']);
+                    return json(['code' => 400,
+                        'message' => '账户不存在']);
                     break;
                 case 3:
-                    return json(['code' => 400, 'message' => '账号被禁止访问系统']);
+                    return json(['code' => 400,
+                        'message' => '账号被禁止访问系统']);
                     break;
                 default :
-                    return json(['code' => 400, 'message' => '未受理的请求']);
+                    return json(['code' => 400,
+                        'message' => '未受理的请求']);
             }
         } else {
-            return json(['code' => 500, 'message' => '请求错误']);
+            return json(['code' => 500,
+                'message' => '请求错误']);
         }
     }
 
@@ -163,7 +168,7 @@ class PublicController extends BaseController {
 
         $GtSdk = new GeetestLib(config('geetest_captcha_id'), config('geetest_private_key'));
 
-        if ($offline==1) {   //服务器正常
+        if ($offline == 1) {   //服务器正常
             if ($GtSdk->fail_validate($geetest_challenge, $geetest_validate, $geetest_seccode)) {
                 return true;
             } else {
@@ -192,5 +197,42 @@ class PublicController extends BaseController {
         $GtSdk->pre_process($data, 1);
 
         return $GtSdk->get_response_str();
+    }
+
+
+    private function getLoginInfo($entity) {
+        $tokenId = base64_encode($this->uuid());
+        $issuedAt = time();
+        $notBefore = $issuedAt;
+        $expire = $notBefore + 86400;
+        $serverName = get_client_ip();
+        //载荷
+        $payload = ['iat' => $issuedAt,
+            'jti' => $tokenId,
+            'iss' => $serverName,
+            'nbf' => $notBefore,
+            'exp' => $expire,
+            'data' => ['id' => $entity['id'],
+                'name' => $entity['name'],
+                'email' => $entity['email'],
+                'mobile' => $entity['mobile']]];
+        $key = config('jwt_key');
+        $secretKey = base64_encode($key);
+        $token = JWT::encode($payload, $secretKey);
+
+        $result['token'] = $token;
+        $result['userInfo'] = array('name' => $entity['name'],
+            'email' => $entity['email'],
+            'mobile' => $entity['mobile']);
+
+        return $result;
+    }
+
+    public function uuid() {
+        $charid = md5(uniqid(mt_rand(), true));
+        $hyphen = chr(45);// "-"
+        $uuid = chr(123)// "{"
+            . substr($charid, 0, 8) . $hyphen . substr($charid, 8, 4) . $hyphen . substr($charid, 12, 4) . $hyphen . substr($charid, 16, 4) . $hyphen . substr($charid, 20, 12) . chr(125);// "}"
+        return $uuid;
     }
 }

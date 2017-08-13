@@ -11,19 +11,17 @@ namespace app\service\controller;
 use Exception;
 use Firebase\JWT\JWT;
 
-class BaseController{
+class BaseController {
     protected $userInfo;
 
-    protected function _initialize() {
-        $this->userInfo = session('userInfo');
-        if (getHost() != 'https://www.syd666.com') {
-            header('Access-Control-Allow-Origin: *');
-            header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept,Authorization');
-            header('Access-Control-Allow-Methods: GET, POST, PUT,DELETE,OPTIONS');
-        }
+    public function __construct() {
+
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept,Authorization');
+        header('Access-Control-Allow-Methods: GET, POST, PUT,DELETE,OPTIONS');
 
         if (strtoupper($_SERVER['REQUEST_METHOD']) == 'OPTIONS') {
-            die('welcome to C2B Technology Co.,Ltd');
+            die('welcome to XRepair');
         }
     }
 
@@ -47,6 +45,8 @@ class BaseController{
     }
 
     protected function ajaxResult($code, $message, $result = []) {
-        return json(['code'=>$code,'message'=>$message,'result'=>$result]);
+        return json(['code' => $code,
+            'message' => $message,
+            'result' => $result]);
     }
 }

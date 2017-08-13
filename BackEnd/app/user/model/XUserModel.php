@@ -60,31 +60,29 @@ class XUserModel extends Model {
 
         if (!empty($result)) {
             $comparePasswordResult = cmf_compare_password($user['user_pass'], $result['user_pass']);
-//            $hookParam =[
-//                'user'=>$user,
-//                'compare_password_result'=>$comparePasswordResult
-//            ];
-//            hook_one("user_login_start",$hookParam);
             if ($comparePasswordResult) {
                 //拉黑判断。
                 if($result['user_status']==0){
-                    return 3;
+                    return array('status'=>3);
                 }
                 $data = [
                     'last_login_time' => time(),
                     'last_login_ip'   => get_client_ip(0, true),
                 ];
                 $userQuery->where('id', $result["id"])->update($data);
-                return 0;
+                return array(
+                    'status'=>0,
+                    'userInfo'=>array(
+                        'id'=>$result['id'],
+                        'name'=>$result['user_nickname'],
+                        'email'=>$result['user_email'],
+                        'mobile'=>$result['mobile'],
+                    )
+                );
             }
-            return 1;
+            return array('status'=>1);
         }
-//        $hookParam =[
-//            'user'=>$user,
-//            'compare_password_result'=>false
-//        ];
-//        hook_one("user_login_start",$hookParam);
-        return 2;
+        return array('status'=>2);
     }
 
     public function doName($user)
@@ -94,15 +92,10 @@ class XUserModel extends Model {
         $result = $userQuery->where('user_login', $user['user_login'])->find();
         if (!empty($result)) {
             $comparePasswordResult = cmf_compare_password($user['user_pass'], $result['user_pass']);
-//            $hookParam =[
-//                'user'=>$user,
-//                'compare_password_result'=>$comparePasswordResult
-//            ];
-//            hook_one("user_login_start",$hookParam);
             if ($comparePasswordResult) {
                 //拉黑判断。
                 if($result['user_status']==0){
-                    return 3;
+                    return array('status'=>3);
                 }
                 session('user', $result);
                 $data = [
@@ -110,16 +103,20 @@ class XUserModel extends Model {
                     'last_login_ip'   => get_client_ip(0, true),
                 ];
                 $userQuery->where('id', $result["id"])->update($data);
-                return 0;
+                return array(
+                    'status'=>0,
+                    'userInfo'=>array(
+                        'id'=>$result['id'],
+                        'name'=>$result['user_nickname'],
+                        'email'=>$result['user_email'],
+                        'mobile'=>$result['mobile'],
+                    )
+                );
             }
-            return 1;
+            return array('status'=>1);
         }
-//        $hookParam =[
-//            'user'=>$user,
-//            'compare_password_result'=>false
-//        ];
-//        hook_one("user_login_start",$hookParam);
-        return 2;
+
+        return array('status'=>2);
     }
 
     public function doEmail($user)
@@ -132,16 +129,11 @@ class XUserModel extends Model {
 
         if (!empty($result)) {
             $comparePasswordResult = cmf_compare_password($user['user_pass'], $result['user_pass']);
-//            $hookParam =[
-//                'user'=>$user,
-//                'compare_password_result'=>$comparePasswordResult
-//            ];
-//            hook_one("user_login_start",$hookParam);
-            if ($comparePasswordResult) {
 
+            if ($comparePasswordResult) {
                 //拉黑判断。
                 if($result['user_status']==0){
-                    return 3;
+                    return array('status'=>3);
                 }
                 session('user', $result);
                 $data = [
@@ -149,15 +141,18 @@ class XUserModel extends Model {
                     'last_login_ip'   => get_client_ip(0, true),
                 ];
                 $userQuery->where('id', $result["id"])->update($data);
-                return 0;
+                return array(
+                    'status'=>0,
+                    'userInfo'=>array(
+                        'id'=>$result['id'],
+                        'name'=>$result['user_nickname'],
+                        'email'=>$result['user_email'],
+                        'mobile'=>$result['mobile'],
+                    )
+                );
             }
-            return 1;
+            return array('status'=>1);
         }
-//        $hookParam =[
-//            'user'=>$user,
-//            'compare_password_result'=>false
-//        ];
-//        hook_one("user_login_start",$hookParam);
-        return 2;
+        return array('status'=>2);
     }
 }

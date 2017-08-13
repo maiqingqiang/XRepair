@@ -6,6 +6,7 @@ import {createForm} from 'rc-form';
 import Qs from 'qs';
 import '../styles/pages/Register.less';
 import Geetest from 'geetest3'
+import './../styles/geetest.less'
 
 const Item = List.Item;
 

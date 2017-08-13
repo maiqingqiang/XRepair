@@ -234,5 +234,6 @@ $configs = [
     //极验验证码
     'geetest_captcha_id' => '289ebe30e4b31684c46a6a9eb0927729',
     'geetest_private_key' => 'ed95a6958e14a9546514c667af92121c',
+    'jwt_key' => 'xiaomak'
 ];
 return array_merge($configs, $runtimeConfig);

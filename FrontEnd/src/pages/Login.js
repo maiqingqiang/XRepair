@@ -4,8 +4,8 @@ import {List, InputItem, Button, WhiteSpace, WingBlank, Toast} from 'antd-mobile
 import {HeadTitle} from './../components/Index'
 import {createForm} from 'rc-form';
 import Qs from 'qs';
-import '../styles/pages/Register.less';
 import Geetest from 'geetest3'
+import '../styles/geetest.less';
 
 @inject('userStore')
 @observer
@@ -66,6 +66,8 @@ class Login extends Component {
                 if (data.code == 200) {
                     const {userStore} = this.props;
                     userStore.isLogin = true;
+                    userStore.token = data.result.token;
+                    userStore.userInfo = data.result.userInfo;
                     const {from} = this.props.location.state || {from: {pathname: '/'}};
                     this.props.history.replace(from)
                 } else {

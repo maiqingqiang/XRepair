@@ -3,47 +3,20 @@ import ReactDOM from 'react-dom';
 import registerServiceWorker from './registerServiceWorker';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 import {Provider} from "mobx-react";
+import {} from 'mobx';
 import * as store from './stores';
 import routes from './router';
-import axios from 'axios';
+import FastClick from 'fastclick';
+import config from './utils/config';
+import axios from './utils/axios';
 
-
-let host = '192.168.31.188';
-
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-axios.defaults.baseURL = 'http://' + host;
+window.addEventListener('load', () => {
+    FastClick.attach(document.body);
+});
 
 React.Component.prototype.axios = axios;
 
-// http request 拦截器
-// axios.interceptors.request.use(
-//     config => {
-//         // if (store.state.token) {
-//         //     config.headers.Authorization = store.state.token;
-//         // }
-//         return config;
-//     },
-//     err => {
-//         return Promise.reject(err);
-//     });
-//
-// // http response 拦截器
-// axios.interceptors.response.use(
-//     response => {
-//         return response;
-//     },
-//     error => {
-//         if (error.response) {
-//             switch (error.response.status) {
-//                 case 401:
-//
-//                     break;
-//             }
-//         }
-//         return Promise.reject(error.response.data) // 返回接口返回的错误信息
-//     });
-
-let basename = window.location.host === host ? '/XRepair/BackEnd/public/webapp/app/index' : '';
+let basename = window.location.host === config.host ? '/XRepair/BackEnd/public/webapp/app/index' : '';
 
 ReactDOM.render(
     <Provider {...store}>
@@ -60,5 +33,5 @@ ReactDOM.render(
                 </Switch>
             </div>
         </Router>
-    </Provider>, document.getElementById('root'));
+    </Provider>, document.getElementById('container'));
 registerServiceWorker();

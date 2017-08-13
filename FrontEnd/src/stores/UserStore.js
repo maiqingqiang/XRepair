@@ -1,8 +1,14 @@
-import {observable} from "mobx"
+import {observable,action} from "mobx"
 
 class UiStore {
-    @observable token = "123";
+    @observable token = '';
     @observable isLogin = false;
+
+    @action
+    cleanData(){
+        this.isLogin= false;
+        this.token = '';
+    }
 }
 
 const uiStore = new UiStore();
