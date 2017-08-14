@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {observer,inject} from 'mobx-react';
+import {observer, inject} from 'mobx-react';
 import {List, InputItem, TextareaItem, Picker, Button, WhiteSpace, WingBlank, Toast} from 'antd-mobile';
 import {HeadTitle} from './../../components/Index'
 import {createForm} from 'rc-form';
@@ -8,22 +8,22 @@ import Qs from 'qs';
 import {Protected} from "./../../components/Index";
 
 @Protected
-@inject('repairStore','generalStore','userStore')
+@inject('repairStore', 'generalStore', 'userStore')
 @observer
 class Index extends Component {
 
     state = {
         region: [],
         regionCols: 1,
-        UserNameStatus:false
+        UserNameStatus: false
     };
 
     constructor(props) {
         super(props);
-        this.store={
-            repairStore:props.repairStore,
-            generalStore:props.generalStore,
-            userStore:props.userStore
+        this.store = {
+            repairStore: props.repairStore,
+            generalStore: props.generalStore,
+            userStore: props.userStore
         };
         this.store.repairStore.getRegion();
         this.store.generalStore.getCategory();
@@ -39,14 +39,16 @@ class Index extends Component {
             } else {
                 Toast.fail(data.message, 1.5);
             }
+        }).catch((e) => {
+            Toast.offline(e.response.data, 1.5)
         });
     }
 
     render() {
         const _this = this;
         const {getFieldProps} = this.props.form;
-        const {regionList,regionCols} = this.store.repairStore;
-        const {categoryList,categoryCols} = this.store.generalStore;
+        const {regionList, regionCols} = this.store.repairStore;
+        const {categoryList, categoryCols} = this.store.generalStore;
         const {userInfo} = this.store.userStore;
         return (
             <div id="general-index">
@@ -54,15 +56,15 @@ class Index extends Component {
 
                 <List renderHeader={() => '个人信息'}>
                     <InputItem
-                        {...getFieldProps('name',{
-                            initialValue:userInfo.name
+                        {...getFieldProps('name', {
+                            initialValue: userInfo.name
                         })}
                         clear
                         placeholder="请输入你的姓名"
                     >姓名</InputItem>
                     <InputItem
-                        {...getFieldProps('mobile',{
-                            initialValue:userInfo.mobile
+                        {...getFieldProps('mobile', {
+                            initialValue: userInfo.mobile
                         })}
                         clear
                         placeholder="请输入你的手机号码"

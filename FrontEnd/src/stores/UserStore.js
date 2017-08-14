@@ -6,7 +6,7 @@ class UiStore {
     @observable userInfo = [];
 
     @action
-    cleanData() {
+    clearData() {
         this.userInfo = [];
         this.isLogin = false;
         this.token = '';

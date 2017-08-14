@@ -1,6 +1,6 @@
 import {observable, action} from "mobx"
 import {Toast} from 'antd-mobile'
-import axios from '../utils/axios'
+import axios from 'axios'
 
 class GeneralStore {
     @observable categoryList = [];
@@ -19,7 +19,7 @@ class GeneralStore {
                     Toast.fail(data.message, 1.5);
                 }
             }).catch((e) => {
-                Toast.offline(e.message, 1.5);
+                Toast.offline(e.response.data, 1.5)
             });
         }
     }

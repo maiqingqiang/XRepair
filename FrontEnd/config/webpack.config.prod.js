@@ -18,6 +18,8 @@ const AutoDllPlugin = require('autodll-webpack-plugin');
 const pkg = require("../package.json");
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const PrepackWebpackPlugin = require('prepack-webpack-plugin').default;
+var Visualizer = require('webpack-visualizer-plugin');
+
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -31,6 +33,8 @@ const shouldUseRelativeAssetPaths = publicPath === './';
 const publicUrl = publicPath.slice(0, -1);
 // Get environment variables to inject into our app.
 const env = getClientEnvironment(publicUrl);
+
+console.log(env.stringified)
 
 // Assert this just to be safe.
 // Development builds of React are slow and not intended for production.
@@ -280,10 +284,27 @@ module.exports = {
             inject: true, // will inject the DLL bundles to index.html
             filename: '[name]_[hash].js',
             entry: {
-                vendor: Object.keys(pkg.dependencies),
+                // vendor: Object.keys(pkg.dependencies),
+                vendor: ['react','react-dom','mobx','mobx-react','fastclick','antd-mobile','lazy-route'],
             },
             plugins: [
-                new webpack.optimize.UglifyJsPlugin()
+                new webpack.DefinePlugin(env.stringified),
+                new webpack.optimize.UglifyJsPlugin({
+                    compress: {
+                        warnings: false,
+                        comparisons: false,
+                    },
+                    output: {
+                        comments: false,
+                        // ascii_only: true,
+                    },
+                    // sourceMap: true,
+                }),
+                new webpack.optimize.AggressiveMergingPlugin(), // Merge chunks
+                // new PrepackWebpackPlugin({
+                //     mathRandomSeed: '0',
+                // }),
+
             ]
         }),
         new webpack.optimize.CommonsChunkPlugin({
@@ -345,9 +366,9 @@ module.exports = {
                 comments: false,
                 // Turned on because emoji and regex is not minified properly using default
                 // https://github.com/facebookincubator/create-react-app/issues/2488
-                ascii_only: true,
+                // ascii_only: true,
             },
-            sourceMap: true,
+            // sourceMap: true,
         }),
         // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
         new ExtractTextPlugin({
@@ -403,9 +424,12 @@ module.exports = {
             threshold: 10240,
             minRatio: 0.8,
         }),
-        new PrepackWebpackPlugin({
-            mathRandomSeed: '0',
-        }),
+        // new PrepackWebpackPlugin({
+        //     mathRandomSeed: '0',
+        // }),
+        new Visualizer({
+            filename: './statistics.html'
+        })
     ],
     // Some libraries import Node modules but don't use them in the browser.
     // Tell Webpack to provide empty mocks for them so importing them works.
