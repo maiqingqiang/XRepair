@@ -9,6 +9,7 @@ import routes from './router';
 export default class App extends Component {
 
     componentDidMount() {
+        this.props.userStore.getToken();
         this.axios.interceptors.request.use(
             config => {
                 if (this.props.userStore.token) {

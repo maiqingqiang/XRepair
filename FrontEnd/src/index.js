@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import registerServiceWorker from './registerServiceWorker';
+// import registerServiceWorker from './registerServiceWorker';
 import {BrowserRouter as Router} from 'react-router-dom'
 import {Provider} from "mobx-react";
 import {} from 'mobx';
@@ -28,4 +28,4 @@ ReactDOM.render(
             <App/>
         </Router>
     </Provider>, document.getElementById('container'));
-registerServiceWorker();
+// registerServiceWorker();

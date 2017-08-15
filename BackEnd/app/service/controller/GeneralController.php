@@ -9,9 +9,11 @@
 
 namespace app\service\controller;
 
+use app\service\model\RepairOrderModel;
 use Exception;
 use Firebase\JWT\JWT;
 use think\Db;
+use think\Model;
 use think\Validate;
 use tree\XTree;
 
@@ -59,6 +61,7 @@ class GeneralController extends BaseController {
                 }
 
                 $order = ['name' => $data['name'],
+                    'type'=>'general',
                     'mobile' => $data['mobile'],
                     'region' => implode(',', $data['regions']),
                     'category' => implode(',', $data['categorys']),
@@ -66,9 +69,13 @@ class GeneralController extends BaseController {
                     'create_time' => time(),
                     'update_time' => time(),
                     'user_id' => $userInfo['id']];
-                $model = Db::name("general_order");
 
-                $orderId = $model->insertGetId($order);
+
+                $model = new RepairOrderModel();
+
+
+                $orderId = $model->addGeneralOrder($order);
+
                 if ($orderId) {
                     return json(['code' => 200,
                         'message' => '提交成功',
@@ -85,5 +92,22 @@ class GeneralController extends BaseController {
             header('HTTP/1.0 401 Unauthorized');
             die('Service API authentication failed');
         }
+    }
+
+    public function test(){
+//        $result = Db::view('RepairOrder','*')
+//            ->view('GeneralOrder','name,mobile,region,category,desc','GeneralOrder.oid=RepairOrder.id and RepairOrder.type="general"')
+//            ->view('NetOrder','name,mobile,desc','NetOrder.oid=RepairOrder.id and RepairOrder.type="net"')
+//            ->select();
+//        $result=Db::field('*')
+//            ->name('RepairOrder')
+//            ->union(function($query){
+//                $query->field('name,mobile,region,category,desc')->name('GeneralOrder')->where('RepairOrder.id = GeneralOrder.oid');
+//            })
+//            ->union(function($query){
+//                $query->field('name,desc,op')->name('NetOrder')->where('RepairOrder.id = NetOrder.oid');
+//            })
+//            ->select();
+
     }
 }

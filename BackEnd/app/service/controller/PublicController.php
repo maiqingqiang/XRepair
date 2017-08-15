@@ -200,7 +200,7 @@ class PublicController extends BaseController {
     }
 
 
-    private function getLoginInfo($entity) {
+    private function getLoginInfo($data) {
         $tokenId = base64_encode($this->uuid());
         $issuedAt = time();
         $notBefore = $issuedAt;
@@ -212,20 +212,29 @@ class PublicController extends BaseController {
             'iss' => $serverName,
             'nbf' => $notBefore,
             'exp' => $expire,
-            'data' => ['id' => $entity['id'],
-                'name' => $entity['name'],
-                'email' => $entity['email'],
-                'mobile' => $entity['mobile']]];
+            'data' => ['id' => $data['id'],
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'mobile' => $data['mobile']]];
         $key = config('jwt_key');
         $secretKey = base64_encode($key);
         $token = JWT::encode($payload, $secretKey);
 
         $result['token'] = $token;
-        $result['userInfo'] = array('name' => $entity['name'],
-            'email' => $entity['email'],
-            'mobile' => $entity['mobile']);
+        $result['userInfo'] = array('name' => $data['name'],
+            'email' => $data['email'],
+            'mobile' => $data['mobile']);
 
         return $result;
+    }
+    
+    
+    public function getToken(){
+        $data= ['id'=>1,'name'=>'麦青强','email'=>'xiaomak@qq.com','mobile'=>'18587733312'];
+        $result = $this->getLoginInfo($data);
+        return json(['code' => 200,
+            'message' => '登录成功',
+            'result' => $result]);
     }
 
     public function uuid() {
