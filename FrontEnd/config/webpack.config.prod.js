@@ -33,8 +33,9 @@ const shouldUseRelativeAssetPaths = publicPath === './';
 const publicUrl = publicPath.slice(0, -1);
 // Get environment variables to inject into our app.
 const env = getClientEnvironment(publicUrl);
+const os = require('os');
+const UglifyJsParallelPlugin = require('webpack-uglify-parallel');
 
-console.log(env.stringified)
 
 // Assert this just to be safe.
 // Development builds of React are slow and not intended for production.
@@ -103,6 +104,7 @@ module.exports = {
             // Support React Native Web
             // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
             'react-native': 'react-native-web',
+            // 'react': (0, join)(__dirname, './node_modules/react/dist/react.min.js'),
         },
         plugins: [
             // Prevents users from importing files from outside of src/ (or node_modules/).
@@ -289,16 +291,29 @@ module.exports = {
             },
             plugins: [
                 new webpack.DefinePlugin(env.stringified),
-                new webpack.optimize.UglifyJsPlugin({
-                    compress: {
-                        warnings: false,
-                        comparisons: false,
-                    },
-                    output: {
-                        comments: false,
-                        // ascii_only: true,
-                    },
-                    // sourceMap: true,
+                // new webpack.optimize.UglifyJsPlugin({
+                //     compress: {
+                //         warnings: false,
+                //         comparisons: false,
+                //     },
+                //     output: {
+                //         comments: false,
+                //         // ascii_only: true,
+                //     },
+                //     // sourceMap: true,
+                // }),
+                new UglifyJsParallelPlugin({
+                    workers: os.cpus().length, // usually having as many workers as cpu cores gives good results
+                    // other uglify options
+                        compress: {
+                            warnings: false,
+                            comparisons: false,
+                        },
+                        output: {
+                            comments: false,
+                            // ascii_only: true,
+                        },
+                        // sourceMap: true,
                 }),
                 new webpack.optimize.AggressiveMergingPlugin(), // Merge chunks
                 // new PrepackWebpackPlugin({
@@ -353,19 +368,32 @@ module.exports = {
         // Otherwise React will be compiled in the very slow development mode.
         new webpack.DefinePlugin(env.stringified),
         // Minify the code.
-        new webpack.optimize.UglifyJsPlugin({
+        // new webpack.optimize.UglifyJsPlugin({
+        //     compress: {
+        //         warnings: false,
+        //         // Disabled because of an issue with Uglify breaking seemingly valid code:
+        //         // https://github.com/facebookincubator/create-react-app/issues/2376
+        //         // Pending further investigation:
+        //         // https://github.com/mishoo/UglifyJS2/issues/2011
+        //         comparisons: false,
+        //     },
+        //     output: {
+        //         comments: false,
+        //         // Turned on because emoji and regex is not minified properly using default
+        //         // https://github.com/facebookincubator/create-react-app/issues/2488
+        //         // ascii_only: true,
+        //     },
+        //     // sourceMap: true,
+        // }),
+        new UglifyJsParallelPlugin({
+            workers: os.cpus().length, // usually having as many workers as cpu cores gives good results
+            // other uglify options
             compress: {
                 warnings: false,
-                // Disabled because of an issue with Uglify breaking seemingly valid code:
-                // https://github.com/facebookincubator/create-react-app/issues/2376
-                // Pending further investigation:
-                // https://github.com/mishoo/UglifyJS2/issues/2011
                 comparisons: false,
             },
             output: {
                 comments: false,
-                // Turned on because emoji and regex is not minified properly using default
-                // https://github.com/facebookincubator/create-react-app/issues/2488
                 // ascii_only: true,
             },
             // sourceMap: true,
