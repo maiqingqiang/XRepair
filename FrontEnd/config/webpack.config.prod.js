@@ -115,6 +115,17 @@ module.exports = {
             new ModuleScopePlugin(paths.appSrc),
         ],
     },
+    externals: {
+        // require("jquery") is external and available
+        //  on the global var jQuery
+        "react": "React",
+        "react-dom": "ReactDOM",
+        'react-router-dom': 'ReactRouterDOM',
+        'mobx': 'mobx',
+        'mobx-react': 'mobxReact',
+        // 'antd-mobile': 'AntdMobile',
+        // 'antd-mobile': 'AntdMobile',
+    },
     module: {
         strictExportPresence: true,
         rules: [
@@ -282,54 +293,54 @@ module.exports = {
         ],
     },
     plugins: [
-        new AutoDllPlugin({
-            inject: true, // will inject the DLL bundles to index.html
-            filename: '[name]_[hash].js',
-            entry: {
-                // vendor: Object.keys(pkg.dependencies),
-                vendor: ['react','react-dom','mobx','mobx-react','fastclick','antd-mobile','lazy-route'],
-            },
-            plugins: [
-                new webpack.DefinePlugin(env.stringified),
-                // new webpack.optimize.UglifyJsPlugin({
-                //     compress: {
-                //         warnings: false,
-                //         comparisons: false,
-                //     },
-                //     output: {
-                //         comments: false,
-                //         // ascii_only: true,
-                //     },
-                //     // sourceMap: true,
-                // }),
-                new UglifyJsParallelPlugin({
-                    workers: os.cpus().length, // usually having as many workers as cpu cores gives good results
-                    // other uglify options
-                        compress: {
-                            warnings: false,
-                            comparisons: false,
-                        },
-                        output: {
-                            comments: false,
-                            // ascii_only: true,
-                        },
-                        // sourceMap: true,
-                }),
-                new webpack.optimize.AggressiveMergingPlugin(), // Merge chunks
-                // new PrepackWebpackPlugin({
-                //     mathRandomSeed: '0',
-                // }),
-
-            ]
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'vendor',
-            filename: 'vendor.bundle.js',
-            minChunks: ({ resource }) =>
-                resource &&
-                resource.indexOf('node_modules') >= 0 &&
-                resource.match(/\.(js|less|scss)$/),
-        }),
+        // new AutoDllPlugin({
+        //     inject: true, // will inject the DLL bundles to index.html
+        //     filename: '[name]_[hash].js',
+        //     entry: {
+        //         // vendor: Object.keys(pkg.dependencies),
+        //         vendor: ['react','react-dom','mobx','mobx-react','fastclick','antd-mobile','lazy-route'],
+        //     },
+        //     plugins: [
+        //         new webpack.DefinePlugin(env.stringified),
+        //         // new webpack.optimize.UglifyJsPlugin({
+        //         //     compress: {
+        //         //         warnings: false,
+        //         //         comparisons: false,
+        //         //     },
+        //         //     output: {
+        //         //         comments: false,
+        //         //         // ascii_only: true,
+        //         //     },
+        //         //     // sourceMap: true,
+        //         // }),
+        //         new UglifyJsParallelPlugin({
+        //             workers: os.cpus().length, // usually having as many workers as cpu cores gives good results
+        //             // other uglify options
+        //                 compress: {
+        //                     warnings: false,
+        //                     comparisons: false,
+        //                 },
+        //                 output: {
+        //                     comments: false,
+        //                     // ascii_only: true,
+        //                 },
+        //                 // sourceMap: true,
+        //         }),
+        //         // new webpack.optimize.AggressiveMergingPlugin(), // Merge chunks
+        //         // new PrepackWebpackPlugin({
+        //         //     mathRandomSeed: '0',
+        //         // }),
+        //
+        //     ]
+        // }),
+        // new webpack.optimize.CommonsChunkPlugin({
+        //     name: 'vendor',
+        //     filename: 'vendor.bundle.js',
+        //     minChunks: ({ resource }) =>
+        //         resource &&
+        //         resource.indexOf('node_modules') >= 0 &&
+        //         resource.match(/\.(js|less|scss)$/),
+        // }),
         //todo 这个东东有bug
         // new webpack.optimize.ModuleConcatenationPlugin(),
         new webpack.LoaderOptionsPlugin({
@@ -396,7 +407,7 @@ module.exports = {
                 comments: false,
                 // ascii_only: true,
             },
-            // sourceMap: true,
+            sourceMap: false,
         }),
         // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
         new ExtractTextPlugin({
@@ -445,13 +456,13 @@ module.exports = {
         // You can remove this if you don't use Moment.js:
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
         new webpack.optimize.AggressiveMergingPlugin(), // Merge chunks
-        new CompressionWebpackPlugin({
-            asset: "[path].gz[query]",
-            algorithm: 'gzip',
-            test: /\.js$|\.css$|\.html$/,
-            threshold: 10240,
-            minRatio: 0.8,
-        }),
+        // new CompressionWebpackPlugin({
+        //     asset: "[path].gz[query]",
+        //     algorithm: 'gzip',
+        //     test: /\.js$|\.css$|\.html$/,
+        //     threshold: 10240,
+        //     minRatio: 0.8,
+        // }),
         // new PrepackWebpackPlugin({
         //     mathRandomSeed: '0',
         // }),
