@@ -25,6 +25,9 @@ class Index extends Component {
             generalStore: props.generalStore,
             userStore: props.userStore
         };
+    }
+
+    componentDidMount() {
         this.store.repairStore.getRegion();
         this.store.generalStore.getCategory();
     }
@@ -40,7 +43,7 @@ class Index extends Component {
                 Toast.fail(data.message, 1.5);
             }
         }).catch((e) => {
-            Toast.offline(e.response.data, 1.5)
+            Toast.offline(e.message, 1.5)
         });
     }
 

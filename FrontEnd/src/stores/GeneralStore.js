@@ -19,7 +19,7 @@ class GeneralStore {
                     Toast.fail(data.message, 1.5);
                 }
             }).catch((e) => {
-                Toast.offline(e.response.data, 1.5)
+                Toast.offline(e.message, 1.5)
             });
         }
     }

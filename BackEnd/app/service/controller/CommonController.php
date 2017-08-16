@@ -9,15 +9,15 @@
 
 namespace app\service\controller;
 
+use app\service\model\RepairOrderModel;
+use Exception;
+use Firebase\JWT\JWT;
 use think\Db;
 use tree\XTree;
 
 class CommonController extends BaseController {
 
     public function getRegion() {
-        if (strtoupper(request()->method()) == 'OPTIONS') {
-            die('welcome to XRepair');
-        }
         $where = ['delete_time' => 0];
         $result = Db::name('repair_region')->order("list_order ASC")->where($where)->select()->toArray();
         if ($result) {
@@ -32,6 +32,30 @@ class CommonController extends BaseController {
             return json(['code' => 400,
                 'message' => '获取区域失败']);
         }
+    }
 
+    public function getRepairList() {
+        $authinfo = apache_request_headers();
+        $key = base64_encode(config('jwt_key'));
+        try {
+            $payload = JWT::decode($authinfo['Authorization'], $key, array('HS256'));
+            $userInfo = object_array($payload->data);
+            if (request()->isPost()) {
+                $model = new RepairOrderModel();
+                $result = $model->getRepairList($userInfo['id']);
+                if ($result) {
+                    return json(['code' => 200,
+                        'message' => '获取报修列表成功',
+                        'result' => $result,
+                        'row' => count($result)]);
+                } else {
+                    return json(['code' => 400,
+                        'message' => '获取报修列表失败']);
+                }
+            }
+        } catch (Exception $e) {
+            header('HTTP/1.0 401 Unauthorized');
+            die('Service API authentication failed');
+        }
     }
 }
