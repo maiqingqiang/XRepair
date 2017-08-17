@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import {observer,inject} from 'mobx-react';
-import {List, Badge,ListView } from 'antd-mobile';
+import {observer, inject} from 'mobx-react';
+import {List, Badge, ListView} from 'antd-mobile';
 import {HeadTitle} from './../components/Index'
 import './../styles/pages/RepairList.less'
 
@@ -12,9 +12,9 @@ const Brief = Item.Brief;
 @observer
 export default class RepairList extends Component {
 
-    state={
-        list:[],
-        dataSource:[]
+    state = {
+        list: [],
+        dataSource: []
     }
 
     ds = new ListView.DataSource({
@@ -29,6 +29,8 @@ export default class RepairList extends Component {
         this.store = {
             repairStore: props.repairStore
         };
+        this.repairStatus = this.repairStatus.bind(this);
+        this.repairStatusTitle = this.repairStatusTitle.bind(this);
     }
 
     componentDidMount() {
@@ -36,124 +38,111 @@ export default class RepairList extends Component {
         console.log(this.store.repairStore.repairList)
     }
 
-    onEndReached=(e)=>{
-        this.store.repairStore.getRepair();
-    }
+
+    repairStatus(status) {
+        switch (status) {
+            case 0:
+                return 'not-order';
+                break;
+            case 1:
+                return 'processing';
+                break;
+            case 2:
+                return 'complete';
+                break;
+            default:
+                return 'not-order';
+        }
+    };
+
+    repairStatusTitle(status) {
+        switch (status) {
+            case 0:
+                return '未接单';
+                break;
+            case 1:
+                return '处理中';
+                break;
+            case 2:
+                return '已完成';
+                break;
+            default:
+                return '未接单';
+        }
+    };
 
     render() {
         const row = (rowData, sectionID, rowID) => {
-            return (
-                    <Item key={rowID} multipleLine onClick={() => {
-                    }} className="special-badge" extra={<Badge className="am-badge-45" style={{ backgroundColor: '#49a9ee',   fontSize: '0.18rem'}} text={'处理中'}/>}>
-                        <Badge text="宽带"
-                               style={{
-                                   marginRight: 12,
-                                   padding: '0 0.06rem',
-                                   backgroundColor: '#fff',
-                                   borderRadius: 2,
-                                   color: '#49a9ee',
-                                   border: '1px solid #49a9ee',
-                               }}
-                        />
-                        T：2017年8月9日 16:04:03
-                        <Brief>
-                            报修项目：宽带 <br/>
-                            报修描述：不能上网<br/>
-                        </Brief>
 
-                    </Item>
-            );
+            switch (rowData.type) {
+                case 'general':
+                    return (
+                        <Item key={rowID} multipleLine onClick={() => {
+                        }} className="special-badge"
+                              extra={<Badge className={this.repairStatus(rowData.status) + " am-badge-45 "}
+                                            text={this.repairStatusTitle(rowData.status)}/>}>
+                            <Badge text="通用"
+                                   style={{
+                                       marginRight: 12,
+                                       padding: '0 0.06rem',
+                                       backgroundColor: '#fff',
+                                       borderRadius: 2,
+                                       color: '#49a9ee',
+                                       border: '1px solid #49a9ee',
+                                   }}
+                            />
+                            T：2017年8月9日 16:04:03
+                            <Brief>
+                                {rowData.id}报修项目：{rowData.data.cate} <br/>
+                                报修描述：{rowData.data.desc}<br/>
+                            </Brief>
+
+                        </Item>
+                    );
+                    break;
+                case 'net':
+                    return (
+                        <Item multipleLine onClick={() => {
+                        }} className="special-badge"
+                              extra={<Badge className={this.repairStatus(rowData.status) + " am-badge-45 "}
+                                            text={this.repairStatusTitle(rowData.status)}/>}>
+                            <Badge text="宽带"
+                                   style={{
+                                       marginRight: 12,
+                                       padding: '0 0.06rem',
+                                       backgroundColor: '#fff',
+                                       borderRadius: 2,
+                                       color: '#49a9ee',
+                                       border: '1px solid #49a9ee',
+                                   }}
+                            />
+                            T：2017年8月9日 16:04:03
+                            <Brief>
+                                {rowData.id}报修帐号：{rowData.data.account}<br/>
+                                报修描述：{rowData.data.desc}<br/>
+                            </Brief>
+
+                        </Item>
+                    );
+                    break;
+            }
+
+
         };
-            let _this =this;
         return (
-            <div id="login">
+            <div id="repairList">
                 <HeadTitle title="我的报修" subTitle="一共报修1次"/>
-                <List className="my-list">
-                {/*<ListView ref="lv"*/}
-                          {/*dataSource={this.store.repairStore.repairList}*/}
-                          {/*renderFooter={() => (<div style={{ padding: 30, textAlign: 'center' }}>*/}
-                              {/*{this.store.repairStore.isLoading ? 'Loading...' : 'Loaded'}*/}
-                          {/*</div>)}*/}
-                          {/*renderRow={row}*/}
-                          {/*className="am-list"*/}
-                          {/*useBodyScroll*/}
-                          {/*onScroll={() => { console.log('scroll'); }}*/}
-                          {/*scrollRenderAheadDistance={500}*/}
-                          {/*scrollEventThrottle={200}*/}
-                          {/*onEndReached={this.onEndReached}*/}
-                          {/*onEndReachedThreshold={10}*/}
-                {/*/>*/}
 
-                </List>
-                23
-                <ListView className="am-list"
-                          renderFooter={() => (<div style={{ padding: 30, textAlign: 'center' }}>
-                    {this.store.repairStore.isLoading ? 'Loading...' : 'Loaded'}
-                </div>)}
+                <ListView ref="lv"
+                          dataSource={this.store.repairStore.repairListDataSource}
+                          renderFooter={() => (<div style={{padding: 30, textAlign: 'center'}}>
+                              {this.store.repairStore.isLoadingTitle}
+                          </div>)}
+                          renderRow={row}
+                          className="am-list"
                           useBodyScroll
-                          dataSource={this.store.repairStore.repairList}
-                          renderRow={(rowData) => <div>31222{rowData.id}</div>}
+                          onEndReached={() => this.store.repairStore.getRepair()}
                 />
-                123
-                <List className="my-list">
-                    <Item multipleLine onClick={() => {
-                    }} className="special-badge" extra={<Badge className="am-badge-45" style={{ backgroundColor: '#49a9ee',   fontSize: '0.18rem'}} text={'处理中'}/>}>
-                        <Badge text="宽带"
-                               style={{
-                                   marginRight: 12,
-                                   padding: '0 0.06rem',
-                                   backgroundColor: '#fff',
-                                   borderRadius: 2,
-                                   color: '#49a9ee',
-                                   border: '1px solid #49a9ee',
-                               }}
-                        />
-                        T：2017年8月9日 16:04:03
-                        <Brief>
-                            报修项目：宽带 <br/>
-                            报修描述：不能上网<br/>
-                        </Brief>
-
-                    </Item>
-                    <Item multipleLine onClick={() => {
-                    }} className="special-badge" extra={<Badge className="am-badge-45" style={{ backgroundColor: '#d9d9d9',   fontSize: '0.18rem'}} text={'未接单'}/>}>
-                        <Badge text="通用"
-                               style={{
-                                   marginRight: 12,
-                                   padding: '0 0.06rem',
-                                   backgroundColor: '#fff',
-                                   borderRadius: 2,
-                                   color: '#49a9ee',
-                                   border: '1px solid #49a9ee',
-                               }}
-                        />
-                        T：2017年8月9日 16:04:03
-                        <Brief>
-                            报修项目：宽带 <br/>
-                            报修描述：不能上网<br/>
-                        </Brief>
-                    </Item>
-                    <Item multipleLine onClick={() => {
-                    }} className="special-badge" extra={<Badge className="am-badge-45" style={{ backgroundColor: '#3dbd7d',   fontSize: '0.18rem'}} text={'已完成'}/>}>
-                        <Badge text="通用"
-                               style={{
-                                   marginRight: 12,
-                                   padding: '0 0.06rem',
-                                   backgroundColor: '#fff',
-                                   borderRadius: 2,
-                                   color: '#49a9ee',
-                                   border: '1px solid #49a9ee',
-                               }}
-                        />
-                        T：2017年8月9日 16:04:03
-                        <Brief>
-                            报修项目：宽带 <br/>
-                            报修描述：不能上网<br/>
-                        </Brief>
-                    </Item>
-                </List>
-
-
             </div>
         );
     }

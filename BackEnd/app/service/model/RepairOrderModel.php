@@ -20,12 +20,12 @@ class RepairOrderModel extends Model {
         self::startTrans();
         try {
             $this->allowField(true)->save($data);
-            $data['id'] = $this->id;
+            $data['oid'] = $this->id;
             $generalOrderModel = new GeneralOrderModel();
             $generalOrderModel->allowField(true)->save($data);
             self::commit();
 
-            return $data['id'];
+            return $data['oid'];
         } catch (\Exception $e) {
             self::rollback();
 
@@ -33,16 +33,16 @@ class RepairOrderModel extends Model {
         }
     }
 
-    public function getRepairList($user_id) {
+    public function getRepairList($user_id,$page) {
 
-        $repairLists = $this->where('user_id','=',$user_id)->select()->toArray();
+        $repairLists = $this->where('user_id','=',$user_id)->page($page,10)->order(['create_time'=>'desc','id'=>'desc'])->select()->toArray();
         foreach ($repairLists as $key => $val) {
             switch ($val['type']) {
                 case 'general':
                     $repairLists[$key]['data'] = Db::view('GeneralOrder', 'name,mobile,region,desc')->view('RepairRegion', ['GROUP_CONCAT(distinct RepairRegion.name)' => 'address'], 'FIND_IN_SET(RepairRegion.id,GeneralOrder.region)', 'LEFT')->view('GeneralCategory', ['GROUP_CONCAT(distinct GeneralCategory.name)' => 'cate'], 'FIND_IN_SET(GeneralCategory.id,GeneralOrder.category)', 'LEFT')->where('oid', '=', $val['id'])->group('GeneralOrder.id')->find();
                     break;
                 case 'net':
-                    $repairLists[$key]['data'] = Db::view('NetOrder', 'name,mobile,desc')->view('RepairRegion', ['GROUP_CONCAT(distinct RepairRegion.name)' => 'address'], 'FIND_IN_SET(RepairRegion.id,NetOrder.region)', 'LEFT')->view('NetOperator', ['name' => 'operator'], 'NetOperator.id=NetOrder.operator_id', 'LEFT')->where('oid', '=', $val['id'])->group('NetOrder.id')->find();
+                    $repairLists[$key]['data'] = Db::view('NetOrder', 'name,account,mobile,desc')->view('RepairRegion', ['GROUP_CONCAT(distinct RepairRegion.name)' => 'address'], 'FIND_IN_SET(RepairRegion.id,NetOrder.region)', 'LEFT')->view('NetOperator', ['name' => 'operator'], 'NetOperator.id=NetOrder.operator_id', 'LEFT')->where('oid', '=', $val['id'])->group('NetOrder.id')->find();
                     break;
             }
         }

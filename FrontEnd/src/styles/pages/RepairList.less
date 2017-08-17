@@ -1,32 +1,54 @@
-.corner-badge {
-  height: 1rem;
-  width: 4rem;
-}
-.special-badge .am-list-line {
-  padding-right: 0;
-}
+#repairList {
+  .corner-badge {
+    height: 1rem;
+    width: 4rem;
+  }
+  .special-badge .am-list-line {
+    padding-right: 0;
+  }
 
+  .special-badge .am-list-line .am-list-extra {
+    padding: 0;
+    height: 1.88rem;
+  }
 
-.special-badge .am-list-line .am-list-extra {
-  padding: 0;
-  height: 1.88rem;
-}
+  .am-list-item .am-list-line-multiple {
+    padding: 0;
+  }
 
-.am-list-item .am-list-line-multiple {
-  padding: 0;
-}
+  .am-list-content {
+    padding: 0.14rem 0 !important;
+  }
 
-.am-list-content{
-  padding: 0.14rem 0 !important;
-}
+  .special-badge .am-badge-45 {
+    transform: rotate(45deg);
+    transform-origin: right bottom;
+    right: 0;
+    top: 0.26rem;
+    width: 1rem;
+  }
+  .special-badge .am-badge-text {
+    border-radius: 0.02rem;
+  }
 
-.special-badge .am-badge-45 {
-  transform: rotate(45deg);
-  transform-origin: right bottom;
-  right: 0;
-  top: 0.26rem;
-  width: 1rem;
-}
-.special-badge .am-badge-text {
-  border-radius: 0.02rem;
+  .not-order {
+    .am-badge-text {
+      background: #d9d9d9 !important;
+      font-size: 0.18rem;
+    }
+  }
+
+  .processing {
+    .am-badge-text {
+      background: #49a9ee !important;
+      font-size: 0.18rem;
+    }
+  }
+
+  .complete {
+    .am-badge-text {
+      background: #3dbd7d !important;
+      font-size: 0.18rem;
+    }
+  }
 }

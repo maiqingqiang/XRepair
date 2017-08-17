@@ -1,6 +1,7 @@
-import {observable, action,computed} from "mobx"
-import {Toast,ListView} from 'antd-mobile'
+import {observable, action, computed} from "mobx"
+import {Toast, ListView} from 'antd-mobile'
 import axios from 'axios'
+import qs from 'qs'
 
 class RepairStore {
     @observable regionList = [];
@@ -10,12 +11,9 @@ class RepairStore {
     @observable isLoading = false;
     @observable hasMore = true;
 
-    constructor(){
-        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        this.repairList = ds.cloneWithRows([]);
-    }
+    ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
-
+    //获取区域
     @action
     getRegion() {
         if (this.regionList.length <= 0) {
@@ -35,32 +33,34 @@ class RepairStore {
         }
     }
 
+    //获取报修结果
     @action
     getRepair() {
+        console.log('1'+this.isLoading)
+        console.log('2'+this.hasMore)
+        console.log('3:'+(this.isLoading && !this.hasMore))
         if (this.isLoading && !this.hasMore) {
-            return;
+            return false;
         }
-        let _this = this;
+
+        if (!this.hasMore){
+            return false;
+        }
+
         this.isLoading = true;
-        axios.post('/XRepair/BackEnd/public/service/common/getRepairList').then((res) => {
-            console.log(1)
-            this.isLoading = false;
+
+        let _this = this;
+        axios.post('/XRepair/BackEnd/public/service/common/getRepairList', qs.stringify({page: this.repairListPage++})).then((res) => {
+            _this.isLoading = false;
             let data = res.data;
             if (data.code == 200) {
-                _this.hasMore = data.row >= 25;
-                // _this.repairList=[
-                //     'John', 'Joel', 'James', 'Jimmy', 'Jackson', 'Jillian', 'Julie', 'Devin'
-                // ];
-
-                _this.repairList = _this.repairList.cloneWithRows(data.result);
-
-                console.log(_this.repairList)
+                _this.hasMore = data.row >= 10;
+                _this.repairList = [..._this.repairList, ...data.result];
             } else {
                 _this.hasMore = false;
-                Toast.fail(data.message, 1.5);
+                // Toast.fail(data.message, 1.5);
             }
         }).catch((e) => {
-            this.isLoading = false;
             Toast.offline(e.message, 1.5)
         });
     }
@@ -73,11 +73,15 @@ class RepairStore {
         this.hasMore = true;
     }
 
-    // ds = new ListView.DataSource({ rowHasChanged: (r1,r2) => r1 !== r2});
-    //
-    // @computed get datasourceRepairList(){
-    //        return this.ds.cloneWithRows(this.repairList.slice())
-    //   	  }
+    @computed
+    get repairListDataSource() {
+        return this.ds.cloneWithRows(this.repairList.slice());
+    }
+
+    @computed
+    get isLoadingTitle() {
+        return this.hasMore ? '正在努力加载数据...' : '没有数据啦~~';
+    }
 }
 
 const repairStore = new RepairStore();
