@@ -1,16 +1,19 @@
-import {observable, action} from "mobx"
+import {observable, action,computed} from "mobx"
 import {Toast,ListView} from 'antd-mobile'
 import axios from 'axios'
-
-const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
 class RepairStore {
     @observable regionList = [];
     @observable regionCols = 1;
-    @observable repairList = ds;
+    @observable repairList = [];
     @observable repairListPage = 1;
     @observable isLoading = false;
     @observable hasMore = true;
+
+    constructor(){
+        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        this.repairList = ds.cloneWithRows([]);
+    }
 
 
     @action
@@ -40,15 +43,16 @@ class RepairStore {
         let _this = this;
         this.isLoading = true;
         axios.post('/XRepair/BackEnd/public/service/common/getRepairList').then((res) => {
-            _this.repairList.cloneWithRows([
-                'John', 'Joel', 'James', 'Jimmy', 'Jackson', 'Jillian', 'Julie', 'Devin'
-            ]);
             console.log(1)
             this.isLoading = false;
             let data = res.data;
             if (data.code == 200) {
                 _this.hasMore = data.row >= 25;
-                // _this.repairList=ds.cloneWithRows(data.result);
+                // _this.repairList=[
+                //     'John', 'Joel', 'James', 'Jimmy', 'Jackson', 'Jillian', 'Julie', 'Devin'
+                // ];
+
+                _this.repairList = _this.repairList.cloneWithRows(data.result);
 
                 console.log(_this.repairList)
             } else {
@@ -68,6 +72,12 @@ class RepairStore {
         this.isLoading = false;
         this.hasMore = true;
     }
+
+    // ds = new ListView.DataSource({ rowHasChanged: (r1,r2) => r1 !== r2});
+    //
+    // @computed get datasourceRepairList(){
+    //        return this.ds.cloneWithRows(this.repairList.slice())
+    //   	  }
 }
 
 const repairStore = new RepairStore();

@@ -18,7 +18,7 @@ const AutoDllPlugin = require('autodll-webpack-plugin');
 const pkg = require("../package.json");
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const PrepackWebpackPlugin = require('prepack-webpack-plugin').default;
-var Visualizer = require('webpack-visualizer-plugin');
+const Visualizer = require('webpack-visualizer-plugin');
 
 
 // Webpack uses `publicPath` to determine where the app is being served from.

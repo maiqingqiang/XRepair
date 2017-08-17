@@ -17,22 +17,22 @@ export default class RepairList extends Component {
         dataSource:[]
     }
 
+    ds = new ListView.DataSource({
+        rowHasChanged: (r1, r2) => {
+            return r1 !== r2
+        }
+    });
+
     constructor(props) {
         super(props);
         this.history = props.history;
         this.store = {
             repairStore: props.repairStore
         };
-        const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-        this.state = {
-            dataSource: ds.cloneWithRows([
-                'John', 'Joel', 'James', 'Jimmy', 'Jackson', 'Jillian', 'Julie', 'Devin'
-            ])
-        };
     }
 
     componentDidMount() {
-
+        this.store.repairStore.getRepair()
         console.log(this.store.repairStore.repairList)
     }
 
@@ -64,7 +64,7 @@ export default class RepairList extends Component {
                     </Item>
             );
         };
-
+            let _this =this;
         return (
             <div id="login">
                 <HeadTitle title="我的报修" subTitle="一共报修1次"/>
@@ -92,7 +92,7 @@ export default class RepairList extends Component {
                 </div>)}
                           useBodyScroll
                           dataSource={this.store.repairStore.repairList}
-                          renderRow={(rowData) => <div>31222{rowData}</div>}
+                          renderRow={(rowData) => <div>31222{rowData.id}</div>}
                 />
                 123
                 <List className="my-list">
