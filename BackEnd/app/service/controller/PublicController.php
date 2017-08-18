@@ -235,7 +235,8 @@ class PublicController extends BaseController {
         $data = ['id' => 1,
             'name' => '麦青强',
             'email' => 'xiaomak@qq.com',
-            'mobile' => '18587733312'];
+            'mobile' => '18587733312',
+            'isAdmin' => 1];
         $result = $this->getLoginInfo($data);
 
         return json(['code' => 200,
