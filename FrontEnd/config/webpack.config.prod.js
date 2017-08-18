@@ -19,6 +19,7 @@ const pkg = require("../package.json");
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const PrepackWebpackPlugin = require('prepack-webpack-plugin').default;
 const Visualizer = require('webpack-visualizer-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin'); // 压缩css的插件
 
 
 // Webpack uses `publicPath` to determine where the app is being served from.
@@ -336,6 +337,13 @@ module.exports = {
         //
         //     ]
         // }),
+        //压缩css
+        new OptimizeCssAssetsPlugin({
+            assetNameRegExp: /\.optimize\.css$/g,
+            cssProcessor: require('cssnano'),
+            cssProcessorOptions: { discardComments: {removeAll: true } },
+            canPrint: true
+        }),
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',
             filename: 'vendor.bundle.js',

@@ -55,6 +55,7 @@ class PublicController extends BaseController {
             switch ($result['status']) {
                 case 0:
                     $data = $this->getLoginInfo($result['userInfo']);
+
                     return json(['code' => 200,
                         'message' => '登录成功',
                         'result' => $data]);
@@ -215,7 +216,8 @@ class PublicController extends BaseController {
             'data' => ['id' => $data['id'],
                 'name' => $data['name'],
                 'email' => $data['email'],
-                'mobile' => $data['mobile']]];
+                'mobile' => $data['mobile'],
+                'isAdmin' => $data['isAdmin']]];
         $key = config('jwt_key');
         $secretKey = base64_encode($key);
         $token = JWT::encode($payload, $secretKey);
@@ -227,11 +229,15 @@ class PublicController extends BaseController {
 
         return $result;
     }
-    
-    
-    public function getToken(){
-        $data= ['id'=>1,'name'=>'麦青强','email'=>'xiaomak@qq.com','mobile'=>'18587733312'];
+
+
+    public function getToken() {
+        $data = ['id' => 1,
+            'name' => '麦青强',
+            'email' => 'xiaomak@qq.com',
+            'mobile' => '18587733312'];
         $result = $this->getLoginInfo($data);
+
         return json(['code' => 200,
             'message' => '登录成功',
             'result' => $result]);

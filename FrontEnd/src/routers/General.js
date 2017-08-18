@@ -4,7 +4,10 @@ import LazyRoute from "lazy-route";
 export default [
     {
         path: '/general/index',
-        exact: true,
-        render: props => (<LazyRoute {...props} component={import('./../modules/General/index')}/>)
+        render: props => (<LazyRoute {...props} component={import('./../modules/General/Index')}/>)
+    },
+    {
+        path: '/general/details/:id',
+        render: props => (<LazyRoute {...props} component={import('./../modules/General/Details')}/>)
     },
 ]

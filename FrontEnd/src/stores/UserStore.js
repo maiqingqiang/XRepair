@@ -4,12 +4,14 @@ import axios from 'axios'
 class UiStore {
     @observable token = '';
     @observable isLogin = false;
+    @observable isAdmin = false;
     @observable userInfo = [];
 
     @action
     clearData() {
         this.userInfo = [];
         this.isLogin = false;
+        this.isAdmin = false;
         this.token = '';
     }
 
@@ -17,6 +19,7 @@ class UiStore {
     @action
     setToken(token,userInfo){
         this.isLogin=true;
+        this.isAdmin=true;
         this.token=token;
         this.userInfo=userInfo;
     }

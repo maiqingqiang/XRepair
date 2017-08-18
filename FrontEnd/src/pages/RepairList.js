@@ -25,7 +25,6 @@ export default class RepairList extends Component {
 
     constructor(props) {
         super(props);
-        this.history = props.history;
         this.store = {
             repairStore: props.repairStore
         };
@@ -72,13 +71,16 @@ export default class RepairList extends Component {
     };
 
     render() {
+
+        const _this = this;
+        const {history} = this.props;
+
         const row = (rowData, sectionID, rowID) => {
 
             switch (rowData.type) {
                 case 'general':
                     return (
-                        <Item key={rowID} multipleLine onClick={() => {
-                        }} className="special-badge"
+                        <Item key={rowID} multipleLine onClick={() => {history.push('/general/details/'+rowData.id)}} className="special-badge"
                               extra={<Badge className={this.repairStatus(rowData.status) + " am-badge-45 "}
                                             text={this.repairStatusTitle(rowData.status)}/>}>
                             <Badge text="通用"

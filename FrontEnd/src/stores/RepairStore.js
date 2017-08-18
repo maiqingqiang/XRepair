@@ -36,14 +36,14 @@ class RepairStore {
     //获取报修结果
     @action
     getRepair() {
-        console.log('1'+this.isLoading)
-        console.log('2'+this.hasMore)
-        console.log('3:'+(this.isLoading && !this.hasMore))
+        console.log('1' + this.isLoading)
+        console.log('2' + this.hasMore)
+        console.log('3:' + (this.isLoading && !this.hasMore))
         if (this.isLoading && !this.hasMore) {
             return false;
         }
 
-        if (!this.hasMore){
+        if (!this.hasMore) {
             return false;
         }
 
@@ -80,7 +80,11 @@ class RepairStore {
 
     @computed
     get isLoadingTitle() {
-        return this.hasMore ? '正在努力加载数据...' : '没有数据啦~~';
+        if (this.hasMore) {
+            return this.isLoading ? '正在努力加载数据...' : '下拉加载';
+        } else {
+            return '没有数据啦';
+        }
     }
 }
 

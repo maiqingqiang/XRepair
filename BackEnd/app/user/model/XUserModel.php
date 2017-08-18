@@ -77,6 +77,7 @@ class XUserModel extends Model {
                         'name'=>$result['user_nickname'],
                         'email'=>$result['user_email'],
                         'mobile'=>$result['mobile'],
+                        'isAdmin'=>$result['user_type']==1?1:0
                     )
                 );
             }
@@ -110,6 +111,7 @@ class XUserModel extends Model {
                         'name'=>$result['user_nickname'],
                         'email'=>$result['user_email'],
                         'mobile'=>$result['mobile'],
+                        'isAdmin'=>$result['user_type']==1?1:0
                     )
                 );
             }
@@ -148,6 +150,7 @@ class XUserModel extends Model {
                         'name'=>$result['user_nickname'],
                         'email'=>$result['user_email'],
                         'mobile'=>$result['mobile'],
+                        'isAdmin'=>$result['user_type']==1?1:0
                     )
                 );
             }
