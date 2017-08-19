@@ -33,13 +33,16 @@ export default class RepairList extends Component {
     }
 
     componentDidMount() {
-        this.store.repairStore.getRepair()
-        console.log(this.store.repairStore.repairList)
+        this.store.repairStore.getRepair();
+        this.store.repairStore.getRepairCount();
     }
 
 
     repairStatus(status) {
         switch (status) {
+            case -1:
+                return 'del-order';
+                break;
             case 0:
                 return 'not-order';
                 break;
@@ -56,6 +59,9 @@ export default class RepairList extends Component {
 
     repairStatusTitle(status) {
         switch (status) {
+            case -1:
+                return '已撤销';
+                break;
             case 0:
                 return '未接单';
                 break;
@@ -71,12 +77,10 @@ export default class RepairList extends Component {
     };
 
     render() {
-
-        const _this = this;
         const {history} = this.props;
+        const {repairStore} = this.store;
 
         const row = (rowData, sectionID, rowID) => {
-
             switch (rowData.type) {
                 case 'general':
                     return (
@@ -128,22 +132,20 @@ export default class RepairList extends Component {
                     );
                     break;
             }
-
-
         };
         return (
             <div id="repairList">
-                <HeadTitle title="我的报修" subTitle="一共报修1次"/>
+                <HeadTitle title="我的报修" subTitle={"一共报 "+repairStore.getRepairListCount+" 修次"}/>
 
                 <ListView ref="lv"
-                          dataSource={this.store.repairStore.repairListDataSource}
+                          dataSource={repairStore.repairListDataSource}
                           renderFooter={() => (<div style={{padding: 30, textAlign: 'center'}}>
-                              {this.store.repairStore.isLoadingTitle}
+                              {repairStore.isLoadingTitle}
                           </div>)}
                           renderRow={row}
                           className="am-list"
                           useBodyScroll
-                          onEndReached={() => this.store.repairStore.getRepair()}
+                          onEndReached={() => repairStore.getRepair()}
                 />
             </div>
         );

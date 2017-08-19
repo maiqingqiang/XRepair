@@ -10,6 +10,7 @@
 namespace app\user\model;
 
 use think\Db;
+use think\Exception;
 use think\Model;
 
 class XUserModel extends Model {
@@ -25,9 +26,9 @@ class XUserModel extends Model {
 
         $userStatus = 1;
 
-//        if (!cmf_is_open_registration()) {
-//            $userStatus = 2;
-//        }
+        //        if (!cmf_is_open_registration()) {
+        //            $userStatus = 2;
+        //        }
 
         $data = ['user_login' => $user['user_login'],
             'user_email' => $user['user_email'],
@@ -41,9 +42,9 @@ class XUserModel extends Model {
             "user_type" => 2,];
         $userId = $userQuery->insertGetId($data);
         if ($userId) {
-            if ($userStatus==1){
+            if ($userStatus == 1) {
                 return 0;
-            }else{
+            } else {
                 return 1;
             }
         } else {
@@ -51,8 +52,44 @@ class XUserModel extends Model {
         }
     }
 
-    public function doMobile($user)
-    {
+    public function updateUserInfo($id, $user) {
+        $userQuery = Db::name("user");
+
+        $data = ['user_email' => $user['email'],
+            'mobile' => $user['mobile'],
+            'user_nickname' => $user['name']];
+
+        try {
+            $userQuery->where('id', $id)->update($data);
+
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    public function updatePassword($id, $user) {
+        $userQuery = Db::name("user");
+        $result = $userQuery->where('id', $id)->find();
+        if (!empty($result)) {
+            $comparePasswordResult = cmf_compare_password($user['old_password'], $result['user_pass']);
+            if ($comparePasswordResult) {
+                $data = ['user_pass' => cmf_password($user['password'])];
+                try {
+                    $userQuery->where('id', $id)->update($data);
+                    return 1;
+                } catch (Exception $e) {
+                    return 2;
+                }
+            } else {
+                return 3;
+            }
+        } else {
+            return 4;
+        }
+    }
+
+    public function doMobile($user) {
         $userQuery = Db::name("user");
 
         $result = $userQuery->where('mobile', $user['mobile'])->find();
@@ -62,32 +99,29 @@ class XUserModel extends Model {
             $comparePasswordResult = cmf_compare_password($user['user_pass'], $result['user_pass']);
             if ($comparePasswordResult) {
                 //拉黑判断。
-                if($result['user_status']==0){
-                    return array('status'=>3);
+                if ($result['user_status'] == 0) {
+                    return array('status' => 3);
                 }
-                $data = [
-                    'last_login_time' => time(),
-                    'last_login_ip'   => get_client_ip(0, true),
-                ];
+                $data = ['last_login_time' => time(),
+                    'last_login_ip' => get_client_ip(0, true),];
                 $userQuery->where('id', $result["id"])->update($data);
-                return array(
-                    'status'=>0,
-                    'userInfo'=>array(
-                        'id'=>$result['id'],
-                        'name'=>$result['user_nickname'],
-                        'email'=>$result['user_email'],
-                        'mobile'=>$result['mobile'],
-                        'isAdmin'=>$result['user_type']==1?1:0
-                    )
-                );
+
+                return array('status' => 0,
+                    'userInfo' => array('id' => $result['id'],
+                        'name' => $result['user_nickname'],
+                        'account' => $result['user_login'],
+                        'email' => $result['user_email'],
+                        'mobile' => $result['mobile'],
+                        'isAdmin' => $result['user_type'] == 1 ? 1 : 0));
             }
-            return array('status'=>1);
+
+            return array('status' => 1);
         }
-        return array('status'=>2);
+
+        return array('status' => 2);
     }
 
-    public function doName($user)
-    {
+    public function doName($user) {
         $userQuery = Db::name("user");
 
         $result = $userQuery->where('user_login', $user['user_login'])->find();
@@ -95,34 +129,30 @@ class XUserModel extends Model {
             $comparePasswordResult = cmf_compare_password($user['user_pass'], $result['user_pass']);
             if ($comparePasswordResult) {
                 //拉黑判断。
-                if($result['user_status']==0){
-                    return array('status'=>3);
+                if ($result['user_status'] == 0) {
+                    return array('status' => 3);
                 }
                 session('user', $result);
-                $data = [
-                    'last_login_time' => time(),
-                    'last_login_ip'   => get_client_ip(0, true),
-                ];
+                $data = ['last_login_time' => time(),
+                    'last_login_ip' => get_client_ip(0, true),];
                 $userQuery->where('id', $result["id"])->update($data);
-                return array(
-                    'status'=>0,
-                    'userInfo'=>array(
-                        'id'=>$result['id'],
-                        'name'=>$result['user_nickname'],
-                        'email'=>$result['user_email'],
-                        'mobile'=>$result['mobile'],
-                        'isAdmin'=>$result['user_type']==1?1:0
-                    )
-                );
+
+                return array('status' => 0,
+                    'userInfo' => array('id' => $result['id'],
+                        'name' => $result['user_nickname'],
+                        'account' => $result['user_login'],
+                        'email' => $result['user_email'],
+                        'mobile' => $result['mobile'],
+                        'isAdmin' => $result['user_type'] == 1 ? 1 : 0));
             }
-            return array('status'=>1);
+
+            return array('status' => 1);
         }
 
-        return array('status'=>2);
+        return array('status' => 2);
     }
 
-    public function doEmail($user)
-    {
+    public function doEmail($user) {
 
         $userQuery = Db::name("user");
 
@@ -134,28 +164,26 @@ class XUserModel extends Model {
 
             if ($comparePasswordResult) {
                 //拉黑判断。
-                if($result['user_status']==0){
-                    return array('status'=>3);
+                if ($result['user_status'] == 0) {
+                    return array('status' => 3);
                 }
                 session('user', $result);
-                $data = [
-                    'last_login_time' => time(),
-                    'last_login_ip'   => get_client_ip(0, true),
-                ];
+                $data = ['last_login_time' => time(),
+                    'last_login_ip' => get_client_ip(0, true),];
                 $userQuery->where('id', $result["id"])->update($data);
-                return array(
-                    'status'=>0,
-                    'userInfo'=>array(
-                        'id'=>$result['id'],
-                        'name'=>$result['user_nickname'],
-                        'email'=>$result['user_email'],
-                        'mobile'=>$result['mobile'],
-                        'isAdmin'=>$result['user_type']==1?1:0
-                    )
-                );
+
+                return array('status' => 0,
+                    'userInfo' => array('id' => $result['id'],
+                        'name' => $result['user_nickname'],
+                        'account' => $result['user_login'],
+                        'email' => $result['user_email'],
+                        'mobile' => $result['mobile'],
+                        'isAdmin' => $result['user_type'] == 1 ? 1 : 0));
             }
-            return array('status'=>1);
+
+            return array('status' => 1);
         }
-        return array('status'=>2);
+
+        return array('status' => 2);
     }
 }

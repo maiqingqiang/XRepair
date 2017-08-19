@@ -29,7 +29,9 @@ class Register extends Component {
         this.initCaptcha();
     }
 
-    register = () => {
+    register = (e) => {
+        if (e) e.preventDefault();
+
         let result = this.captcha.getValidate();
 
         if (this.captcha.getValidate()) {

@@ -48,20 +48,20 @@ const data = [{
 }];
 
 
-@inject("uiStore")
+@inject('uiStore','userStore')
 @observer
 export default class Home extends Component {
     constructor(props) {
         super(props);
-        this.history = props.history;
-        this.state = {
-            selectedTab: 'homeTab'
-        };
     }
 
+    logout=()=>{
+        this.props.userStore.clearData();
+        this.props.history.push('/login');
+    };
+
     render() {
-        const {uiStore} = this.props;
-        const {history} = this;
+        const {uiStore,history} = this.props;
         return (
             <div id="home">
                 <TabBar
@@ -106,13 +106,14 @@ export default class Home extends Component {
                             uiStore.selectedTab = 'meTab'
                         }}>
                         <List renderHeader={() => '我的'} className="my-list">
-                            <Item arrow="horizontal" onClick={() => {history.push('')}}>个人资料</Item>
+                            <Item arrow="horizontal" onClick={() => {history.push('/userinfo')}}>个人资料</Item>
+                            <Item arrow="horizontal" onClick={() => {history.push('/password')}}>修改密码</Item>
                             <Item arrow="horizontal" onClick={() => {history.push('/repair_list')}}>我的报修</Item>
+                            <Item arrow="horizontal" onClick={() => {history.push('/admin/index')}}>后台管理</Item>
                         </List>
                         <WhiteSpace size="lg"/>
                         <WingBlank size="sm">
-                            <Button style={{backgroundColor: 'red', border: 'red'}} className="btn"
-                                    type="primary">退出登录</Button>
+                            <Button style={{backgroundColor: 'red', border: 'red'}} type="primary" onClick={this.logout}>退出登录</Button>
                         </WingBlank>
 
                     </TabBar.Item>

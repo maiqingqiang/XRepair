@@ -52,7 +52,9 @@ class Login extends Component {
         });
     }
 
-    login = () => {
+    login = (e) => {
+        if (e) e.preventDefault();
+
         let result = this.captcha.getValidate();
 
         if (this.captcha.getValidate()) {
@@ -60,8 +62,9 @@ class Login extends Component {
                 random: this.random,
                 offline: this.offline
             });
-
+            Toast.loading('正在登录中…',0);
             this.axios.post('/XRepair/BackEnd/public/service/public/login', Qs.stringify(data)).then((res) => {
+                Toast.hide();
                 let data = res.data;
                 if (data.code == 200) {
                     const {userStore} = this.props;

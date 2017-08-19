@@ -1,0 +1,221 @@
+<include file="public@header"/>
+<link href="//cdn.bootcss.com/limonte-sweetalert2/6.6.7/sweetalert2.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="javascript:;">通用报修数据</a></li>
+    </ul>
+    <form class="well form-inline margin-top-20" method="post" action="{:url('Index/index')}">
+        区域:
+        <select class="form-control" name="region" style="width: 140px;">
+            <option value='0'>全部</option>
+            {$region_tree|default=''}
+        </select> &nbsp;&nbsp;
+        报修类型:
+        <select class="form-control" name="category" style="width: 140px;">
+            <option value='0'>全部</option>
+            {$category_tree|default=''}
+        </select> &nbsp;&nbsp;
+        时间:
+        <input type="text" class="form-control js-bootstrap-datetime" name="start_time"
+               value="{$start_time|default=''}"
+               style="width: 140px;" autocomplete="off">-
+        <input type="text" class="form-control js-bootstrap-datetime" name="end_time"
+               value="{$end_time|default=''}"
+               style="width: 140px;" autocomplete="off"> &nbsp; &nbsp;
+        姓名:
+        <input type="text" class="form-control" name="name" style="width: 200px;"
+               value="{$name|default=''}" placeholder="请输入姓名...">
+        <input type="submit" class="btn btn-primary" value="搜索"/>
+        <a class="btn btn-danger" href="{:url('Index/index')}">清空</a>
+    </form>
+    <form class="js-ajax-form" action="" method="post">
+        <div class="table-actions">
+            <button class="btn btn-primary btn-sm js-ajax-submit" type="submit"
+                    data-action="{:url('Index/order')}" data-subcheck="true">接单
+            </button>
+            <button class="btn btn-primary btn-sm js-ajax-submit" type="submit"
+                    data-action="{:url('Index/complete')}" data-subcheck="true">完成
+            </button>
+        </div>
+        <table class="table table-hover table-bordered table-list">
+            <thead>
+            <tr>
+                <th width="15">
+                    <label>
+                        <input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x">
+                    </label>
+                </th>
+                <th width="50">ID</th>
+                <th width="70">姓名</th>
+                <th width="50">手机号码</th>
+                <th width="160">区域</th>
+                <th width="90">报修类型</th>
+                <th>描述</th>
+                <th width="130">报修时间</th>
+                <th width="70">维修员</th>
+                <th width="50">联系方式</th>
+                <th width="130">接单时间</th>
+                <th width="70">状态</th>
+                <th width="90">操作</th>
+            </tr>
+            </thead>
+            <foreach name="list" item="vo">
+                <tr>
+                    <td>
+                        <input type="checkbox" class="js-check" data-yid="js-check-y" data-xid="js-check-x" name="ids[]"
+                               value="{$vo.id}" title="ID:{$vo.id}">
+                    </td>
+                    <notempty name="category">
+                        <td>
+                            <input name="list_orders[{$vo.post_category_id}]" class="input-order" type="text"
+                                   value="{$vo.list_order}">
+                        </td>
+                    </notempty>
+                    <td><b>{$vo.id}</b></td>
+                    <td>
+                        {$vo.name}
+                    </td>
+                    <td>{$vo.mobile}</td>
+                    <td>{$vo.address}</td>
+                    <td>
+                        {$vo.cate}
+                    </td>
+                    <td>
+                        {$vo.desc}
+                    </td>
+                    <td>
+                        <notempty name="vo.create_time">
+                            {:date('Y-m-d H:i',$vo['create_time'])}
+                        </notempty>
+                    </td>
+                    <td>
+                        {$vo.repairer_name}
+                    </td>
+                    <td>
+                        {$vo.repairer_mobile}
+                    </td>
+                    <td>
+                        <notempty name="vo.order_time">
+                            {:date('Y-m-d H:i',$vo['order_time'])}
+                        </notempty>
+                    </td>
+                    <td>
+                        <switch name="vo.status">
+                            <case value="-1"><span style="color: red">已撤销</span></case>
+                            <case value="0">未接单</case>
+                            <case value="1"><span style="color: dodgerblue">处理中</span></case>
+                            <case value="2"><span style="color: limegreen">完成</span></case>
+                            <default/>
+                            未接单
+                        </switch>
+                    </td>
+                    <td>
+                        <switch name="vo.status">
+                            <case value="0"><a href="{:url('Index/order',array('ids'=>$vo['id']))}"
+                                               class="js-ajax-dialog-btn" data-msg="确定接单吗？">接单</a> |
+                            </case>
+                            <case value="1"><a href="{:url('Index/complete',array('ids'=>$vo['id']))}"
+                                               class="js-ajax-dialog-btn" data-msg="确定完成订单吗？">完成</a> |
+                            </case>
+                        </switch>
+                        <eq name="vo.status" value="2">
+                            <empty name="vo.feedback">
+                                <a onclick="feedback('{$vo.id}','{$vo.name}')">反馈</a> |
+                            </empty>
+                        </eq>
+                        <a href="{:url('Index/details',array('id'=>$vo['id']))}">查看</a>
+
+                    </td>
+                </tr>
+            </foreach>
+            <tfoot>
+            <tr>
+                <th width="15">
+                    <label>
+                        <input type="checkbox" class="js-check-all" data-direction="x" data-checklist="js-check-x">
+                    </label>
+                </th>
+                <th width="50">ID</th>
+                <th width="70">姓名</th>
+                <th width="50">手机号码</th>
+                <th width="160">区域</th>
+                <th width="90">报修类型</th>
+                <th>描述</th>
+                <th width="130">报修时间</th>
+                <th width="70">维修员</th>
+                <th width="50">联系方式</th>
+                <th width="130">接单时间</th>
+                <th width="70">状态</th>
+                <th width="90">操作</th>
+            </tr>
+            </tfoot>
+        </table>
+        <div class="table-actions">
+            <button class="btn btn-primary btn-sm js-ajax-submit" type="submit"
+                    data-action="{:url('Index/order')}" data-subcheck="true">接单
+            </button>
+            <button class="btn btn-primary btn-sm js-ajax-submit" type="submit"
+                    data-action="{:url('Index/complete')}" data-subcheck="true">完成
+            </button>
+        </div>
+        <ul class="pagination">{$page|default=''}</ul>
+    </form>
+</div>
+<script src="__STATIC__/js/admin.js"></script>
+<script src="//cdn.bootcss.com/limonte-sweetalert2/6.6.7/sweetalert2.min.js"></script>
+<script src="//cdn.bootcss.com/es6-promise/4.1.1/es6-promise.min.js"></script>
+<script>
+
+    function reloadPage(win) {
+        win.location.reload();
+    }
+
+    function feedback(id, name) {
+
+        var api = "{:url('Index/feedback')}";
+
+        swal({
+            title: '请对ID:' + id + ' 客户:' + name + ',反馈你的维修情况',
+            input: 'text',
+            type: 'info',
+            showCancelButton: true,
+            confirmButtonText: '提交',
+            cancelButtonText: '暂时不反馈',
+            preConfirm: function (text) {
+
+                return new Promise(function (resolve, reject) {
+                    $.post(api, {id: id, feedback: text}, function (data) {
+                        if (data.code == '1') {
+                            resolve('success');
+                        } else {
+                            reject();
+                        }
+                    });
+                });
+
+            },
+            allowOutsideClick: false
+        }).then(function (result) {
+            if (result) {
+                swal({
+                    type: 'success',
+                    title: '反馈成功',
+                    html: '对ID:' + id + ' 客户:' + name + ',反馈成功!'
+                }).then(function () {
+                    reloadPage(window);
+                });
+            } else {
+                swal({
+                    type: 'error',
+                    title: '反馈失败',
+                    html: '对ID:' + id + ' 客户:' + name + ',反馈失败,请重新反馈'
+                })
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

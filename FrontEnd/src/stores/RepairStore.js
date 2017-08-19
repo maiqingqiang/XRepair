@@ -4,12 +4,17 @@ import axios from 'axios'
 import qs from 'qs'
 
 class RepairStore {
+
     @observable regionList = [];
     @observable regionCols = 1;
+
     @observable repairList = [];
     @observable repairListPage = 1;
+    @observable repairCount = null;
     @observable isLoading = false;
     @observable hasMore = true;
+
+    @observable repairDetails = [];
 
     ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
@@ -33,12 +38,9 @@ class RepairStore {
         }
     }
 
-    //获取报修结果
+    //获取报修列表
     @action
     getRepair() {
-        console.log('1' + this.isLoading)
-        console.log('2' + this.hasMore)
-        console.log('3:' + (this.isLoading && !this.hasMore))
         if (this.isLoading && !this.hasMore) {
             return false;
         }
@@ -58,13 +60,49 @@ class RepairStore {
                 _this.repairList = [..._this.repairList, ...data.result];
             } else {
                 _this.hasMore = false;
-                // Toast.fail(data.message, 1.5);
             }
         }).catch((e) => {
             Toast.offline(e.message, 1.5)
         });
     }
 
+    //获取报修次数
+    @action
+    getRepairCount(){
+        if (this.repairCount===null){
+            let _this = this;
+            axios.post('/XRepair/BackEnd/public/service/common/getRepairCount').then((res) => {
+                let data = res.data;
+                if (data.code == 200) {
+                    _this.repairCount = data.result;
+                } else {
+                    _this.repairCount = 0;
+                }
+            }).catch((e) => {
+                Toast.offline(e.message, 1.5)
+            });
+        }
+    }
+
+    //获取报修详情
+    @action
+    getRepairDetails(id){
+        this.repairDetails=[];
+        let _this = this;
+        axios.post('/XRepair/BackEnd/public/service/common/getRepairDetails',qs.stringify({id})).then((res) => {
+            let data = res.data;
+            if (data.code == 200) {
+                _this.repairDetails = data.result;
+                console.log(data.result)
+            } else {
+                Toast.fail(data.message, 1.5)
+            }
+        }).catch((e) => {
+            Toast.offline(e.message, 1.5)
+        });
+    }
+
+    //刷新报修列表
     @action
     refreshRepairList() {
         this.repairList = [];
@@ -79,12 +117,22 @@ class RepairStore {
     }
 
     @computed
+    get getRepairListCount() {
+        return this.repairCount===null?0:this.repairCount;
+    }
+
+    @computed
     get isLoadingTitle() {
         if (this.hasMore) {
             return this.isLoading ? '正在努力加载数据...' : '下拉加载';
         } else {
             return '没有数据啦';
         }
+    }
+
+    @computed
+    get getRepairStatus(){
+        return this.repairDetails.status?this.repairDetails.status:0;
     }
 }
 

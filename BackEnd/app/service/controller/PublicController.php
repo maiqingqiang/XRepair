@@ -11,6 +11,7 @@ namespace app\service\controller;
 use app\user\model\XUserModel;
 use Firebase\JWT\JWT;
 use geetest\GeetestLib;
+use think\Db;
 use think\Validate;
 
 class PublicController extends BaseController {
@@ -20,13 +21,16 @@ class PublicController extends BaseController {
         header('Access-Control-Allow-Methods: GET, POST, PUT,DELETE');
     }
 
+    /**
+     * 登录
+     * @return \think\response\Json
+     */
     public function login() {
         if (request()->isPost()) {
             $validate = new Validate(['username' => 'require',
-                'password' => 'require|min:5|max:32',]);
+                'password' => 'require|min:5',]);
             $validate->message(['username.require' => '用户名不能为空',
                 'password.require' => '密码不能为空',
-                'password.max' => '密码不能超过32个字符',
                 'password.min' => '密码不能小于5个字符',]);
 
             $data = request()->post();
@@ -55,10 +59,14 @@ class PublicController extends BaseController {
             switch ($result['status']) {
                 case 0:
                     $data = $this->getLoginInfo($result['userInfo']);
-
-                    return json(['code' => 200,
-                        'message' => '登录成功',
-                        'result' => $data]);
+                    if ($data) {
+                        return json(['code' => 200,
+                            'message' => '登录成功',
+                            'result' => $data]);
+                    } else {
+                        return json(['code' => 500,
+                            'message' => '系统错误']);
+                    }
                     break;
                 case 1:
                     return json(['code' => 400,
@@ -82,13 +90,17 @@ class PublicController extends BaseController {
         }
     }
 
+    /**
+     * 注册
+     * @return \think\response\Json
+     */
     public function register() {
         if (request()->isPost()) {
             $rules = ['username' => 'require|min:4|max:10|alphaDash|unique:user,user_login',
                 'name' => 'require|min:2|chs',
                 'email' => 'require|email|unique:user,user_email',
                 'mobile' => 'require|length:11|unique:user,mobile',
-                'password' => 'require|min:5|max:32|confirm',];
+                'password' => 'require|min:5|confirm'];
 
             $isOpenRegistration = cmf_is_open_registration();
 
@@ -113,7 +125,6 @@ class PublicController extends BaseController {
                 'mobile.length' => '手机号码长度只能为11位',
                 'mobile.unique' => '手机号码已使用',
                 'password.require' => '密码不能为空',
-                'password.max' => '密码不能超过32个字符',
                 'password.min' => '密码不能小于5个字符',
                 'password.confirm' => '两个密码不一样',]);
 
@@ -162,6 +173,17 @@ class PublicController extends BaseController {
 
     }
 
+    /**
+     * 检验验证码
+     *
+     * @param $random
+     * @param $offline
+     * @param $geetest_challenge
+     * @param $geetest_validate
+     * @param $geetest_seccode
+     *
+     * @return bool
+     */
     private function captcha($random, $offline, $geetest_challenge, $geetest_validate, $geetest_seccode) {
         $data = array("user_id" => $random,
             "client_type" => "h5",
@@ -185,7 +207,10 @@ class PublicController extends BaseController {
         }
     }
 
-
+    /**
+     * 初始化验证码
+     * @return mixed
+     */
     public function initCaptcha() {
         $random = input('random');
 
@@ -201,54 +226,21 @@ class PublicController extends BaseController {
     }
 
 
-    private function getLoginInfo($data) {
-        $tokenId = base64_encode($this->uuid());
-        $issuedAt = time();
-        $notBefore = $issuedAt;
-        $expire = $notBefore + 86400;
-        $serverName = get_client_ip();
-        //载荷
-        $payload = ['iat' => $issuedAt,
-            'jti' => $tokenId,
-            'iss' => $serverName,
-            'nbf' => $notBefore,
-            'exp' => $expire,
-            'data' => ['id' => $data['id'],
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'mobile' => $data['mobile'],
-                'isAdmin' => $data['isAdmin']]];
-        $key = config('jwt_key');
-        $secretKey = base64_encode($key);
-        $token = JWT::encode($payload, $secretKey);
-
-        $result['token'] = $token;
-        $result['userInfo'] = array('name' => $data['name'],
-            'email' => $data['email'],
-            'mobile' => $data['mobile']);
-
-        return $result;
-    }
-
-
     public function getToken() {
-        $data = ['id' => 1,
-            'name' => '麦青强',
-            'email' => 'xiaomak@qq.com',
-            'mobile' => '18587733312',
+
+        $result = Db::name('User')->where('id', 1)->find();
+
+
+        $data = ['id' => $result['id'],
+            'name' => $result['user_nickname'],
+            'account' => $result['user_login'],
+            'email' => $result['user_email'],
+            'mobile' => $result['mobile'],
             'isAdmin' => 1];
         $result = $this->getLoginInfo($data);
 
         return json(['code' => 200,
             'message' => '登录成功',
             'result' => $result]);
-    }
-
-    public function uuid() {
-        $charid = md5(uniqid(mt_rand(), true));
-        $hyphen = chr(45);// "-"
-        $uuid = chr(123)// "{"
-            . substr($charid, 0, 8) . $hyphen . substr($charid, 8, 4) . $hyphen . substr($charid, 12, 4) . $hyphen . substr($charid, 16, 4) . $hyphen . substr($charid, 20, 12) . chr(125);// "}"
-        return $uuid;
     }
 }

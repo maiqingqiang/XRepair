@@ -40,13 +40,53 @@ class BaseController {
         }
     }
 
-    public function getUserInfo() {
-        $this->ajaxResult(200, '获取成功', $this->userInfo);
+    /**
+     * 获取用户登录token
+     * @param $data
+     *
+     * @return mixed
+     */
+    public function getLoginInfo($data) {
+        try{
+            $tokenId = base64_encode($this->uuid());
+            $issuedAt = time();
+            $notBefore = $issuedAt;
+            $expire = $notBefore + 86400;
+            $serverName = get_client_ip();
+            //载荷
+            $payload = ['iat' => $issuedAt,
+                'jti' => $tokenId,
+                'iss' => $serverName,
+                'nbf' => $notBefore,
+                'exp' => $expire,
+                'data' => ['id' => $data['id'],
+                    'name' => $data['name'],
+                    'account' => $data['account'],
+                    'email' => $data['email'],
+                    'mobile' => $data['mobile'],
+                    'isAdmin' => $data['isAdmin']]];
+            $key = config('jwt_key');
+            $secretKey = base64_encode($key);
+            $token = JWT::encode($payload, $secretKey);
+
+            $result['token'] = $token;
+            $result['userInfo'] = array('name' => $data['name'],
+                'account' => $data['account'],
+                'email' => $data['email'],
+                'mobile' => $data['mobile']);
+
+            return $result;
+        }catch (Exception $e){
+            return false;
+        }
     }
 
-    protected function ajaxResult($code, $message, $result = []) {
-        return json(['code' => $code,
-            'message' => $message,
-            'result' => $result]);
+
+    public function uuid() {
+        $charid = md5(uniqid(mt_rand(), true));
+        $hyphen = chr(45);// "-"
+        $uuid = chr(123)// "{"
+            . substr($charid, 0, 8) . $hyphen . substr($charid, 8, 4) . $hyphen . substr($charid, 12, 4) . $hyphen . substr($charid, 16, 4) . $hyphen . substr($charid, 20, 12) . chr(125);// "}"
+        return $uuid;
     }
 }

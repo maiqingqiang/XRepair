@@ -18,6 +18,11 @@ use think\Validate;
 use tree\XTree;
 
 class GeneralController extends BaseController {
+
+    /**
+     * 获取通用报修类型
+     * @return \think\response\Json
+     */
     public function getCategory() {
         $where = ['delete_time' => 0];
         $result = Db::name('general_category')->order("list_order ASC")->where($where)->select()->toArray();
@@ -35,6 +40,10 @@ class GeneralController extends BaseController {
         }
     }
 
+    /**
+     * 添加报修单
+     * @return \think\response\Json
+     */
     public function addOrder() {
         $authinfo = apache_request_headers();
         $key = base64_encode(config('jwt_key'));

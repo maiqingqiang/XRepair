@@ -1,0 +1,187 @@
+<include file="public@header"/>
+<link href="//cdn.bootcss.com/limonte-sweetalert2/6.6.7/sweetalert2.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li><a href="{:url('index')}">通用报修数据</a></li>
+        <li class="active"><a href="javascript:;">报修详情</a></li>
+    </ul>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered">
+                <tr>
+                    <th width="100">状态</th>
+                    <td>
+                        <switch name="result.status">
+                            <case value="-1"><span style="color: red">已撤销</span></case>
+                            <case value="0">未接单</case>
+                            <case value="1"><span style="color: dodgerblue">处理中</span></case>
+                            <case value="2"><span style="color: limegreen">完成</span></case>
+                            <default/>
+                            未接单
+                        </switch>
+                    </td>
+                </tr>
+                <tr>
+                    <th width="150">ID</th>
+                    <td>
+                        {$result.id}
+                    </td>
+                </tr>
+                <tr>
+                    <th>姓名</th>
+                    <td>
+                        {$result.name}
+                    </td>
+                </tr>
+                <tr>
+                    <th>手机号码</th>
+                    <td>
+                        {$result.mobile}
+                    </td>
+                </tr>
+                <tr>
+                    <th>区域</th>
+                    <td>
+                        {$result.address}
+                    </td>
+                </tr>
+                <tr>
+                    <th>报修类型</th>
+                    <td>
+                        {$result.cate}
+                    </td>
+                </tr>
+                <tr>
+                    <th>描述</th>
+                    <td>
+                        {$result.desc}
+                    </td>
+                </tr>
+                <tr>
+                    <th>报修时间</th>
+                    <td>
+                        <notempty name="result.create_time">
+                            {:date('Y-m-d H:i',$result['create_time'])}
+                        </notempty>
+                    </td>
+                </tr>
+                <tr>
+                    <th>维修员</th>
+                    <td>
+                        {$result.repairer_name}
+                    </td>
+                </tr>
+                <tr>
+                    <th>维修员联系方式</th>
+                    <td>
+                        {$result.repairer_mobile}
+                    </td>
+                </tr>
+                <tr>
+                    <th>接单时间</th>
+                    <td>
+                        <notempty name="result.order_time">
+                            {:date('Y-m-d H:i',$result['order_time'])}
+                        </notempty>
+                    </td>
+                </tr>
+                <tr>
+                    <th>完成时间</th>
+                    <td>
+                        <notempty name="result.complete_time">
+                            {:date('Y-m-d H:i',$result['complete_time'])}
+                        </notempty>
+                    </td>
+                </tr>
+                <tr>
+                    <th>更新时间</th>
+                    <td>
+                        <notempty name="result.update_time">
+                            {:date('Y-m-d H:i',$result['update_time'])}
+                        </notempty>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>反馈信息</th>
+                    <td>
+                        {$result.feedback}
+                    </td>
+                </tr>
+            </table>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <eq name="result.status" value="2">
+                        <button type="button" onclick="feedback('{$result.id}','{$result.name}')"
+                                class="btn btn-primary js-ajax-submit">
+                            <empty name="result.feedback">
+                                反馈
+                                <else/>
+                                更新反馈
+                            </empty>
+                        </button>
+                    </eq>
+                    <a class="btn btn-default" href="{:url('index')}">{:lang('BACK')}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript" src="__STATIC__/js/admin.js"></script>
+<script src="//cdn.bootcss.com/limonte-sweetalert2/6.6.7/sweetalert2.min.js"></script>
+<script src="//cdn.bootcss.com/es6-promise/4.1.1/es6-promise.min.js"></script>
+<script>
+
+    function reloadPage(win) {
+        win.location.reload();
+    }
+
+    function feedback(id, name) {
+
+        var api = "{:url('Index/feedback')}";
+
+        swal({
+            title: '请对ID:' + id + ' 客户:' + name + ',反馈你的维修情况',
+            input: 'text',
+            type: 'info',
+            showCancelButton: true,
+            confirmButtonText: '提交',
+            cancelButtonText: '暂时不反馈',
+            preConfirm: function (text) {
+
+                return new Promise(function (resolve, reject) {
+                    $.post(api, {id: id, feedback: text}, function (data) {
+                        if (data.code == '1') {
+                            resolve('success');
+                        } else {
+                            reject();
+                        }
+                    });
+                });
+
+            },
+            allowOutsideClick: false
+        }).then(function (result) {
+            if (result) {
+                swal({
+                    type: 'success',
+                    title: '反馈成功',
+                    html: '对ID:' + id + ' 客户:' + name + ',反馈成功!'
+                }).then(function () {
+                    reloadPage(window);
+                });
+            } else {
+                swal({
+                    type: 'error',
+                    title: '反馈失败',
+                    html: '对ID:' + id + ' 客户:' + name + ',反馈失败,请重新反馈'
+                })
+            }
+        });
+    }
+</script>
+</body>
+</html>
