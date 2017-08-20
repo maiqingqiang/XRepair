@@ -59,4 +59,50 @@ class GeneralService
         return $result;
     }
 
+    public function repairListPage($filter){
+
+        $where="RepairOrder.type = 'general'";
+
+        if ($filter['categorys']) {
+            $category=end($filter['categorys']);
+            $where.=' and FIND_IN_SET('.$category.',GeneralOrder.category)';
+        }
+
+
+        if ($filter['regions']) {
+            $region=end($filter['regions']);
+            $where.=' and FIND_IN_SET('.$region.',GeneralOrder.region)';
+        }
+
+        $name = empty($filter['name']) ? 0 : intval($filter['name']);
+        if (!empty($name)) {
+            $where.=' and like %'.$name.'%';
+        }
+
+        $page = empty($filter['page']) ? 1 : intval($filter['page']);
+
+        $startTime = empty($filter['start_time']) ? 0 : strtotime($filter['start_time']);
+        $endTime   = empty($filter['end_time']) ? 0 : strtotime($filter['end_time']);
+        if (!empty($startTime) && !empty($endTime)) {
+            $where.=' and RepairOrder.create_time >='.$startTime.' and RepairOrder.create_time <='.$endTime;
+        } else {
+            if (!empty($startTime)) {
+                $where.=' and RepairOrder.create_time >='.$startTime;
+            }
+            if (!empty($endTime)) {
+                $where.=' and RepairOrder.create_time <='.$endTime;
+            }
+        }
+
+
+        $result = Db::view('RepairOrder','id,type,create_time,update_time,order_time,complete_time,status,feedback')
+            ->view('User',['user_nickname'=>'repairer_name','mobile'=>'repairer_mobile'],'RepairOrder.repairer_id=User.id','LEFT')
+            ->view('GeneralOrder', 'name,mobile,region,desc','GeneralOrder.oid = RepairOrder.id','LEFT')
+            ->view('RepairRegion', ['GROUP_CONCAT(distinct RepairRegion.name ORDER BY RepairRegion.id ASC)' => 'address'], 'FIND_IN_SET(RepairRegion.id,GeneralOrder.region)', 'LEFT')
+            ->view('GeneralCategory', ['GROUP_CONCAT(distinct GeneralCategory.name ORDER BY GeneralCategory.id ASC)' => 'cate'], 'FIND_IN_SET(GeneralCategory.id,GeneralOrder.category)', 'LEFT')
+            ->where($where)->order('create_time','DESC')->group('GeneralOrder.id')->page($page,10)->select()->toArray();
+
+        return $result;
+    }
+
 }

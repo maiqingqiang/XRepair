@@ -52,12 +52,13 @@ class RepairStore {
         this.isLoading = true;
 
         let _this = this;
-        axios.post('/XRepair/BackEnd/public/service/common/getRepairList', qs.stringify({page: this.repairListPage++})).then((res) => {
+        axios.post('/XRepair/BackEnd/public/service/common/getRepairList', qs.stringify({page: this.repairListPage})).then((res) => {
             _this.isLoading = false;
             let data = res.data;
             if (data.code == 200) {
                 _this.hasMore = data.row >= 10;
-                _this.repairList = [..._this.repairList, ...data.result];
+                _this.repairList = data.result;
+                this.repairListPage++;
             } else {
                 _this.hasMore = false;
             }

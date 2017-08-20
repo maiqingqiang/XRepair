@@ -33,9 +33,13 @@ export default class RepairList extends Component {
     }
 
     componentDidMount() {
+        this.store.repairStore.repairListPage=1;
+        console.log(123)
         this.store.repairStore.getRepair();
         this.store.repairStore.getRepairCount();
     }
+
+    onEndReached=()=>this.store.repairStore.getRepair();
 
 
     repairStatus(status) {
@@ -145,7 +149,7 @@ export default class RepairList extends Component {
                           renderRow={row}
                           className="am-list"
                           useBodyScroll
-                          onEndReached={() => repairStore.getRepair()}
+                          onEndReached={this.onEndReached}
                 />
             </div>
         );
