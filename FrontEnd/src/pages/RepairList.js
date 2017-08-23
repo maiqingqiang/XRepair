@@ -1,8 +1,9 @@
 import React, {Component} from 'react'
 import {observer, inject} from 'mobx-react';
-import {List, Badge, RefreshControl, ListView} from 'antd-mobile';
+import {List, Badge,Toast, RefreshControl, ListView} from 'antd-mobile';
 import {HeadTitle} from './../components/Index'
 import './../styles/pages/RepairList.less'
+import Qs from 'qs'
 
 const Item = List.Item;
 const Brief = Item.Brief;
@@ -27,7 +28,7 @@ const data = [
 
 let index = data.length - 1;
 
-let pageIndex = 0;
+let pageIndex = 1;
 
 @inject('repairStore')
 @observer
@@ -36,7 +37,9 @@ export default class RepairList extends Component {
     state = {
         list: [],
         dataSource: [],
-        isRefreshing:false
+        isRefreshing: false,
+        isLoading:false,
+        hasMore:true
     };
 
     dataSource = new ListView.DataSource({
@@ -46,15 +49,13 @@ export default class RepairList extends Component {
 
     constructor(props) {
         super(props);
-
-        this.initData = [];
-        for (let i = 0; i < 20; i++) {
-            this.initData.push(`r${i}`);
-        }
-
         this.state = {
-            dataSource: this.dataSource.cloneWithRows(this.initData),
+            list: [],
+            dataSource: this.dataSource.cloneWithRows([]),
             isRefreshing: false,
+            isLoading:false,
+            hasMore:true,
+            refreshing:false,
             height: document.documentElement.clientHeight,
         };
 
@@ -63,19 +64,82 @@ export default class RepairList extends Component {
         };
         this.repairStatus = this.repairStatus.bind(this);
         this.repairStatusTitle = this.repairStatusTitle.bind(this);
+        this.onEndReached();
     }
 
     componentDidMount() {
-        this.store.repairStore.repairListPage=1;
+        this.store.repairStore.repairListPage = 1;
         this.store.repairStore.getRepair();
         this.store.repairStore.getRepairCount();
     }
 
-    onRefresh=()=>{
+    onRefresh = () => {
+
+        if (!this.state.isRefreshing) {
+            this.setState({ refreshing: true,isRefreshing:true });
+        }
+        pageIndex = 0
+        // this.state.refreshing=true;
+        // this.state.isRefreshing=true;
+        setTimeout(() => {
+            this.setState({
+                list: [],
+                dataSource: this.dataSource.cloneWithRows([]),
+                isRefreshing: false,
+                isLoading:false,
+                refreshing:false,
+                hasMore:true
+            });
+        }, 1000);
 
     };
 
-    onEndReached=()=>this.store.repairStore.getRepair();
+    onEndReached = () => {
+
+        // if (this.state.isLoading || this.state.isRefreshing ||!this.state.hasMore){
+        //     return
+        // }
+
+        if (this.state.isRefreshing){
+            console.log(2)
+
+            return
+        }
+        //
+        if (!this.state.hasMore){
+            console.log(3)
+            console.log(this.state.hasMore)
+            return
+        }
+
+        console.log(123)
+
+
+        this.state.isLoading = true;
+        this.axios.post('/XRepair/BackEnd/public/service/common/getRepairList', Qs.stringify({page: pageIndex})).then((res) => {
+            let data = res.data;
+            if (data.code == 200) {
+                // this.state.dataSource.cloneWithRows(data.result);
+                this.state.list= [...this.state.list,...data.result]
+                this.setState({
+                    dataSource:this.state.dataSource.cloneWithRows(this.state.list),
+                    isLoading:false,hasMore:data.row >=10
+                })
+                pageIndex++;
+            } else {
+                this.setState({
+                    isLoading:false
+                })
+                Toast.fail(data.message, 1.5);
+            }
+
+        }).catch((e) => {
+            this.setState({
+                isLoading:false
+            })
+            Toast.offline(e.message, 1.5)
+        });
+    };
 
 
     repairStatus(status) {
@@ -120,105 +184,96 @@ export default class RepairList extends Component {
         const {history} = this.props;
         const {repairStore} = this.store;
 
-        // const row = (rowData, sectionID, rowID) => {
-        //     switch (rowData.type) {
-        //         case 'general':
-        //             return (
-        //                 <Item key={rowID} multipleLine onClick={() => {history.push('/general/details/'+rowData.id)}} className="special-badge"
-        //                       extra={<Badge className={this.repairStatus(rowData.status) + " am-badge-45 "}
-                                            {/*text={this.repairStatusTitle(rowData.status)}/>}>*/}
-                            {/*<Badge text="通用"*/}
-        //                            style={{
-        //                                marginRight: 12,
-        //                                padding: '0 0.06rem',
-        //                                backgroundColor: '#fff',
-        //                                borderRadius: 2,
-        //                                color: '#49a9ee',
-        //                                border: '1px solid #49a9ee',
-        //                            }}
-                            {/*/>*/}
-                            {/*T：2017年8月9日 16:04:03*/}
-        //                     <Brief>
-        //                         {rowData.id}报修项目：{rowData.data.cate} <br/>
-        //                         报修描述：{rowData.data.desc}<br/>
-        //                     </Brief>
-        //
-        //                 </Item>
-        //             );
-        //             break;
-        //         case 'net':
-        //             return (
-        //                 <Item multipleLine onClick={() => {
-        //                 }} className="special-badge"
-        //                       extra={<Badge className={this.repairStatus(rowData.status) + " am-badge-45 "}
-                                            {/*text={this.repairStatusTitle(rowData.status)}/>}>*/}
-                            {/*<Badge text="宽带"*/}
-        //                            style={{
-        //                                marginRight: 12,
-        //                                padding: '0 0.06rem',
-        //                                backgroundColor: '#fff',
-        //                                borderRadius: 2,
-        //                                color: '#49a9ee',
-                                       {/*border: '1px solid #49a9ee',*/}
-                                   {/*}}*/}
-                            {/*/>*/}
-                            {/*T：2017年8月9日 16:04:03*/}
-                            {/*<Brief>*/}
-        //                         {rowData.id}报修帐号：{rowData.data.account}<br/>
-        //                         报修描述：{rowData.data.desc}<br/>
-        //                     </Brief>
-        //
-        //                 </Item>
-        //             );
-        //             break;
-        //     }
-        // };
-
         const row = (rowData, sectionID, rowID) => {
-            if (index < 0) {
-                index = data.length - 1;
+            switch (rowData.type) {
+                case 'general':
+                    return (
+                        <Item key={rowID} multipleLine onClick={() => {history.push('/general/details/'+rowData.id)}} className="special-badge"
+                              extra={<Badge className={this.repairStatus(rowData.status) + " am-badge-45 "}
+        text={this.repairStatusTitle(rowData.status)}/>}>
+        <Badge text="通用"
+                                   style={{
+                                       marginRight: 12,
+                                       padding: '0 0.06rem',
+                                       backgroundColor: '#fff',
+                                       borderRadius: 2,
+                                       color: '#49a9ee',
+                                       border: '1px solid #49a9ee',
+                                   }}
+        />T：2017年8月9日 16:04:03
+                            <Brief>
+                                {rowData.id}报修项目：{rowData.data.cate} <br/>
+                                报修描述：{rowData.data.desc}<br/>
+                            </Brief>
+
+                        </Item>
+                    );
+                    break;
+                case 'net':
+                    return (
+                        <Item multipleLine onClick={() => {
+                        }} className="special-badge"
+                              extra={<Badge className={this.repairStatus(rowData.status) + " am-badge-45 "}
+        text={this.repairStatusTitle(rowData.status)}/>}>
+        <Badge text="宽带"
+                                   style={{
+                                       marginRight: 12,
+                                       padding: '0 0.06rem',
+                                       backgroundColor: '#fff',
+                                       borderRadius: 2,
+                                       color: '#49a9ee',
+        border: '1px solid #49a9ee',
+        }}
+
+        />
+        2017年8月9日 16:04:03
+        <Brief>
+
+                                {rowData.id}报修帐号：{rowData.data.account}<br/>
+                                报修描述：{rowData.data.desc}<br/>
+                            </Brief>
+
+                        </Item>
+                    );
+                    break;
             }
-            const obj = data[index--];
-            return (
-                <div key={rowID}
-                     style={{
-                         padding: '0.08rem 0.16rem',
-                         backgroundColor: 'white',
-                     }}
-                >
-                    <h3 style={{ padding: 2, marginBottom: '0.08rem', borderBottom: '1px solid #F6F6F6' }}>
-                        {obj.title}
-                    </h3>
-                    <div style={{ display: '-webkit-box', display: 'flex' }}>
-                        <img style={{ height: '1.28rem', marginRight: '0.08rem' }} src={obj.img} alt="icon" />
-                        <div style={{ display: 'inline-block' }}>
-                            <div style={{ margin: '0.1rem 0 0.2rem 0' }}>{obj.des}-{rowData}</div>
-                            <div><span style={{ fontSize: '1.6em', color: '#FF6E27' }}>35</span>元/任务</div>
-                        </div>
-                    </div>
-                </div>
-            );
         };
+
+        // const row = (rowData, sectionID, rowID) => {
+        //
+        //     return (
+        //         <div key={rowID} style={{height:'.88rem'}}>
+        //             {rowData.id}
+        //         </div>
+        //     );
+        // };
         return (
-                <ListView
-                    ref="lv"
-                    dataSource={this.state.dataSource}
-                    renderRow={row}
-                    renderHeader={()=><HeadTitle title="我的报修" subTitle={"一共报 "+repairStore.getRepairListCount+" 修次"}/>}
-                    initialListSize={5}
-                    pageSize={5}
-                    scrollRenderAheadDistance={200}
-                    scrollEventThrottle={20}
-                    style={{
-                        height: this.state.height,
-                        margin: '0.1rem 0',
-                    }}
-                    scrollerOptions={{ scrollbars: true }}
-                    refreshControl={<RefreshControl
-                        refreshing={this.state.refreshing}
-                        onRefresh={this.onRefresh}
-                    />}
-                />
+            <ListView
+                id="repairList"
+                ref="lv"
+                dataSource={this.store.repairStore.repairListDataSource}
+                renderRow={row}
+                renderFooter={() => (<div style={{ padding: 30, textAlign: 'center' }}>
+                    {this.store.repairStore.hasMore?this.store.repairStore.isLoading ? '正在加载...' : '上拉加载':'没有数据了'}
+                </div>)}
+                renderHeader={() => <HeadTitle title="我的报修" subTitle={"一共报 " + repairStore.getRepairListCount + " 修次"}/>}
+                pageSize={10}
+                scrollRenderAheadDistance={500}
+                scrollEventThrottle={200}
+                onEndReachedThreshold={10}
+                removeClippedSubviews
+                initialListSize={0}
+                style={{
+                    height: document.documentElement.clientHeight,
+                    margin: '0.1rem 0',
+                }}
+                onEndReached={()=>this.store.repairStore.getRepair()}
+                scrollerOptions={{scrollbars: true}}
+                refreshControl={<RefreshControl
+                    refreshing={this.store.repairStore.refreshing}
+                    onRefresh={()=>this.store.repairStore.onRefresh()}
+                />}
+            />
         );
     }
 }
