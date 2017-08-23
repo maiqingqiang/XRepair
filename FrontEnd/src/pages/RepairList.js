@@ -248,8 +248,8 @@ export default class RepairList extends Component {
         //     );
         // };
         return (
+            <div id="repairList">
             <ListView
-                id="repairList"
                 ref="lv"
                 dataSource={this.store.repairStore.repairListDataSource}
                 renderRow={row}
@@ -274,6 +274,7 @@ export default class RepairList extends Component {
                     onRefresh={()=>this.store.repairStore.onRefresh()}
                 />}
             />
+            </div>
         );
     }
 }
