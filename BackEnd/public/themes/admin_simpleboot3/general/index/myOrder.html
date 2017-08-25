@@ -4,9 +4,9 @@
 <body>
 <div class="wrap js-check-wrap">
     <ul class="nav nav-tabs">
-        <li class="active"><a href="javascript:;">通用报修数据</a></li>
+        <li class="active"><a href="javascript:;">我的接单</a></li>
     </ul>
-    <form class="well form-inline margin-top-20" method="post" action="{:url('Index/index')}">
+    <form class="well form-inline margin-top-20" method="post" action="{:url('Index/myOrder')}">
         区域:
         <select class="form-control" name="region" style="width: 140px;">
             <option value='0'>全部</option>
@@ -28,7 +28,7 @@
         <input type="text" class="form-control" name="name" style="width: 200px;"
                value="{$name|default=''}" placeholder="请输入姓名...">
         <input type="submit" class="btn btn-primary" value="搜索"/>
-        <a class="btn btn-danger" href="{:url('Index/index')}">清空</a>
+        <a class="btn btn-danger" href="{:url('Index/myOrder')}">清空</a>
     </form>
     <form class="js-ajax-form" action="" method="post">
         <div class="table-actions">
@@ -54,8 +54,6 @@
                 <th width="90">报修类型</th>
                 <th>描述</th>
                 <th width="130">报修时间</th>
-                <th width="70">维修员</th>
-                <th width="50">联系方式</th>
                 <th width="130">接单时间</th>
                 <th width="70">状态</th>
                 <th width="90">操作</th>
@@ -91,12 +89,6 @@
                         </notempty>
                     </td>
                     <td>
-                        {$vo.repairer_name}
-                    </td>
-                    <td>
-                        {$vo.repairer_mobile}
-                    </td>
-                    <td>
                         <notempty name="vo.order_time">
                             {:date('Y-m-d H:i',$vo['order_time'])}
                         </notempty>
@@ -121,10 +113,11 @@
                                     <a href="{:url('Index/complete',array('ids'=>$vo['id']))}"
                                        class="js-ajax-dialog-btn" data-msg="确定完成订单吗？">完成</a> |
                                 </eq>
+
                             </case>
                         </switch>
-                        <eq name="vo.status" value="2">
-                            <eq name="vo.repairer_id" value="$Think.session.ADMIN_ID">
+                        <eq name="vo.repairer_id" value="$Think.session.ADMIN_ID">
+                            <eq name="vo.status" value="2">
                                 <empty name="vo.feedback">
                                     <a onclick="feedback('{$vo.id}','{$vo.name}')">反馈</a> |
                                 </empty>
@@ -149,8 +142,6 @@
                 <th width="90">报修类型</th>
                 <th>描述</th>
                 <th width="130">报修时间</th>
-                <th width="70">维修员</th>
-                <th width="50">联系方式</th>
                 <th width="130">接单时间</th>
                 <th width="70">状态</th>
                 <th width="90">操作</th>

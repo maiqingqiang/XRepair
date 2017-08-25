@@ -113,15 +113,17 @@
             </table>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <eq name="result.status" value="2">
-                        <button type="button" onclick="feedback('{$result.id}','{$result.name}')"
-                                class="btn btn-primary js-ajax-submit">
-                            <empty name="result.feedback">
-                                反馈
-                                <else/>
-                                更新反馈
-                            </empty>
-                        </button>
+                    <eq name="result.repairer_id" value="$Think.session.ADMIN_ID">
+                        <eq name="result.status" value="2">
+                            <button type="button" onclick="feedback('{$result.id}','{$result.name}')"
+                                    class="btn btn-primary js-ajax-submit">
+                                <empty name="result.feedback">
+                                    反馈
+                                    <else/>
+                                    更新反馈
+                                </empty>
+                            </button>
+                        </eq>
                     </eq>
                     <a class="btn btn-default" href="{:url('index')}">{:lang('BACK')}</a>
                 </div>

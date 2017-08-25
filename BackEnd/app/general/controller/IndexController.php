@@ -103,7 +103,7 @@ class IndexController extends AdminBaseController {
 
         $id = input('id');
         if ($id) {
-            $result = Db::view('RepairOrder', 'id,type,create_time,update_time,order_time,complete_time,status,feedback')
+            $result = Db::view('RepairOrder', 'id,type,create_time,update_time,order_time,complete_time,status,feedback,repairer_id')
                 ->view('User', ['user_nickname' => 'repairer_name', 'mobile' => 'repairer_mobile'], 'RepairOrder.repairer_id=User.id', 'LEFT')
                 ->view('GeneralOrder', 'name,mobile,region,desc', 'GeneralOrder.oid = RepairOrder.id', 'LEFT')
                 ->view('RepairRegion', ['GROUP_CONCAT(distinct RepairRegion.name ORDER BY RepairRegion.id ASC)' => 'address'], 'FIND_IN_SET(RepairRegion.id,GeneralOrder.region)', 'LEFT')
@@ -115,5 +115,36 @@ class IndexController extends AdminBaseController {
         } else {
             $this->error("非法操作！", '');
         }
+    }
+
+    public function myOrder(){
+        $param = $this->request->param();
+
+        $regionId = $this->request->param('region', 0, 'intval');
+        $categoryId = $this->request->param('category', 0, 'intval');
+
+        $postService = new GeneralService();
+        $data = $postService->myOrderList($param);
+
+        $data->appends($param);
+
+        $generalCategoryModel = new GeneralCategoryModel();
+        $categoryTree = $generalCategoryModel->adminCategoryTree($categoryId);
+
+        $repairRegionModel = new RepairRegionModel();
+
+        $regionTree = $repairRegionModel->adminCategoryTree($regionId);
+
+        $this->assign('start_time', isset($param['start_time']) ? $param['start_time'] : '');
+        $this->assign('end_time', isset($param['end_time']) ? $param['end_time'] : '');
+        $this->assign('name', isset($param['name']) ? $param['name'] : '');
+        $this->assign('list', $data->items());
+        $this->assign('category_tree', $categoryTree);
+        $this->assign('region_tree', $regionTree);
+        $this->assign('category', $categoryId);
+        $this->assign('region', $regionId);
+        $this->assign('page', $data->render());
+
+        return $this->fetch();
     }
 }

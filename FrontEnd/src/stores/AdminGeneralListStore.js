@@ -3,7 +3,7 @@ import {Toast, ListView} from 'antd-mobile'
 import axios from 'axios'
 import qs from 'qs'
 
-class AdminGeneralStore {
+class AdminGeneralListStore {
     @observable repairList = [];
     @observable repairListPage = 1;
     @observable repairCount = null;
@@ -104,8 +104,8 @@ class AdminGeneralStore {
 
 }
 
-const adminGeneralStore = new AdminGeneralStore();
+const adminGeneralListStore = new AdminGeneralListStore();
 
-export default adminGeneralStore;
+export default adminGeneralListStore;
 
-export {AdminGeneralStore}
+export {AdminGeneralListStore}

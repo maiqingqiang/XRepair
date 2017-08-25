@@ -1,9 +1,10 @@
 import React, {Component} from 'react'
 import {observer} from 'mobx-react';
-import {Grid, Icon, List} from 'antd-mobile';
+import {Grid, Icon, List,NavBar} from 'antd-mobile';
 import '../../styles/modules/Admin/Index.less';
 import GeneralRepair from '../../asset/general_repair.svg';
 import Net from '../../asset/net.svg';
+
 
 const Item = List.Item;
 
@@ -31,6 +32,10 @@ export default class Index extends Component {
         const {history} = this.props;
         return (
             <div id="admin-index">
+                <NavBar leftContent="返回"
+                        mode="dark"
+                        onLeftClick={() => history.goBack()}
+                >后台管理</NavBar>
                 <Grid data={data}
                       columnNum={2}
                       onClick={_el => history.push(_el.to)}
