@@ -14,7 +14,8 @@
     "qs": "^6.5.0",
     "rc-form": "^1.4.3",
     "react": "next",
-    "react-dom": "next"
+    "react-dom": "next",
+    "urijs": "^1.18.12"
   },
   "scripts": {
     "start": "node scripts/start.js",
