@@ -1,0 +1,42 @@
+<include file="public@header"/>
+</head>
+<body>
+<div class="wrap js-check-wrap">
+    <ul class="nav nav-tabs">
+        <li class="active"><a>微信公众号设置</a></li>
+    </ul>
+    <form class="form-horizontal js-ajax-form margin-top-20" role="form" action="{:url('wechat/edit')}" method="post">
+        <fieldset>
+            <div class="tabbable">
+                <div class="tab-content">
+                    <div class="form-group">
+                        <label for="input-appid" class="col-sm-2 control-label"><span class="form-required">*</span>微信AppId</label>
+                        <div class="col-md-6 col-sm-10">
+                            <input type="text" class="form-control" id="input-appid" name="appid"
+                                   value="{$appid|default=''}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="input-secret" class="col-sm-2 control-label"><span class="form-required">*</span>微信Secret</label>
+                        <div class="col-md-6 col-sm-10">
+                            <input type="text" class="form-control" id="input-secret" name="secret"
+                                   value="{$secret|default=''}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-primary js-ajax-submit" data-refresh="1">
+                                {:lang('SAVE')}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+
+</div>
+<script type="text/javascript" src="__STATIC__/js/admin.js"></script>
+</body>
+</html>
