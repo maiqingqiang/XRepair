@@ -3,7 +3,7 @@ import {observer, inject} from 'mobx-react';
 import {List, InputItem, Button, WhiteSpace, WingBlank, Toast} from 'antd-mobile';
 import {HeadTitle} from './../components/Index'
 import {createForm} from 'rc-form';
-import Qs from 'qs';
+import qs from 'qs';
 
 const Item = List.Item;
 
@@ -21,7 +21,7 @@ class Password extends Component {
     save=(e)=>{
         if (e) e.preventDefault();
         Toast.loading('正在修改中…',0);
-        this.axios.post('/XRepair/BackEnd/public/service/common/changePassword', Qs.stringify(this.props.form.getFieldsValue())).then((res) => {
+        this.axios.post('/XRepair/BackEnd/public/service/common/changePassword', qs.stringify(this.props.form.getFieldsValue())).then((res) => {
             let data = res.data;
             if (data.code == 200) {
                 Toast.success(data.message+ ',2s后自动跳转~~', 2, () => this.props.history.replace('/login'));

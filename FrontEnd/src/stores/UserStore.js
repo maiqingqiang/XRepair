@@ -4,15 +4,17 @@ import axios from 'axios'
 import Qs from 'qs';
 
 class UiStore {
-    @observable token = '';
+    @observable token = null;
     @observable isLogin = false;
     @observable userInfo = [];
+    @observable wx_code = null;
+    @observable wx_openid = null;
 
     @action
     clearData() {
         this.userInfo = [];
         this.isLogin = false;
-        this.token = '';
+        this.token = null;
     }
 
 

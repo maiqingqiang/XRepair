@@ -11,6 +11,7 @@ namespace app\service\controller;
 use app\user\model\XUserModel;
 use Firebase\JWT\JWT;
 use geetest\GeetestLib;
+use GuzzleHttp\Client;
 use think\Db;
 use think\Validate;
 
@@ -19,6 +20,36 @@ class PublicController extends BaseController {
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept,Authorization');
         header('Access-Control-Allow-Methods: GET, POST, PUT,DELETE');
+    }
+
+    public function getAppId() {
+        if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
+            $appId = config('wechat.appid');
+            if ($appId) {
+                return json(['code' => 200,
+                    'message' => '成功',
+                    'result' => $appId]);
+            } else {
+                return json(['code' => 300,
+                    'message' => '失败']);
+            }
+        }
+    }
+
+    public function getWxUserInfo() {
+        if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
+            if (request()->isPost()) {
+                $code = input('code');
+                $appid = config('wechat.appid');
+                $secret = config('wechat.secret');
+
+                $client = new Client();
+                $url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' . $appid . '&secret=' . $secret . '&code=' . $code . '&grant_type=authorization_code';
+                $response = $client->request('GET', $url);
+
+                return $response->getBody();
+            }
+        }
     }
 
     /**

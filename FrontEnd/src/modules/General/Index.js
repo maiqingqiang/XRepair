@@ -3,7 +3,7 @@ import {observer, inject} from 'mobx-react';
 import {List, InputItem, TextareaItem, Picker, Button, WhiteSpace, WingBlank, Toast} from 'antd-mobile';
 import {HeadTitle} from './../../components/Index'
 import {createForm} from 'rc-form';
-import Qs from 'qs';
+import qs from 'qs';
 
 import {Protected} from "./../../components/Index";
 
@@ -35,7 +35,7 @@ class Index extends Component {
     save(e) {
         if (e) e.preventDefault();
         let post = this.props.form.getFieldsValue();
-        this.axios.post('/XRepair/BackEnd/public/service/general/addOrder', Qs.stringify(post)).then((res) => {
+        this.axios.post('/XRepair/BackEnd/public/service/general/addOrder', qs.stringify(post)).then((res) => {
             let data = res.data;
             if (data.code == 200) {
                 Toast.success(data.message, 1.5);

@@ -3,7 +3,7 @@ import {observer, inject} from 'mobx-react';
 import {List, InputItem, Button, WhiteSpace, WingBlank, Toast} from 'antd-mobile';
 import {HeadTitle} from './../components/Index'
 import {createForm} from 'rc-form';
-import Qs from 'qs';
+import qs from 'qs';
 import Geetest from 'geetest3'
 import '../styles/geetest.less';
 
@@ -28,7 +28,7 @@ class Login extends Component {
 
     initCaptcha = () => {
         let _this = this;
-        this.axios.post('/XRepair/BackEnd/public/service/public/initCaptcha', Qs.stringify({random: this.random})).then((res) => {
+        this.axios.post('/XRepair/BackEnd/public/service/public/initCaptcha', qs.stringify({random: this.random})).then((res) => {
             let data = res.data;
             this.offline = data.success ? 0 : 1;
             this.captcha = new Geetest({
@@ -63,7 +63,7 @@ class Login extends Component {
                 offline: this.offline
             });
             Toast.loading('正在登录中…',0);
-            this.axios.post('/XRepair/BackEnd/public/service/public/login', Qs.stringify(data)).then((res) => {
+            this.axios.post('/XRepair/BackEnd/public/service/public/login', qs.stringify(data)).then((res) => {
                 Toast.hide();
                 let data = res.data;
                 if (data.code == 200) {

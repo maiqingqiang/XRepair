@@ -1,11 +1,8 @@
 import React, {Component} from 'react'
 import {observer, inject} from 'mobx-react';
-import {List, InputItem, Button, WhiteSpace, WingBlank, Toast} from 'antd-mobile';
+import {List, InputItem, Button, WhiteSpace, WingBlank} from 'antd-mobile';
 import {HeadTitle} from './../components/Index'
 import {createForm} from 'rc-form';
-import Qs from 'qs';
-
-const Item = List.Item;
 
 @inject('userStore')
 @observer

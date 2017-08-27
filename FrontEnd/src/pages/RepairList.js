@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {observer, inject} from 'mobx-react';
-import {List, Badge, Toast, RefreshControl, ListView} from 'antd-mobile';
+import {List, Badge, RefreshControl, ListView} from 'antd-mobile';
 import {HeadTitle} from './../components/Index'
 import './../styles/pages/RepairList.less'
 import moment from 'moment'

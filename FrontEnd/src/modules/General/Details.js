@@ -1,8 +1,7 @@
 import React, {Component} from 'react'
 import {observer, inject} from 'mobx-react';
-import {List, WhiteSpace, WingBlank, Toast, Button, Steps, Badge} from 'antd-mobile';
+import {List, WhiteSpace, WingBlank, Button, Steps, Badge} from 'antd-mobile';
 import {HeadTitle} from './../../components/Index'
-import Qs from 'qs';
 import '../../styles/modules/general/Details.less'
 
 import {Protected} from "./../../components/Index";

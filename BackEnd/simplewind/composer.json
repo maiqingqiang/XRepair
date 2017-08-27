@@ -2,6 +2,7 @@
     "require": {
         "firebase/php-jwt": "^5.0",
         "overtrue/wechat": "^3.3",
-        "topthink/think-queue": "^1.1"
+        "topthink/think-queue": "^1.1",
+        "guzzlehttp/guzzle": "^6.3"
     }
 }

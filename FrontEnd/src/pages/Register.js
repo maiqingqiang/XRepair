@@ -3,12 +3,10 @@ import {observer, inject} from 'mobx-react';
 import {List, InputItem, Button, WhiteSpace, WingBlank, Toast} from 'antd-mobile';
 import {HeadTitle} from './../components/Index'
 import {createForm} from 'rc-form';
-import Qs from 'qs';
+import qs from 'qs';
 import '../styles/pages/Register.less';
 import Geetest from 'geetest3'
 import './../styles/geetest.less'
-
-const Item = List.Item;
 
 @inject('userStore')
 @observer
@@ -40,7 +38,7 @@ class Register extends Component {
                 offline: this.offline
             });
 
-            this.axios.post('/XRepair/BackEnd/public/service/public/register', Qs.stringify(data)).then((res) => {
+            this.axios.post('/XRepair/BackEnd/public/service/public/register', qs.stringify(data)).then((res) => {
                 let data = res.data;
                 if (data.code == 200) {
                     Toast.success(data.message + ',2s后自动跳转~~', 2, () => this.props.history.push('/login'));
@@ -60,7 +58,7 @@ class Register extends Component {
 
     initCaptcha = () => {
         let _this = this;
-        this.axios.post('/XRepair/BackEnd/public/service/public/initCaptcha', Qs.stringify({random: this.random})).then((res) => {
+        this.axios.post('/XRepair/BackEnd/public/service/public/initCaptcha', qs.stringify({random: this.random})).then((res) => {
             let data = res.data;
             this.offline = data.success ? 0 : 1;
             this.captcha = new Geetest({
