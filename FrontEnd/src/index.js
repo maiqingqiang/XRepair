@@ -4,14 +4,13 @@ import {BrowserRouter as Router} from 'react-router-dom'
 import {Provider} from "mobx-react";
 import * as store from './stores';
 import FastClick from 'fastclick';
-import config from './utils/config';
 import axios from 'axios';
 import App from './App'
 import URI from 'urijs';
 import qs from 'qs';
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-axios.defaults.baseURL = 'http://' + config.host;
+axios.defaults.baseURL = 'http://' + window.location.host;
 
 function generateGetCodeUrl(id) {
     document.location = new URI("https://open.weixin.qq.com/connect/oauth2/authorize")
@@ -60,7 +59,7 @@ window.addEventListener('load', () => {
 
 React.Component.prototype.axios = axios;
 
-let basename = window.location.host === config.host || window.location.host === 'localhost' ? '/XRepair/BackEnd/public/webapp/app/index' : '';
+let basename = window.location.host+':'+window.location.port !== '192.168.31.188:8080' ? '/XRepair/BackEnd/public/webapp/app/index' : '';
 
 ReactDOM.render(
     <Provider {...store}>
