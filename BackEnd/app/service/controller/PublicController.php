@@ -8,19 +8,14 @@
 
 namespace app\service\controller;
 
-use app\user\model\XUserModel;
-use Firebase\JWT\JWT;
+
+use app\service\model\UserModel;
 use geetest\GeetestLib;
 use GuzzleHttp\Client;
 use think\Db;
 use think\Validate;
 
 class PublicController extends BaseController {
-    protected function _initialize() {
-        header('Access-Control-Allow-Origin: *');
-        header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept,Authorization');
-        header('Access-Control-Allow-Methods: GET, POST, PUT,DELETE');
-    }
 
     public function getAppId() {
         if (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false) {
@@ -44,10 +39,18 @@ class PublicController extends BaseController {
                 $secret = config('wechat.secret');
 
                 $client = new Client();
-                $url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' . $appid . '&secret=' . $secret . '&code=' . $code . '&grant_type=authorization_code';
-                $response = $client->request('GET', $url);
+                $token_url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' . $appid . '&secret=' . $secret . '&code=' . $code . '&grant_type=authorization_code';
+                $token_response = $client->request('GET', $token_url);
 
-                return $response->getBody();
+
+                $data = \GuzzleHttp\json_decode($token_response->getBody());
+
+                if (isset($data->openid) && isset($data->access_token)) {
+                    $userinfo_url = 'https://api.weixin.qq.com/sns/userinfo?access_token=' . $data->access_token . '&openid=' . $data->openid . '&lang=zh_CN';
+                    $response = $client->request('GET', $userinfo_url);
+
+                    return $response->getBody();
+                }
             }
         }
     }
@@ -75,7 +78,7 @@ class PublicController extends BaseController {
                     'message' => '验证码错误']);
             }
 
-            $userModel = new XUserModel();
+            $userModel = new UserModel();
             $user['user_pass'] = $data['password'];
             if (filter_var($data['username'], FILTER_VALIDATE_EMAIL)) {
                 $user['user_email'] = $data['username'];
@@ -93,7 +96,8 @@ class PublicController extends BaseController {
                     if ($data) {
                         return json(['code' => 200,
                             'message' => '登录成功',
-                            'result' => $data]);
+                            'result' => $data,
+                            'wechat' => $result['wechat']]);
                     } else {
                         return json(['code' => 500,
                             'message' => '系统错误']);
@@ -102,6 +106,46 @@ class PublicController extends BaseController {
                 case 1:
                     return json(['code' => 400,
                         'message' => '登录密码错误']);
+                    break;
+                case 2:
+                    return json(['code' => 400,
+                        'message' => '账户不存在']);
+                    break;
+                case 3:
+                    return json(['code' => 400,
+                        'message' => '账号被禁止访问系统']);
+                    break;
+                default :
+                    return json(['code' => 400,
+                        'message' => '未受理的请求']);
+            }
+        } else {
+            return json(['code' => 500,
+                'message' => '请求错误']);
+        }
+    }
+
+    /**
+     * 微信登录
+     * @return \think\response\Json
+     */
+    public function wxLogin() {
+        if (request()->isPost()) {
+            $openid = input('openid');
+
+            $userModel = new UserModel();
+            $result = $userModel->doWxOpenId($openid);
+            switch ($result['status']) {
+                case 0:
+                    $data = $this->getLoginInfo($result['userInfo']);
+                    if ($data) {
+                        return json(['code' => 200,
+                            'message' => '登录成功',
+                            'result' => $data]);
+                    } else {
+                        return json(['code' => 500,
+                            'message' => '系统错误']);
+                    }
                     break;
                 case 2:
                     return json(['code' => 400,
@@ -175,13 +219,14 @@ class PublicController extends BaseController {
                     'message' => '验证码错误']);
             }
 
-            $model = new XUserModel();
+            $model = new UserModel();
 
             $user['user_login'] = $data['username'];
             $user['user_nickname'] = $data['name'];
             $user['mobile'] = $data['mobile'];
             $user['user_email'] = $data['email'];
             $user['user_pass'] = $data['password'];
+            $user['wechat'] = isset($data['wechat']) ? $data['wechat'] : [];
             $log = $model->register($user);
 
             switch ($log) {

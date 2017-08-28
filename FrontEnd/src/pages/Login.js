@@ -68,7 +68,7 @@ class Login extends Component {
                 let data = res.data;
                 if (data.code == 200) {
                     const {userStore} = this.props;
-                    userStore.setToken(data.result.token, data.result.userInfo);
+                    userStore.setToken(data.result.token, data.result.userInfo,data.result.wechat);
                     const {from} = this.props.location.state || {from: {pathname: '/'}};
                     this.props.history.replace(from)
                 } else {

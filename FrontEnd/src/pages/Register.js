@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {observer, inject} from 'mobx-react';
-import {List, InputItem, Button, WhiteSpace, WingBlank, Toast} from 'antd-mobile';
+import {List, InputItem, Button, WhiteSpace, WingBlank, Toast, Switch} from 'antd-mobile';
 import {HeadTitle} from './../components/Index'
 import {createForm} from 'rc-form';
 import qs from 'qs';
@@ -13,7 +13,9 @@ import './../styles/geetest.less'
 class Register extends Component {
 
     state = {
-        captchaTips: true
+        captchaTips: true,
+        wechat: true,
+        bind: true
     };
 
     constructor(props) {
@@ -21,6 +23,13 @@ class Register extends Component {
         this.captcha = null;
         this.random = (new Date()).getTime();
         this.offline = 0;
+
+        let ua = navigator.userAgent.toLowerCase();
+        if (ua.match(/MicroMessenger/i) == "micromessenger") {
+            this.state.wechat = this.state.bind = true;
+        } else {
+            this.state.wechat = this.state.bind = false;
+        }
     }
 
     componentDidMount() {
@@ -33,16 +42,23 @@ class Register extends Component {
         let result = this.captcha.getValidate();
 
         if (this.captcha.getValidate()) {
+
+            let wechat = [];
+
+            if (this.props.form.getFieldValue('bind')) {
+                wechat = this.props.userStore.wxUserInfo
+            }
+
             let data = Object.assign(this.props.form.getFieldsValue(), result, {
                 random: this.random,
                 offline: this.offline
-            });
+            }, {wechat: wechat});
 
             this.axios.post('/XRepair/BackEnd/public/service/public/register', qs.stringify(data)).then((res) => {
                 let data = res.data;
                 if (data.code == 200) {
                     Toast.success(data.message + ',2s后自动跳转~~', 2, () => this.props.history.push('/login'));
-                } else{
+                } else {
                     this.captcha.reset();
                     Toast.fail(data.message, 1.5);
                 }
@@ -69,7 +85,7 @@ class Register extends Component {
                 lang: 'zh-cn',
                 width: '100%',
                 product: 'custom',
-                area: '#captcha', // 假设页面有一个id为area的标签
+                area: '#captcha',
                 next_width: '6rem',
                 bg_color: 'black'
             });
@@ -114,21 +130,29 @@ class Register extends Component {
                     <InputItem
                         {...getFieldProps('password')}
                         clear
-                        type="email"
+                        type="password"
                         placeholder="请输入你的登录密码"
                     >密码</InputItem>
                     <InputItem
                         {...getFieldProps('password_confirm')}
                         clear
-                        type="email"
+                        type="password"
                         placeholder="请再次输入你的登录密码"
                     >再输入密码</InputItem>
+                    <List.Item
+                        style={{display:this.state.wechat?'block':'none'}}
+                        extra={<Switch
+                            {...getFieldProps('bind', {
+                                initialValue: this.state.bind,
+                                valuePropName: 'checked',
+                            })}
+                        />}
+                    >绑定当前微信</List.Item>
                 </List>
 
                 <List renderHeader={() => '验证'}>
                     <div id="captcha"></div>
                     {this.state.captchaTips ? '正在加载验证码……' : ''}
-                    {/*<div id="Tips">正在加载验证码……</div>*/}
                 </List>
 
                 <WhiteSpace size="lg"/>

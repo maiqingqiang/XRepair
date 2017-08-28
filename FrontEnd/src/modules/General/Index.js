@@ -38,7 +38,7 @@ class Index extends Component {
         this.axios.post('/XRepair/BackEnd/public/service/general/addOrder', qs.stringify(post)).then((res) => {
             let data = res.data;
             if (data.code == 200) {
-                Toast.success(data.message, 1.5);
+                Toast.success(data.message, 1,()=>this.props.history.replace('/repair_list'));
             } else {
                 Toast.fail(data.message, 1.5);
             }

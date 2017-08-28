@@ -10,7 +10,6 @@ class RepairStore {
 
     @observable repairList = [];
     @observable repairListPage = 1;
-    @observable repairCount = null;
     @observable isLoading = false;
     @observable hasMore = true;
     @observable isRefreshing = false;
@@ -64,9 +63,9 @@ class RepairStore {
                 }
                 this.repairListPage++;
 
-                if (_this.isRefreshing){
-                    _this.refreshing=false;
-                    _this.isRefreshing=false;
+                if (_this.isRefreshing) {
+                    _this.refreshing = false;
+                    _this.isRefreshing = false;
                 }
             } else {
                 _this.hasMore = false;
@@ -108,9 +107,9 @@ class RepairStore {
                 }
                 this.repairListPage++;
 
-                if (this.isRefreshing){
-                    this.refreshing=false;
-                    this.isRefreshing=false;
+                if (this.isRefreshing) {
+                    this.refreshing = false;
+                    this.isRefreshing = false;
                 }
             } else {
                 _this.hasMore = false;
@@ -118,24 +117,6 @@ class RepairStore {
         }).catch((e) => {
             Toast.offline(e.message, 1.5)
         });
-    }
-
-    //获取报修次数
-    @action
-    getRepairCount() {
-        if (this.repairCount === null) {
-            let _this = this;
-            axios.post('/XRepair/BackEnd/public/service/common/getRepairCount').then((res) => {
-                let data = res.data;
-                if (data.code == 200) {
-                    _this.repairCount = data.result;
-                } else {
-                    _this.repairCount = 0;
-                }
-            }).catch((e) => {
-                Toast.offline(e.message, 1.5)
-            });
-        }
     }
 
     //获取报修详情
@@ -156,6 +137,23 @@ class RepairStore {
         });
     }
 
+    @action
+    cancelOrder = (id) => {
+        axios.post('/XRepair/BackEnd/public/service/common/cancelOrder', qs.stringify({id})).then((res) => {
+            let data = res.data;
+            if (data.code == 200) {
+                Toast.success(data.message, 1, () => {
+                    this.onRefresh();
+                    window.history.back();
+                });
+            } else {
+                Toast.fail(data.message, 1.5)
+            }
+        }).catch((e) => {
+            Toast.offline(e.message, 1.5)
+        });
+    };
+
     //刷新报修列表
     @action
     refreshRepairList() {
@@ -168,11 +166,6 @@ class RepairStore {
     @computed
     get repairListDataSource() {
         return this.ds.cloneWithRows(this.repairList.slice());
-    }
-
-    @computed
-    get getRepairListCount() {
-        return this.repairCount === null ? 0 : this.repairCount;
     }
 
     @computed

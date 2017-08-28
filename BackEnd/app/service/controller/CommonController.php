@@ -10,7 +10,7 @@
 namespace app\service\controller;
 
 use app\service\model\RepairOrderModel;
-use app\user\model\XUserModel;
+use app\service\model\UserModel;
 use Exception;
 use Firebase\JWT\JWT;
 use think\Db;
@@ -46,30 +46,30 @@ class CommonController extends BaseController {
      * @return \think\response\Json
      */
     public function getRepairList() {
-        //        $authinfo = apache_request_headers();
-        //        $key = base64_encode(config('jwt_key'));
-        //        try {
-        //            $payload = JWT::decode($authinfo['Authorization'], $key, array('HS256'));
-        //            $userInfo = object_array($payload->data);
-        if (request()->isPost()) {
-            $page = input('page');
-            $model = new RepairOrderModel();
-            //                $result = $model->getRepairList($userInfo['id']);
-            $result = $model->getRepairList(1, $page);
-            if ($result) {
-                return json(['code' => 200,
-                    'message' => '获取报修列表成功',
-                    'result' => $result,
-                    'row' => count($result)]);
-            } else {
-                return json(['code' => 400,
-                    'message' => '没有数据']);
+        $authinfo = apache_request_headers();
+        $key = base64_encode(config('jwt_key'));
+        try {
+            $payload = JWT::decode($authinfo['Authorization'], $key, array('HS256'));
+            $userInfo = object_array($payload->data);
+            if (request()->isPost()) {
+                $page = input('page');
+                $model = new RepairOrderModel();
+                $result = $model->getRepairList($userInfo['id'], $page);
+                //                $result = $model->getRepairList(1, $page);
+                if ($result) {
+                    return json(['code' => 200,
+                        'message' => '获取报修列表成功',
+                        'result' => $result,
+                        'row' => count($result)]);
+                } else {
+                    return json(['code' => 400,
+                        'message' => '没有数据']);
+                }
             }
+        } catch (Exception $e) {
+            header('HTTP/1.0 401 Unauthorized');
+            die('Service API authentication failed');
         }
-        //        } catch (Exception $e) {
-        //            header('HTTP/1.0 401 Unauthorized');
-        //            die('Service API authentication failed');
-        //        }
     }
 
     /**
@@ -77,39 +77,13 @@ class CommonController extends BaseController {
      * @return \think\response\Json
      */
     public function getRepairCount() {
-        //        $authinfo = apache_request_headers();
-        //        $key = base64_encode(config('jwt_key'));
-        //        try {
-        //            $payload = JWT::decode($authinfo['Authorization'], $key, array('HS256'));
-        //            $userInfo = object_array($payload->data);
-        $model = new RepairOrderModel();
-        //                $result = $model->getRepairList($userInfo['id']);
-        $result = $model->getRepairCount(1);
-        if ($result) {
-            return json(['code' => 200,
-                'message' => '获取报修列表成功',
-                'result' => $result]);
-        } else {
-            return json(['code' => 400,
-                'message' => '没有数据']);
-        }
-        //        } catch (Exception $e) {
-        //            header('HTTP/1.0 401 Unauthorized');
-        //            die('Service API authentication failed');
-        //        }
-    }
-
-    public function getRepairDetails() {
-        //        $authinfo = apache_request_headers();
-        //        $key = base64_encode(config('jwt_key'));
-        //        try {
-        //            $payload = JWT::decode($authinfo['Authorization'], $key, array('HS256'));
-        //            $userInfo = object_array($payload->data);
-        if (request()->isPost()) {
-            $id = input('id');
+        $authinfo = apache_request_headers();
+        $key = base64_encode(config('jwt_key'));
+        try {
+            $payload = JWT::decode($authinfo['Authorization'], $key, array('HS256'));
+            $userInfo = object_array($payload->data);
             $model = new RepairOrderModel();
-            //                $result = $model->getRepairList($userInfo['id']);
-            $result = $model->getRepairDetails($id, 1);
+            $result = $model->getRepairCount($userInfo['id']);
             if ($result) {
                 return json(['code' => 200,
                     'message' => '获取报修列表成功',
@@ -118,11 +92,36 @@ class CommonController extends BaseController {
                 return json(['code' => 400,
                     'message' => '没有数据']);
             }
+        } catch (Exception $e) {
+            header('HTTP/1.0 401 Unauthorized');
+            die('Service API authentication failed');
         }
-        //        } catch (Exception $e) {
-        //            header('HTTP/1.0 401 Unauthorized');
-        //            die('Service API authentication failed');
-        //        }
+    }
+
+    public function getRepairDetails() {
+        $authinfo = apache_request_headers();
+        $key = base64_encode(config('jwt_key'));
+        try {
+            $payload = JWT::decode($authinfo['Authorization'], $key, array('HS256'));
+            $userInfo = object_array($payload->data);
+            if (request()->isPost()) {
+                $id = input('id');
+                $model = new RepairOrderModel();
+                $result = $model->getRepairDetails($id, $userInfo['id']);
+                //            $result = $model->getRepairDetails($id, 1);
+                if ($result) {
+                    return json(['code' => 200,
+                        'message' => '获取报修列表成功',
+                        'result' => $result]);
+                } else {
+                    return json(['code' => 400,
+                        'message' => '没有数据']);
+                }
+            }
+        } catch (Exception $e) {
+            header('HTTP/1.0 401 Unauthorized');
+            die('Service API authentication failed');
+        }
     }
 
     public function updateUserInfo() {
@@ -143,7 +142,7 @@ class CommonController extends BaseController {
                     'email.email' => '真是姓名只能为中文',
                     'mobile.require' => '手机号码不能为空',
                     'mobile.length' => '手机号码长度只能为11位']);
-                $model = new XUserModel();
+                $model = new UserModel();
 
                 $data = request()->post();
 
@@ -192,21 +191,21 @@ class CommonController extends BaseController {
                         'message' => $validate->getError()]);
                 }
 
-                $model = new XUserModel();
+                $model = new UserModel();
                 $result = $model->updatePassword($userInfo['id'], $data);
 
-                switch ($result){
+                switch ($result) {
                     case 1:
                         return json(['code' => 200,
-                            'message' =>'修改密码成功']);
+                            'message' => '修改密码成功']);
                         break;
                     case 2:
                         return json(['code' => 400,
-                            'message' =>'修改密码失败']);
+                            'message' => '修改密码失败']);
                         break;
                     case 3:
                         return json(['code' => 400,
-                            'message' =>'原密码不正确']);
+                            'message' => '原密码不正确']);
                         break;
                     case 4:
                         header('HTTP/1.0 401 Unauthorized');
@@ -247,6 +246,33 @@ class CommonController extends BaseController {
                 die('系统错误');
             }
         } catch (Exception $e) {
+            header('HTTP/1.0 401 Unauthorized');
+            die('Service API authentication failed');
+        }
+    }
+
+    public function cancelOrder() {
+        $authinfo = apache_request_headers();
+        $key = base64_encode(config('jwt_key'));
+        try {
+            $payload = JWT::decode($authinfo['Authorization'], $key, array('HS256'));
+            $userInfo = object_array($payload->data);
+            if (request()->isPost()) {
+                $id = input('id');
+                $model = new RepairOrderModel();
+                $result = $model->where(['id' => $id,
+                    'user_id' => $userInfo['id']])->update(['status' => -1,
+                    'update_time' => time()]);
+                if ($result) {
+                    return json(['code' => 200,
+                        'message' => '撤销成功']);
+                } else {
+                    return json(['code' => 400,
+                        'message' => '撤销失败']);
+                }
+            }
+        } catch (Exception $e) {
+            echo $e->getMessage();
             header('HTTP/1.0 401 Unauthorized');
             die('Service API authentication failed');
         }

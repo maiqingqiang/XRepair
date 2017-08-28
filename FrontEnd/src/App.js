@@ -3,13 +3,14 @@ import {observer,inject} from 'mobx-react';
 import {Route, Switch,withRouter} from 'react-router-dom'
 import routes from './router';
 
+
 @withRouter
 @inject('userStore')
 @observer
 export default class App extends Component {
 
     componentDidMount() {
-        this.props.userStore.getToken();
+        // this.props.userStore.getToken();
         this.axios.interceptors.request.use(
             config => {
                 if (this.props.userStore.token) {

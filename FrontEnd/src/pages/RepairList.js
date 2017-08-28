@@ -23,7 +23,6 @@ export default class RepairList extends Component {
     componentDidMount() {
         this.store.repairStore.repairListPage = 1;
         this.store.repairStore.getRepair();
-        this.store.repairStore.getRepairCount();
     }
 
 
@@ -132,13 +131,12 @@ export default class RepairList extends Component {
             <div id="repairList">
                 <ListView
                     ref="lv"
-                    dataSource={this.store.repairStore.repairListDataSource}
+                    dataSource={repairStore.repairListDataSource}
                     renderRow={row}
                     renderFooter={() => (<div style={{padding: 30, textAlign: 'center'}}>
-                        {this.store.repairStore.hasMore ? this.store.repairStore.isLoading ? '正在加载...' : '上拉加载' : '没有数据了'}
+                        {repairStore.hasMore ? repairStore.isLoading ? '正在加载...' : '上拉加载' : '没有数据了'}
                     </div>)}
-                    renderHeader={() => <HeadTitle title="我的报修"
-                                                   subTitle={"一共报 " + repairStore.getRepairListCount + " 修次"}/>}
+                    renderHeader={() => <HeadTitle title="我的报修"/>}
                     pageSize={10}
                     removeClippedSubviews={false}
                     scrollRenderAheadDistance={500}
@@ -149,11 +147,11 @@ export default class RepairList extends Component {
                         height: document.documentElement.clientHeight,
                         margin: '0.1rem 0',
                     }}
-                    onEndReached={() => this.store.repairStore.getRepair()}
+                    onEndReached={() => repairStore.getRepair()}
                     scrollerOptions={{scrollbars: true}}
                     refreshControl={<RefreshControl
-                        refreshing={this.store.repairStore.refreshing}
-                        onRefresh={() => this.store.repairStore.onRefresh()}
+                        refreshing={repairStore.refreshing}
+                        onRefresh={() => repairStore.onRefresh()}
                     />}
                 />
             </div>
