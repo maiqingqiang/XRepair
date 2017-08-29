@@ -102,13 +102,13 @@ class RepairOrderModel extends Model {
      *
      * @return array|false|\PDOStatement|string|Model
      */
-    public function getRepairDetails($oid, $user_id) {
+    public function getRepairDetails($oid) {
 //        $result = $this->field('id,type,create_time,update_time,order_time,complete_time,status,feedback')->where(['id' => $oid,
 //            'user_id' => $user_id])->find();
 
         $result = Db::view('RepairOrder','id,type,create_time,update_time,order_time,complete_time,status,feedback')
             ->view('User',['user_nickname'=>'repairer_name','mobile'=>'repairer_mobile'],'RepairOrder.repairer_id=User.id','LEFT')
-            ->where(['id' => $oid, 'user_id' => $user_id])
+            ->where(['id' => $oid])
             ->find();
 
         switch ($result['type']) {

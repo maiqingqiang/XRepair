@@ -2,28 +2,13 @@ import React, {Component} from 'react'
 import {observer, inject} from 'mobx-react';
 import {createForm} from 'rc-form';
 import {HeadTitle} from './../../components/Index'
-
-import {
-    Card,
-    WingBlank,
-    WhiteSpace,
-    Badge,
-    Button,
-    List,
-    NavBar, Picker,
-    Icon,
-    Toast,
-    Modal,
-    InputItem,
-    ListView, DatePicker, RefreshControl
-
-} from 'antd-mobile';
+import {AdminProtected} from "./../../components/Index";
+import {Card, WingBlank, WhiteSpace, Badge, Button, List, Picker, Toast, Modal, InputItem, ListView, DatePicker, RefreshControl} from 'antd-mobile';
 import '../../styles/modules/Admin/General.less'
 import moment from 'moment'
 import qs from 'qs'
 
 const Item = List.Item;
-const Brief = Item.Brief;
 
 function MyList(props) {
     return (
@@ -37,6 +22,7 @@ function MyList(props) {
 
 const prompt = Modal.prompt;
 
+@AdminProtected
 @inject('repairStore', 'generalStore', 'userStore', 'adminMyGeneralOrderStore')
 @observer
 class GeneralList extends Component {
@@ -76,16 +62,12 @@ class GeneralList extends Component {
         switch (status) {
             case -1:
                 return 'del-order';
-                break;
             case 0:
                 return 'not-order';
-                break;
             case 1:
                 return 'processing';
-                break;
             case 2:
                 return 'complete';
-                break;
             default:
                 return 'not-order';
         }
@@ -95,16 +77,12 @@ class GeneralList extends Component {
         switch (status) {
             case -1:
                 return '已撤销';
-                break;
             case 0:
                 return '未接单';
-                break;
             case 1:
                 return '处理中';
-                break;
             case 2:
                 return '已完成';
-                break;
             default:
                 return '未接单';
         }
@@ -158,6 +136,8 @@ class GeneralList extends Component {
 
     render() {
 
+        const {history} = this.props;
+
         const btnStatus = (status, id, feedback) => {
             switch (status) {
                 case 1:
@@ -188,7 +168,7 @@ class GeneralList extends Component {
                             </List>
                         </Card.Body>
                         <Card.Footer content={btnStatus(rowData.status, rowData.id, rowData.feedback)}
-                                     extra={<Button inline size="small">查看</Button>}/>
+                                     extra={<Button inline size="small" onClick={() => {history.push('/admin/general-details/' + rowData.id)}}>查看</Button>}/>
                     </Card>
                     <WhiteSpace size="lg"/>
                 </div>
@@ -212,7 +192,7 @@ class GeneralList extends Component {
                         })}>
                             <Item arrow="horizontal"><strong>选择报修项目</strong></Item>
                         </Picker>
-                        <Picker data={[{label: '全部', value: 0}, {label: '未接单', value: 1}, {
+                        <Picker data={[{label: '全部', value: 0}, {
                             label: '处理中',
                             value: 2
                         }, {label: '完成', value: 3}]} cols="1" {...getFieldProps('status', {
@@ -241,7 +221,6 @@ class GeneralList extends Component {
                 </div>
             );
         };
-        const {history} = this.props;
 
         const {getFieldProps, resetFields} = this.props.form;
         const {regionList, regionCols} = this.store.repairStore;

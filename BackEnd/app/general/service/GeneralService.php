@@ -29,9 +29,13 @@ class GeneralService {
             $where .= ' and FIND_IN_SET(' . $region . ',GeneralOrder.region)';
         }
 
-        $name = empty($filter['name']) ? 0 : intval($filter['name']);
-        if (!empty($name)) {
-            $where .= ' and like %' . $name . '%';
+        $status = empty($filter['status']) ? 0 : intval($filter['status']);
+        if (!empty($status)) {
+            $where .= ' and RepairOrder.status =' . ($status - 1);
+        }
+
+        if (!empty($filter['name'])) {
+            $where .= ' and GeneralOrder.name like "%' . $filter['name'] . '%"';
         }
 
         $startTime = empty($filter['start_time']) ? 0 : strtotime($filter['start_time']);
@@ -60,9 +64,9 @@ class GeneralService {
 
         if (array_key_exists('categorys', $filter) && $filter['categorys']) {
 
-            if(count($filter['categorys'])>1){
-                $category = end($filter['categorys'])?end($filter['categorys']):$filter['categorys'][0];
-            }else{
+            if (count($filter['categorys']) > 1) {
+                $category = end($filter['categorys']) ? end($filter['categorys']) : $filter['categorys'][0];
+            } else {
                 $category = $filter['categorys'][0];
             }
             if (!empty($category)) {
@@ -73,9 +77,9 @@ class GeneralService {
 
         if (array_key_exists('regions', $filter) && $filter['regions']) {
 
-            if(count($filter['regions'])>1){
-                $region = end($filter['regions'])?end($filter['regions']):$filter['regions'][0];
-            }else{
+            if (count($filter['regions']) > 1) {
+                $region = end($filter['regions']) ? end($filter['regions']) : $filter['regions'][0];
+            } else {
                 $region = $filter['regions'][0];
             }
 
@@ -83,13 +87,13 @@ class GeneralService {
                 $where .= ' and FIND_IN_SET(' . $region . ',GeneralOrder.region)';
             }
         }
-        if (array_key_exists('name', $filter)) {
-            $name = empty($filter['name']) ? 0 : intval($filter['name']);
-            if (!empty($name)) {
-                $where .= ' and like %' . $name . '%';
+
+        if (array_key_exists('status', $filter)) {
+            $status = empty($filter['status'][0]) ? 0 : intval($filter['status'][0]);
+            if (!empty($status)) {
+                $where .= ' and RepairOrder.status =' . ($status - 1);
             }
         }
-
 
         $page = !isset($filter['page']) && empty($filter['page']) ? 1 : intval($filter['page']);
 
@@ -114,9 +118,9 @@ class GeneralService {
         return $result;
     }
 
-    public function myOrderList($filter){
+    public function myOrderList($filter) {
         $where = "RepairOrder.type = 'general'";
-        $where .= " and RepairOrder.repairer_id = ".cmf_get_current_admin_id();
+        $where .= " and RepairOrder.repairer_id = " . cmf_get_current_admin_id();
 
         $category = empty($filter['category']) ? 0 : intval($filter['category']);
         if (!empty($category)) {
@@ -129,9 +133,13 @@ class GeneralService {
             $where .= ' and FIND_IN_SET(' . $region . ',GeneralOrder.region)';
         }
 
-        $name = empty($filter['name']) ? 0 : intval($filter['name']);
-        if (!empty($name)) {
-            $where .= ' and like %' . $name . '%';
+        $status = empty($filter['status']) ? 0 : intval($filter['status']);
+        if (!empty($status)) {
+            $where .= ' and RepairOrder.status =' . ($status - 1);
+        }
+
+        if (!empty($filter['name'])) {
+            $where .= ' and GeneralOrder.name like "%' . $filter['name'] . '%"';
         }
 
         $startTime = empty($filter['start_time']) ? 0 : strtotime($filter['start_time']);
@@ -148,31 +156,23 @@ class GeneralService {
         }
 
 
-        $result = Db::view('RepairOrder', 'id,type,create_time,update_time,order_time,complete_time,status,feedback,repairer_id')
-            ->view('User', ['user_nickname' => 'repairer_name',
-            'mobile' => 'repairer_mobile'], 'RepairOrder.repairer_id=User.id', 'LEFT')
-            ->view('GeneralOrder', 'name,mobile,region,desc', 'GeneralOrder.oid = RepairOrder.id', 'LEFT')
-            ->view('RepairRegion', ['GROUP_CONCAT(distinct RepairRegion.name ORDER BY RepairRegion.id ASC)' => 'address'], 'FIND_IN_SET(RepairRegion.id,GeneralOrder.region)', 'LEFT')
-            ->view('GeneralCategory', ['GROUP_CONCAT(distinct GeneralCategory.name ORDER BY GeneralCategory.id ASC)' => 'cate'], 'FIND_IN_SET(GeneralCategory.id,GeneralOrder.category)', 'LEFT')
-            ->where($where)
-            ->order('create_time', 'DESC')
-            ->group('GeneralOrder.id')
-            ->paginate(10);
+        $result = Db::view('RepairOrder', 'id,type,create_time,update_time,order_time,complete_time,status,feedback,repairer_id')->view('User', ['user_nickname' => 'repairer_name',
+            'mobile' => 'repairer_mobile'], 'RepairOrder.repairer_id=User.id', 'LEFT')->view('GeneralOrder', 'name,mobile,region,desc', 'GeneralOrder.oid = RepairOrder.id', 'LEFT')->view('RepairRegion', ['GROUP_CONCAT(distinct RepairRegion.name ORDER BY RepairRegion.id ASC)' => 'address'], 'FIND_IN_SET(RepairRegion.id,GeneralOrder.region)', 'LEFT')->view('GeneralCategory', ['GROUP_CONCAT(distinct GeneralCategory.name ORDER BY GeneralCategory.id ASC)' => 'cate'], 'FIND_IN_SET(GeneralCategory.id,GeneralOrder.category)', 'LEFT')->where($where)->order('create_time', 'DESC')->group('GeneralOrder.id')->paginate(10);
 
         return $result;
     }
 
-    public function myOrderListApi($filter,$user_id) {
+    public function myOrderListApi($filter, $user_id) {
 
         $where = "RepairOrder.type = 'general'";
-        $where .= " and RepairOrder.repairer_id = ".$user_id;
+        $where .= " and RepairOrder.repairer_id = " . $user_id;
 
 
         if (array_key_exists('categorys', $filter) && $filter['categorys']) {
 
-            if(count($filter['categorys'])>1){
-                $category = end($filter['categorys'])?end($filter['categorys']):$filter['categorys'][0];
-            }else{
+            if (count($filter['categorys']) > 1) {
+                $category = end($filter['categorys']) ? end($filter['categorys']) : $filter['categorys'][0];
+            } else {
                 $category = $filter['categorys'][0];
             }
             if (!empty($category)) {
@@ -183,9 +183,9 @@ class GeneralService {
 
         if (array_key_exists('regions', $filter) && $filter['regions']) {
 
-            if(count($filter['regions'])>1){
-                $region = end($filter['regions'])?end($filter['regions']):$filter['regions'][0];
-            }else{
+            if (count($filter['regions']) > 1) {
+                $region = end($filter['regions']) ? end($filter['regions']) : $filter['regions'][0];
+            } else {
                 $region = $filter['regions'][0];
             }
 
@@ -193,10 +193,17 @@ class GeneralService {
                 $where .= ' and FIND_IN_SET(' . $region . ',GeneralOrder.region)';
             }
         }
+
+        if (array_key_exists('status', $filter)) {
+            $status = empty($filter['status'][0]) ? 0 : intval($filter['status'][0]);
+            if (!empty($status)) {
+                $where .= ' and RepairOrder.status =' . ($status - 1);
+            }
+        }
+
         if (array_key_exists('name', $filter)) {
-            $name = empty($filter['name']) ? 0 : intval($filter['name']);
-            if (!empty($name)) {
-                $where .= ' and like %' . $name . '%';
+            if (!empty($filter['name'])) {
+                $where .= ' and GeneralOrder.name like "%' . $filter['name'] . '%"';
             }
         }
 

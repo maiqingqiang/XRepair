@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
-import {observer, inject} from 'mobx-react';
+import {observer} from 'mobx-react';
 import {createForm} from 'rc-form';
+import {AdminProtected} from "./../../components/Index";
+
 
 import {
     List, NavBar
@@ -8,16 +10,11 @@ import {
 import '../../styles/modules/Admin/General.less'
 
 const Item = List.Item;
-const Brief = Item.Brief;
 
 
+@AdminProtected
 @observer
 class General extends Component {
-    constructor(props) {
-        super(props);
-
-    }
-
     render() {
         const {history} = this.props;
         return (

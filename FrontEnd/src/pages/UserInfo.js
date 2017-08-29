@@ -8,13 +8,6 @@ import {createForm} from 'rc-form';
 @observer
 class UserInfo extends Component {
 
-    constructor(props) {
-        super(props);
-    }
-
-    componentDidMount() {
-    }
-
     update=(e)=>{
         if (e) e.preventDefault();
 

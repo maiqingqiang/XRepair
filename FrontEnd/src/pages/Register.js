@@ -24,11 +24,24 @@ class Register extends Component {
         this.random = (new Date()).getTime();
         this.offline = 0;
 
-        let ua = navigator.userAgent.toLowerCase();
-        if (ua.match(/MicroMessenger/i) == "micromessenger") {
-            this.state.wechat = this.state.bind = true;
+        if (localStorage.appid) {
+            let ua = navigator.userAgent.toLowerCase();
+            if (ua.match(/MicroMessenger/i) == "micromessenger") {
+                this.setState({
+                    wechat:true,
+                    bind:true
+                });
+            } else {
+                this.setState({
+                    wechat:false,
+                    bind:false
+                });
+            }
         } else {
-            this.state.wechat = this.state.bind = false;
+            this.setState({
+                wechat:false,
+                bind:false
+            });
         }
     }
 
@@ -140,7 +153,7 @@ class Register extends Component {
                         placeholder="请再次输入你的登录密码"
                     >再输入密码</InputItem>
                     <List.Item
-                        style={{display:this.state.wechat?'block':'none'}}
+                        style={{display: this.state.wechat ? 'block' : 'none'}}
                         extra={<Switch
                             {...getFieldProps('bind', {
                                 initialValue: this.state.bind,

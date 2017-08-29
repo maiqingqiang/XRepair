@@ -10,7 +10,7 @@ import routes from './router';
 export default class App extends Component {
 
     componentDidMount() {
-        // this.props.userStore.getToken();
+        this.props.userStore.getToken();
         this.axios.interceptors.request.use(
             config => {
                 if (this.props.userStore.token) {
@@ -28,7 +28,6 @@ export default class App extends Component {
                 return response;
             },
             error => {
-                console.log(error.response)
                 if (error.response) {
                     switch (error.response.status) {
                         case 401:

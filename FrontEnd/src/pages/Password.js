@@ -5,18 +5,9 @@ import {HeadTitle} from './../components/Index'
 import {createForm} from 'rc-form';
 import qs from 'qs';
 
-const Item = List.Item;
-
 @inject('userStore')
 @observer
 class Password extends Component {
-
-    constructor(props) {
-        super(props);
-    }
-
-    componentDidMount() {
-    }
 
     save=(e)=>{
         if (e) e.preventDefault();
@@ -34,8 +25,7 @@ class Password extends Component {
     };
 
     render() {
-        const {getFieldProps,getFieldValue} = this.props.form;
-        const {userInfo} = this.props.userStore;
+        const {getFieldProps} = this.props.form;
 
         return (
             <div id="register">

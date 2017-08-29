@@ -51,9 +51,6 @@ const data = [{
 @inject('uiStore','userStore')
 @observer
 export default class Home extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     logout=()=>{
         this.props.userStore.clearData();

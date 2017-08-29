@@ -2,28 +2,13 @@ import React, {Component} from 'react'
 import {observer, inject} from 'mobx-react';
 import {createForm} from 'rc-form';
 import {HeadTitle} from './../../components/Index'
-
-import {
-    Card,
-    WingBlank,
-    WhiteSpace,
-    Badge,
-    Button,
-    List,
-    NavBar, Picker,
-    Icon,
-    Toast,
-    Menu,
-    InputItem,
-    ListView, DatePicker, RefreshControl
-
-} from 'antd-mobile';
+import {AdminProtected} from "./../../components/Index";
+import {Card, WingBlank, WhiteSpace, Badge, Button, List, Picker, Toast, InputItem, ListView, DatePicker, RefreshControl} from 'antd-mobile';
 import '../../styles/modules/Admin/General.less'
 import moment from 'moment'
 import qs from 'qs'
 
 const Item = List.Item;
-const Brief = Item.Brief;
 
 function MyList(props) {
     return (
@@ -35,6 +20,7 @@ function MyList(props) {
     );
 }
 
+@AdminProtected
 @inject('repairStore', 'generalStore', 'userStore', 'adminGeneralListStore')
 @observer
 class GeneralList extends Component {
@@ -92,16 +78,12 @@ class GeneralList extends Component {
         switch (status) {
             case -1:
                 return 'del-order';
-                break;
             case 0:
                 return 'not-order';
-                break;
             case 1:
                 return 'processing';
-                break;
             case 2:
                 return 'complete';
-                break;
             default:
                 return 'not-order';
         }
@@ -111,16 +93,12 @@ class GeneralList extends Component {
         switch (status) {
             case -1:
                 return '已撤销';
-                break;
             case 0:
                 return '未接单';
-                break;
             case 1:
                 return '处理中';
-                break;
             case 2:
                 return '已完成';
-                break;
             default:
                 return '未接单';
         }
@@ -147,7 +125,7 @@ class GeneralList extends Component {
                             </List>
                         </Card.Body>
                         <Card.Footer content={rowData.status?'':<Button type="primary" inline size="small" onClick={()=>this.order(rowData.id)}>接单</Button>}
-                                     extra={<Button inline size="small">查看</Button>}/>
+                                     extra={<Button inline size="small" onClick={() => {history.push('/admin/general-details/' + rowData.id)}}>查看</Button>}/>
                     </Card>
                     <WhiteSpace size="lg"/>
                 </div>
@@ -200,19 +178,21 @@ class GeneralList extends Component {
                 </div>
             );
         }
-        const {history} = this.props;
 
+        const {history} = this.props;
         const {getFieldProps, resetFields} = this.props.form;
         const {regionList, regionCols} = this.store.repairStore;
         const {categoryList, categoryCols} = this.store.generalStore;
+
+        const {adminGeneralListStore}= this.store;
         return (
             <div id="admin-general">
                 <ListView
                     ref="lv"
-                    dataSource={this.store.adminGeneralListStore.repairListDataSource}
+                    dataSource={adminGeneralListStore.repairListDataSource}
                     renderRow={row}
                     renderFooter={() => (<div style={{padding: 30, textAlign: 'center'}}>
-                        {this.store.adminGeneralListStore.hasMore ? this.store.adminGeneralListStore.isLoading ? '正在加载...' : '上拉加载' : '没有数据了'}
+                        {adminGeneralListStore.hasMore ? adminGeneralListStore.isLoading ? '正在加载...' : '上拉加载' : '没有数据了'}
                     </div>)}
                     renderHeader={header}
                     pageSize={10}
@@ -226,12 +206,12 @@ class GeneralList extends Component {
                         height: document.documentElement.clientHeight,
                         margin: '0.1rem 0',
                     }}
-                    onEndReached={() => this.store.adminGeneralListStore.getRepair()}
+                    onEndReached={() => adminGeneralListStore.getRepair()}
                     scrollerOptions={{scrollbars: true}}
                     refreshControl={<RefreshControl
-                        refreshing={this.store.adminGeneralListStore.refreshing}
+                        refreshing={adminGeneralListStore.refreshing}
                         onRefresh={() => {
-                            this.store.adminGeneralListStore.onRefresh();
+                            adminGeneralListStore.onRefresh();
                             this.props.form.resetFields()
                         }}
                     />}

@@ -81,6 +81,7 @@ class AdminGeneralListStore {
                     this.isRefreshing = false;
                 }
             } else {
+                Toast.fail('未查询到数据',1.5);
                 _this.hasMore = false;
             }
         }).catch((e) => {

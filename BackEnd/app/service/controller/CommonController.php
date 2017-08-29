@@ -107,7 +107,7 @@ class CommonController extends BaseController {
             if (request()->isPost()) {
                 $id = input('id');
                 $model = new RepairOrderModel();
-                $result = $model->getRepairDetails($id, $userInfo['id']);
+                $result = $model->getRepairDetails($id);
                 //            $result = $model->getRepairDetails($id, 1);
                 if ($result) {
                     return json(['code' => 200,

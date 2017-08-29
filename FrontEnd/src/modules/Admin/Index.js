@@ -1,12 +1,10 @@
 import React, {Component} from 'react'
 import {observer} from 'mobx-react';
-import {Grid, Icon, List,NavBar} from 'antd-mobile';
+import {Grid, Icon,NavBar} from 'antd-mobile';
 import '../../styles/modules/Admin/Index.less';
 import GeneralRepair from '../../asset/general_repair.svg';
 import Net from '../../asset/net.svg';
-
-
-const Item = List.Item;
+import {AdminProtected} from "./../../components/Index";
 
 const data = [{
     icon: GeneralRepair,
@@ -22,11 +20,9 @@ const data = [{
     to: '/admin/net'
 }];
 
+@AdminProtected
 @observer
 export default class Index extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         const {history} = this.props;

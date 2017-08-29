@@ -31,16 +31,12 @@ export default class RepairList extends Component {
         switch (status) {
             case -1:
                 return 'del-order';
-                break;
             case 0:
                 return 'not-order';
-                break;
             case 1:
                 return 'processing';
-                break;
             case 2:
                 return 'complete';
-                break;
             default:
                 return 'not-order';
         }
@@ -50,16 +46,12 @@ export default class RepairList extends Component {
         switch (status) {
             case -1:
                 return '已撤销';
-                break;
             case 0:
                 return '未接单';
-                break;
             case 1:
                 return '处理中';
-                break;
             case 2:
                 return '已完成';
-                break;
             default:
                 return '未接单';
         }
@@ -95,7 +87,6 @@ export default class RepairList extends Component {
 
                         </Item>
                     );
-                    break;
                 case 'net':
                     return (
                         <Item multipleLine onClick={() => {
@@ -122,7 +113,6 @@ export default class RepairList extends Component {
 
                         </Item>
                     );
-                    break;
             }
         };
 

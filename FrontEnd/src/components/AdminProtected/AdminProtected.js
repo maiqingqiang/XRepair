@@ -15,11 +15,17 @@ export default function AdminProtected(Component) {
             const {userStore} = this.props;
             return (
                 <div className="authComponent">
-                    {userStore.isAdmin
+                    {userStore.isLogin ? userStore.userInfo.isAdmin
                         ? <Component {...this.props} />
                         : <Redirect
                             to={{
                                 pathname: "/admin/not-admin",
+                                state: {from: this.props.location}
+                            }}
+                        />
+                        : <Redirect
+                            to={{
+                                pathname: "/login",
                                 state: {from: this.props.location}
                             }}
                         />

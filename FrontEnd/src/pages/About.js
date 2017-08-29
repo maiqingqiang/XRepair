@@ -8,7 +8,6 @@ class About extends Component {
     constructor(props) {
         super(props);
         this.store = props.userStore;
-        console.log(this.store)
     }
 
     render() {

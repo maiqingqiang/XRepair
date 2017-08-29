@@ -22,4 +22,12 @@ export default [
         path: '/admin/net',
         render: props => (<LazyRoute {...props} component={import('./../modules/Admin/Net')}/>)
     },
+    {
+        path: '/admin/not-admin',
+        render: props => (<LazyRoute {...props} component={import('./../modules/Admin/NotAdmin')}/>)
+    },
+    {
+        path: '/admin/general-details/:id',
+        render: props => (<LazyRoute {...props} component={import('./../modules/Admin/GeneralDetails')}/>)
+    },
 ]

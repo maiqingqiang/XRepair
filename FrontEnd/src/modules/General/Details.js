@@ -1,17 +1,15 @@
 import React, {Component} from 'react'
 import {observer, inject} from 'mobx-react';
-import {List, WhiteSpace, WingBlank, Button, Steps, Badge,Toast} from 'antd-mobile';
+import {List, WhiteSpace, WingBlank, Button, Steps, Badge} from 'antd-mobile';
 import {HeadTitle} from './../../components/Index'
 import '../../styles/modules/general/Details.less'
-import Qs from 'qs'
-
 import {Protected} from "./../../components/Index";
 
 const Item = List.Item;
 const Brief = Item.Brief;
 const Step = Steps.Step;
 
-// @Protected
+@Protected
 @inject('repairStore', 'generalStore', 'userStore')
 @observer
 export default class Details extends Component {

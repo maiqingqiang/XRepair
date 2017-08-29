@@ -69,7 +69,8 @@ class BaseController {
             $result['userInfo'] = array('name' => $data['name'],
                 'account' => $data['account'],
                 'email' => $data['email'],
-                'mobile' => $data['mobile']);
+                'mobile' => $data['mobile'],
+                'isAdmin' => $data['isAdmin']);
 
             return $result;
         }catch (Exception $e){

@@ -29,7 +29,6 @@ class RepairStore {
                 if (data.code == 200) {
                     _this.regionList = res.data.result.list;
                     _this.regionCols = res.data.result.cols;
-                    console.log(_this.regionList)
                 } else {
                     Toast.fail(data.message, 1.5);
                 }
@@ -128,7 +127,6 @@ class RepairStore {
             let data = res.data;
             if (data.code == 200) {
                 _this.repairDetails = data.result;
-                console.log(data.result)
             } else {
                 Toast.fail(data.message, 1.5)
             }
