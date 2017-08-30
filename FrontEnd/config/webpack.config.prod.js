@@ -20,6 +20,7 @@ const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const PrepackWebpackPlugin = require('prepack-webpack-plugin').default;
 const Visualizer = require('webpack-visualizer-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin'); // 压缩css的插件
+const CompressionPlugin = require("compression-webpack-plugin");
 
 
 // Webpack uses `publicPath` to determine where the app is being served from.
@@ -477,6 +478,13 @@ module.exports = {
         // new PrepackWebpackPlugin({
         //     mathRandomSeed: '0',
         // }),
+        new CompressionWebpackPlugin({
+            asset: "[path].gz[query]",
+            algorithm: 'gzip',
+            test: /\.js$|\.css$|\.html$/,
+            threshold: 10240,
+            minRatio: 0.8,
+        }),
         new Visualizer({
             filename: './statistics.html'
         })
