@@ -10,7 +10,8 @@ import URI from 'urijs';
 import qs from 'qs';
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-axios.defaults.baseURL = 'http://' + window.location.host;
+// axios.defaults.baseURL = 'http://' + window.location.host;
+axios.defaults.baseURL = 'http://localhost';
 
 function generateGetCodeUrl(id) {
     document.location = new URI("https://open.weixin.qq.com/connect/oauth2/authorize")

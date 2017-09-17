@@ -12,7 +12,7 @@ import '../styles/geetest.less';
 class Login extends Component {
 
     state = {
-        captchaTips: true
+        captchaTips: true,
     };
 
     constructor(props) {
@@ -57,7 +57,7 @@ class Login extends Component {
 
         let result = this.captcha.getValidate();
 
-        if (this.captcha.getValidate()) {
+        if (result) {
             let data = Object.assign(this.props.form.getFieldsValue(), result, {
                 random: this.random,
                 offline: this.offline
@@ -110,6 +110,7 @@ class Login extends Component {
                     <div id="captcha"></div>
                     {this.state.captchaTips ? '正在加载验证码……' : ''}
                 </List>
+
 
                 <WhiteSpace size="lg"/>
                 <WingBlank size="sm">

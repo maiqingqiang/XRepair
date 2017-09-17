@@ -15,7 +15,8 @@
     "rc-form": "^1.4.3",
     "react": "next",
     "react-dom": "next",
-    "urijs": "^1.18.12"
+    "urijs": "^1.18.12",
+    "verification-code": "^1.0.0"
   },
   "scripts": {
     "start": "node scripts/start.js",
